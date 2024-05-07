@@ -1,1 +1,1 @@
-# EEdert_Abschlussarbeit_Prototyp
+# Gestaltungsprinzipien sicherer Softwareentwicklung: prototypische Entwicklung eines Lernspiels
