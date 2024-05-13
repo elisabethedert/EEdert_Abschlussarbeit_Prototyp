@@ -8,8 +8,12 @@ defineProps({
 
 <template>
     <div v-show="message">
-        <p class="text-sm text-red-600">
+        <p class="input-error">
             {{ message }}
         </p>
     </div>
 </template>
+
+<style scoped>
+@import '../../css/_main.scss';
+</style>

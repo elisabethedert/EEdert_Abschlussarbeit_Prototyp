@@ -1,0 +1,23 @@
+.checkbox {
+    border-radius: 3px;
+    border: 2px solid $blue;
+}
+
+.input-error {
+    border: 2px solid $danger-red;
+}
+
+.input-label {
+    color: $blue;
+    font-weight: bold;
+}
+
+.text-input {
+    border-radius: 10px;
+    border: 1px solid $grey;
+    color: $blue;
+    background: $background-light;
+    &:focus {
+        border: 1px solid $blue;
+    }
+}
