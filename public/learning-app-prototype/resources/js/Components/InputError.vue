@@ -14,6 +14,10 @@ defineProps({
     </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 @import '../../css/_main.scss';
+
+.input-error {
+    border: 2px solid $danger-red;
+}
 </style>

@@ -12,8 +12,31 @@ defineProps({
 <template>
     <Link
         :href="href"
-        class="block w-full px-4 py-2 text-start text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out"
+        class="dropdown-link"
     >
         <slot />
     </Link>
 </template>
+
+<style scoped lang="scss">
+@import '../../css/_main.scss';
+.dropdown-link {
+    display: block;
+    width: auto;
+    padding: 0.5rem 1rem;
+    text-align: left;
+    font-size: 1rem;
+    color: $grey;
+    &:hover {
+        background-color: $grey;
+    }
+    &:focus {
+        background-color: $background-light;
+        outline: none;
+    }
+
+    transition: ease-in-out;
+    transition-duration: 150ms;
+}
+
+</style>

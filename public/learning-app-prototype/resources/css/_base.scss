@@ -58,3 +58,38 @@ h2 {
 h3 {
     font-size: 2rem;
 }
+
+$breakpoints: (
+    "default": (0px),
+    "mobile": (667px),
+    "tablet": (1280px),
+    "desktop": (1440px)
+) !default;
+
+$media-direction: max;
+
+@mixin breakpoint($breakpoint, $direction: $media-direction) {
+    @if map-has-key($breakpoints, $breakpoint) {
+        @if $direction == only {
+            $smaller: 0px;
+            @each $name, $width in breakpoints {
+                @if width < map-get($breakpoints, $breakpoint) {
+                    $smaller: max($smaller, $width);
+                }
+            }
+            @media (min-width: $smaller) and (max-width: map-get($breakpoints, $breakpoint)) {
+                @content;
+            }
+        } @else {
+            @media(#{$direction}-width: #{map-get($breakpoints, $breakpoint)}) {
+                @content;
+            }
+        }
+    } @else if unitless($breakpoint) {
+        $breakpoint: $breakpoints + px;
+
+        @media(#{direction}-width: $breakpoint) {
+            @content;
+        }
+    }
+}

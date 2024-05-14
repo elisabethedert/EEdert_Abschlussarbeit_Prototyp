@@ -4,7 +4,7 @@ import { Link } from '@inertiajs/vue3';
 </script>
 
 <template>
-    <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
+    <div class=" guest-layout min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
         <div>
             <Link href="/">
                 <ApplicationLogo class="w-20 h-20 fill-current text-gray-500" />
@@ -18,3 +18,11 @@ import { Link } from '@inertiajs/vue3';
         </div>
     </div>
 </template>
+<style scoped lang="scss">
+@import '../../css/_main.scss';
+
+.guest-layout {
+    min-height: 100vh;
+    background-color: $background-light;
+}
+</style>
