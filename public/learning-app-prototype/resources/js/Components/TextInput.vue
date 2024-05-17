@@ -25,10 +25,14 @@ defineExpose({ focus: () => input.value.focus() });
 @import '../../css/_main.scss';
 
 .text-input {
-    border-radius: 10px;
+    background: $white;
     border: 1px solid $grey;
+    border-radius: 10px;
+    font-size: large;
     color: $blue;
-    background: $background-light;
+    height: 2rem;
+    padding-left: 1rem;
+    margin-bottom: 1rem;
 
     &:focus {
         border: 1px solid $blue;

@@ -21,5 +21,6 @@ defineProps({
 .input-label {
     color: $blue;
     font-weight: bold;
+    margin-bottom: 0.25rem;
 }
 </style>

@@ -1,0 +1,48 @@
+.layout-center {
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+
+    .form-container {
+        width: 50%;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 2rem;
+        border-radius: 25px;
+        background: $background-light;
+    }
+}
+.remember {
+    &-container{
+    display: flex;
+    align-items: center;
+    }   
+
+    &-check {
+        margin-left: 0.5rem;
+    }
+}
+
+.submit {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    margin-top: 2rem;
+    .link {
+        margin-bottom: 1rem;
+    }
+}
+
+.input-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.error-msg {
+    color: $danger-red;
+    margin-top: 0.25rem;
+}
+
+.info-text {
+    margin-bottom: 1rem;
+}
