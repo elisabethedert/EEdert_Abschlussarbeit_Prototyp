@@ -56,11 +56,5 @@ defineProps({
     margin-top: calc(1.5rem * calc(1 - var(--space-y-reverse)));
     margin-bottom: calc(1.5rem * var(--space-y-reverse));
 }
-.input-container {
-    padding: 2rem;
-    background: $white;
-    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
-    border-radius: 10px;
-}
 </style>
 
