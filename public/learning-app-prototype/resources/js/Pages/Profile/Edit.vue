@@ -19,28 +19,30 @@ defineProps({
     <Head title="Profile" />
 
     <AuthenticatedLayout>
-        <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">Profile</h2>
-        </template>
-
-        <div class="py-12">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-                <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
+        <h1>Profil</h1>
+            <div class="input">
                     <UpdateProfileInformationForm
                         :must-verify-email="mustVerifyEmail"
                         :status="status"
-                        class="max-w-xl"
                     />
-                </div>
-
-                <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                    <UpdatePasswordForm class="max-w-xl" />
-                </div>
-
-                <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                    <DeleteUserForm class="max-w-xl" />
-                </div>
+                    <UpdatePasswordForm/>
+                    <DeleteUserForm/>
             </div>
-        </div>
     </AuthenticatedLayout>
 </template>
+
+<style scoped lang="scss">
+@import '../../../css/_main.scss';
+
+.input {
+    margin-left: auto;
+    margin-right: auto;
+    --space-y-reverse: 0;
+    margin-top: calc(1.5rem * calc(1 - var(--space-y-reverse)));
+    margin-bottom: calc(1.5rem * var(--space-y-reverse));
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+</style>
+
