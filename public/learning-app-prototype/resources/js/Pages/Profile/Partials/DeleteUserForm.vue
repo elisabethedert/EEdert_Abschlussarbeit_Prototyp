@@ -38,58 +38,58 @@ const closeModal = () => {
 </script>
 
 <template>
-    <section class="space-y-6">
-        <header>
-            <h2 class="text-lg font-medium text-gray-900">Delete Account</h2>
+    <section>
+        <div class="form-container auth">
+            <h2>Account löschen</h2>
 
-            <p class="mt-1 text-sm text-gray-600">
-                Once your account is deleted, all of its resources and data will be permanently deleted. Before deleting
-                your account, please download any data or information that you wish to retain.
+            <p class="description">
+                Sobald dein Konto gelöscht ist, werden alle Ressourcen und Daten dauerhaft gelöscht. Vor der Löschung deines
+                Kontos lade bitte alle Daten und Informationen herunter, die du aufbewahren möchtest.
             </p>
-        </header>
 
-        <DangerButton @click="confirmUserDeletion">Delete Account</DangerButton>
+            <DangerButton @click="confirmUserDeletion">Account löschen</DangerButton>
 
-        <Modal :show="confirmingUserDeletion" @close="closeModal">
-            <div class="p-6">
-                <h2 class="text-lg font-medium text-gray-900">
-                    Are you sure you want to delete your account?
-                </h2>
+            <Modal :show="confirmingUserDeletion" @close="closeModal">
+                <div>
+                    <h2 class="danger">
+                        Account wirklich löschen?
+                    </h2>
 
-                <p class="mt-1 text-sm text-gray-600">
-                    Once your account is deleted, all of its resources and data will be permanently deleted. Please
-                    enter your password to confirm you would like to permanently delete your account.
-                </p>
+                    <p class="description">
+                        Sobald dein Konto gelöscht ist, werden alle Ressourcen und Daten dauerhaft gelöscht. Bitte gib
+                        dein Passwort ein, um zu bestätigen, dass du dein Konto endgültig löschen möchtest.
+                    </p>
 
-                <div class="mt-6">
-                    <InputLabel for="password" value="Password" class="sr-only" />
+                    <div class="input-container">
+                        <InputLabel for="password" value="Passwort:" />
 
-                    <TextInput
-                        id="password"
-                        ref="passwordInput"
-                        v-model="form.password"
-                        type="password"
-                        class="mt-1 block w-3/4"
-                        placeholder="Password"
-                        @keyup.enter="deleteUser"
-                    />
+                        <TextInput id="password" ref="passwordInput" v-model="form.password" type="password"
+                            placeholder="Passwort" @keyup.enter="deleteUser" />
 
-                    <InputError :message="form.errors.password" class="mt-2" />
+                        <InputError :message="form.errors.password" class="error-msg" />
+                    </div>
+
+                    <div>
+                        <SecondaryButton @click="closeModal"> Abbrechen </SecondaryButton>
+
+                        <DangerButton :disabled="form.processing" @click="deleteUser">
+                            Account löschen
+                        </DangerButton>
+                    </div>
                 </div>
-
-                <div class="mt-6 flex justify-end">
-                    <SecondaryButton @click="closeModal"> Cancel </SecondaryButton>
-
-                    <DangerButton
-                        class="ms-3"
-                        :class="{ 'opacity-25': form.processing }"
-                        :disabled="form.processing"
-                        @click="deleteUser"
-                    >
-                        Delete Account
-                    </DangerButton>
-                </div>
-            </div>
-        </Modal>
+            </Modal>
+        </div>
     </section>
 </template>
+
+<style scoped lang="scss">
+@import '../../../../css/_main.scss';
+
+.description {
+        padding-block: 1rem;
+    }
+
+.danger {
+    color: $danger-red;
+}
+</style>

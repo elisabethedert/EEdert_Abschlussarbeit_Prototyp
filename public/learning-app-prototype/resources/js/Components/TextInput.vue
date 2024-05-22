@@ -32,7 +32,7 @@ defineExpose({ focus: () => input.value.focus() });
     color: $blue;
     height: 2rem;
     padding-left: 1rem;
-    margin-bottom: 1rem;
+    max-width: 700px;
 
     &:focus {
         border: 1px solid $blue;

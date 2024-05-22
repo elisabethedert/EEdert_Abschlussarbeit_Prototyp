@@ -2,9 +2,12 @@
 $background: #FBF4CE;
 $background-light: #FCF9E7;
 $yellow: #FFD521;
+$yellow-dark: #e9c10f;
 $blue: #103A51;
 $green: #67917B;
+$green-dark: #517a65;
 $danger-red: #D83B19;
+$danger-red-dark: #af2304;
 $grey: #CCC8C8;
 $white: #FFFFFF;
 
@@ -17,23 +20,35 @@ $white: #FFFFFF;
     border: none;
     text-decoration: none;
     margin-bottom: 1rem;
+    &:hover {
+        cursor: pointer;
+    }
 
     &-green {
         background: $green;
         color: $white;
         box-shadow: 0px 5px 0px $grey;
+        &:hover {
+            background: $green-dark;
+        }
     }
 
     &-yellow {
         background: $yellow;
         color: $blue;
         box-shadow: 0px 5px 0px $green;
+        &:hover {
+            background: $yellow-dark;
+        }
     }
 
     &-danger {
         background: $danger-red;
         color: $white;
         box-shadow: 0px 5px 0px $yellow;
+        &:hover {
+            background: $danger-red-dark;
+        }
     }
 
     &-text {
@@ -43,11 +58,17 @@ $white: #FFFFFF;
         background: none;
         border: none;
         text-decoration: none;
+        &:hover {
+            text-decoration: underline;
+        }
     }
 }
 
+// typography
+p {
+    color: $blue;
+}
 
-// headings
 h1 {
     font-size: 4rem;
     color: $blue;

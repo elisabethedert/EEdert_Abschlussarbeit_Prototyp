@@ -28,7 +28,7 @@ const submit = () => {
         <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
             {{ status }}
         </div>
-        <div class="form-container">
+        <div class="form-container unauth">
 
             <p class="info-text">
                 Du hast dein Passwort vergessen? Kein Problem, wir schicken dir einen Link über den du dein Passwort

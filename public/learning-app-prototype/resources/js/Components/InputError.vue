@@ -18,6 +18,7 @@ defineProps({
 @import '../../css/_main.scss';
 
 .input-error {
-    border: 2px solid $danger-red;
+    margin-top: 0.25rem;
+    color: $danger-red;
 }
 </style>

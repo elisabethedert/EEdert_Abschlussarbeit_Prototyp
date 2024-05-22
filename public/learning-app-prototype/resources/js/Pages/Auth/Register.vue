@@ -24,7 +24,7 @@ const submit = () => {
     <GuestLayout class="layout-center">
         <Head title="Register" />
         <h1>Registrieren</h1>
-        <div class="form-container">
+        <div class="form-container unauth">
             <form @submit.prevent="submit">
                 <div class="input-container">
                     <InputLabel for="name" value="Name:" />
@@ -61,7 +61,6 @@ const submit = () => {
                     <TextInput
                         id="password"
                         type="password"
-                        class="mt-1 block w-full"
                         v-model="form.password"
                         required
                         autocomplete="new-password"
@@ -76,7 +75,6 @@ const submit = () => {
                     <TextInput
                         id="password_confirmation"
                         type="password"
-                        class="mt-1 block w-full"
                         v-model="form.password_confirmation"
                         required
                         autocomplete="new-password"
@@ -94,7 +92,7 @@ const submit = () => {
                     </Link>
 
                     <PrimaryButton :disabled="form.processing">
-                        Register
+                        Registrieren
                     </PrimaryButton>
                 </div>
             </form>      
