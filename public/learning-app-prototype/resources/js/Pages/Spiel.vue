@@ -59,17 +59,50 @@ function nextQuestion() {
     selectedAnswer.value = null;
 }
 
+function checkResultExistence(userId, questionId) {
+    fetch(`/question_results?user_id=${userId}&question_id=${questionId}`)
+    .then(response => {
+        console.log("Das ist der Response:");
+        console.log(response);
+        if (!response.ok) {
+            throw new Error('Fehler beim Abrufen der Daten.');
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log(data.status);
+        if(data.status === "success") {
+            console.log("Juhu Frage existiert, Result muss geupdated werden")
+            // if the entry already exists, update the result
+            // TODO
+            // QuestionResultController UpdateCounter noch nicht ganz korrekt
+            // router.put('/question_results', {
+            //     question_count: 1,
+            // })
+            
+        } else if(data.status === "error") {
+            // if the entry does not exist, create a new entry
+            //TODO: Beachten, ob Frage richtig oder Falsch beantwortet wurde
+            router.post('/question_results', {
+                user_id: usePage().props.auth.user.id,
+                question_id: props.questions[currentIndex.value].id,
+                question_type: 100,
+                question_count: 1,
+                question_correct_count: 1, //TODO
+                question_incorrect_count: 0, //TODO
+                lecture: props.questions[currentIndex.value].lecture,
+                unit: props.questions[currentIndex.value].unit,
+            })
+        }
+    })
+    .catch(error => {
+        console.error('Fehler beim Überprüfen des Ergebnisses:', error);
+    });
+};
 function saveQuestionResult() {
-    router.post('/question_results', {
-            user_id: usePage().props.auth.user.id,
-            question_id: props.questions[currentIndex.value].id,
-            question_type: 100,
-            question_count: 1,
-            question_correct_count: 1,
-            question_incorrect_count: 0,
-            lecture: props.questions[currentIndex.value].lecture,
-            unit: props.questions[currentIndex.value].unit,
-        })
+    checkResultExistence(usePage().props.auth.user.id, props.questions[currentIndex.value].id)
+
+
 }
 
 function calculateResult() {

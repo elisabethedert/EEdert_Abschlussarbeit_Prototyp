@@ -44,6 +44,21 @@ class QuestionResultsController extends Controller
         $newQuestionResult->save();
     }
 
+    public function checkExistence(Request $request) {
+        $requestdata = $request->all();
+
+        $questionResult = QuestionResults::where('user', $requestdata['user_id'])
+            ->where('question_id', $requestdata['question_id'])
+            ->first();
+
+        if ($questionResult) {
+            return response()->json(['status' => 'success', 'data' => $questionResult]);
+        } else {
+            return response()->json(['status' => 'error', 'message' => 'No record found']);
+        }
+    }
+
+
     /**
      * Display the specified resource.
      */
@@ -63,9 +78,21 @@ class QuestionResultsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, QuestionResults $questionResults)
+    public function updateCounter(Request $request, QuestionResults $questionResults)
     {
-        //
+        $requestdata = $request->all();
+        $editQuestionCount = QuestionResults::where('user', $requestdata['user_id'])
+        ->where('question_id', $requestdata['question_id'])
+        ->first();
+        $editQuestionCount->question_count = $requestdata['question_count']++;
+        //if Frage richtig
+            //TODO
+             $editQuestionCount->question_correct_count = $requestdata['question_correct_count']++;
+        //if Frage falsch
+            //TODO
+             $editQuestionCount->question_incorrect_count = $requestdata['question_incorrect_count']++;
+        $editQuestionCount->save();
+        return response()->json(['status' => 'success']);
     }
 
     /**

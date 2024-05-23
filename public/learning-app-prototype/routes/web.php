@@ -30,6 +30,7 @@ Route::get('spiel',[SpielController::class, 'index']);
 Route::post('/results', [SpielController::class, 'results'])->name('results');
 
 Route::post('/question_results', [QuestionResultsController::class, 'store'])->name('results');
-
+Route::get('/question_results', [QuestionResultsController::class, 'checkExistence']);
+Route::put('/question_results', [QuestionResultsController::class, 'updateCounter']);
 
 require __DIR__.'/auth.php';
