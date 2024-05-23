@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SpielController;
+use App\Http\Controllers\QuestionResultsController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -27,5 +28,8 @@ Route::middleware('auth')->group(function () {
 
 Route::get('spiel',[SpielController::class, 'index']);
 Route::post('/results', [SpielController::class, 'results'])->name('results');
+
+Route::post('/question_results', [QuestionResultsController::class, 'store'])->name('results');
+
 
 require __DIR__.'/auth.php';

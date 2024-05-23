@@ -2,6 +2,7 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, router } from '@inertiajs/vue3';
 import { ref, computed } from 'vue';
+import {usePage} from '@inertiajs/vue3'
 
 const props = defineProps({
     questions: Object
@@ -46,8 +47,9 @@ function nextQuestion() {
     if (selectedAnswer.value !== null) {
         if (choosenAnswer.correct_answer == 1) {
             result.value++;
-            console.log(result.value)
-            // saveQuestionResult();
+            console.log("user id" + usePage().props.auth.user.id)
+            console.log("id: " + props.questions[currentIndex.value].id)
+            saveQuestionResult();
             resultCorrect.value = true;
         } else {
             resultIncorrect.value = true;
@@ -57,28 +59,30 @@ function nextQuestion() {
     selectedAnswer.value = null;
 }
 
-// function saveQuestionResult() {
-//     router.post('/question_results', [
-//         {
-//             question_results: {
-//                 'question_id': currentQuestion.id,
-//                 'question_type': currentQuestion.currentQuestion+100
-//             }
-//         }
-//     ])
-// }
+function saveQuestionResult() {
+    router.post('/question_results', {
+            user_id: usePage().props.auth.user.id,
+            question_id: props.questions[currentIndex.value].id,
+            question_type: 100,
+            question_count: 1,
+            question_correct_count: 1,
+            question_incorrect_count: 0,
+            lecture: props.questions[currentIndex.value].lecture,
+            unit: props.questions[currentIndex.value].unit,
+        })
+}
 
 function calculateResult() {
     var choosenAnswer = props.questions[currentIndex.value].multiple_choice_answers[selectedAnswer.value];
     setTimeout(hideResult, 2000);
-        if (choosenAnswer.correct_answer == 1) {
-            result.value++;
-            console.log(result.value)
-            resultCorrect.value = true;
-        } else {
-            resultIncorrect.value = true;
-        }
-    
+    if (choosenAnswer.correct_answer == 1) {
+        result.value++;
+        console.log(result.value)
+        resultCorrect.value = true;
+    } else {
+        resultIncorrect.value = true;
+    }
+
     router.post('/results', [
         {
             results: {
@@ -97,6 +101,9 @@ function calculateResult() {
         <h1>Spiel</h1>
 
         <div class="question-counter">
+            <p>Frage id: {{ currentQuestion.id }}<br></p>
+            <p>Topic: {{ currentQuestion.topic }}<br></p>
+            <p>Unit: {{ currentQuestion.unit }}<br></p>
             <p>Lektion: {{ currentQuestion.lecture }}<br></p>
             <p>
                 Frage {{ currentIndex + 1 }} von {{ totalQuestions }}

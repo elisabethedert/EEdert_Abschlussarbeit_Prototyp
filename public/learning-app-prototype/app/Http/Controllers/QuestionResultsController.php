@@ -28,7 +28,20 @@ class QuestionResultsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $requestdata = $request->all();
+
+        //save question as new record in database
+        $newQuestionResult = new QuestionResults;
+        $newQuestionResult->user = $requestdata['user_id'];
+        $newQuestionResult->question_id = $requestdata['question_id'];
+        $newQuestionResult->question_type = $requestdata['question_type'];
+        $newQuestionResult->question_count = $requestdata['question_count'];
+        $newQuestionResult->question_correct_count = $requestdata['question_correct_count'];
+        $newQuestionResult->question_incorrect_count = $requestdata['question_incorrect_count'];
+        $newQuestionResult->lecture = $requestdata['lecture'];
+        $newQuestionResult->unit = $requestdata['unit'];
+
+        $newQuestionResult->save();
     }
 
     /**
