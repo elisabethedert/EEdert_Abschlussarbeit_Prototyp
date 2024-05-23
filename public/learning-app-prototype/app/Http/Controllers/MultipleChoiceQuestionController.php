@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\MultipleChoiceQuestion;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class MultipleChoiceQuestionController extends Controller
 {
@@ -12,7 +13,7 @@ class MultipleChoiceQuestionController extends Controller
      */
     public function index()
     {
-        //
+        return Inertia::render('MultipleChoiceQuestions');
     }
 
     /**

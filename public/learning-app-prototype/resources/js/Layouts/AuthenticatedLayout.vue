@@ -7,7 +7,7 @@ import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import { Link } from '@inertiajs/vue3';
 
-const showMenu = ref(true);
+const showMenu = ref(false);
 const showProfile = ref(false);
 
 const toggleNav = () => {
@@ -45,6 +45,7 @@ const toggleProfile = () => {
                             <NavLink class="item" :href="route('dashboard')" :active="route().current('dashboard')">
                                 Dashboard
                             </NavLink>
+                            <NavLink href="/spiel" :class="{'nav-link active':$page.url==='/spiel', 'nav-link':$page.url != '/spiel'}">Spiel</NavLink>
                         </div>
                     </div>
                     <div class="dropdown">
