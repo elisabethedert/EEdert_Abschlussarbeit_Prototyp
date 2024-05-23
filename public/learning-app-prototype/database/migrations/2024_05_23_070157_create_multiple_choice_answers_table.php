@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('multiple_choice_answers', function (Blueprint $table) {
             $table->id();
+            $table->string('answer');
+            $table->foreignId('multiple_choice_question_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
+            $table->boolean('correct_answer'); //1-correct 0-wrong
             $table->timestamps();
         });
     }

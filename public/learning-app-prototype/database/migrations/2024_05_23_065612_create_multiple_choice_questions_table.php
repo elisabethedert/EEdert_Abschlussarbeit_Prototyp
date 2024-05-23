@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('multiple_choice_questions', function (Blueprint $table) {
             $table->id();
+            $table->string('question');
+            $table->string('topic');
+            $table->integer('level');
+            $table->integer('lecture');
+            $table->integer('unit');
             $table->timestamps();
         });
     }
