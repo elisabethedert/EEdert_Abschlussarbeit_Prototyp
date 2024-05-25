@@ -52,6 +52,7 @@ function nextQuestion() {
             saveQuestionResult();
             resultCorrect.value = true;
         } else {
+            saveQuestionResult();
             resultIncorrect.value = true;
         }
     }
@@ -59,7 +60,7 @@ function nextQuestion() {
     selectedAnswer.value = null;
 }
 
-function checkResultExistence(userId, questionId) {
+function databaseEntry(userId, questionId, choosenAnswerValue) {
     fetch(`/question_results?user_id=${userId}&question_id=${questionId}`)
     .then(response => {
         console.log("Das ist der Response:");
@@ -70,39 +71,69 @@ function checkResultExistence(userId, questionId) {
         return response.json();
     })
     .then(data => {
-        console.log(data.status);
+        console.log("Das ist der Data:");
+        console.log(data);
+        
         if(data.status === "success") {
-            console.log("Juhu Frage existiert, Result muss geupdated werden")
-            // if the entry already exists, update the result
-            // TODO
-            // QuestionResultController UpdateCounter noch nicht ganz korrekt
-            // router.put('/question_results', {
-            //     question_count: 1,
-            // })
+            console.log("Juhu Frage existiert, Result muss geupdated werden, hier nochmal data:")
+            console.log(data)
+            console.log("Data question_count")
+            console.log(data.data.question_count);
+            console.log("Data question question_correct_count")
+            console.log(data.data.question_correct_count);
+            console.log("Data question_incorrect_count")
+            console.log(data.data.question_incorrect_count);
+
+            var questionCount = data.data.question_count;
+            var questionCorrectCount = data.data.question_correct_count;
+            var questionIncorrectCount = data.data.question_incorrect_count;
+
+            if (choosenAnswerValue == 1){
+                router.put('/question_results', {
+                    question_count: questionCount++,
+                    question_correct_count: questionCorrectCount++,
+                    question_incorrect_count: questionIncorrectCount,
+                })
+                console.log("put richtige antwort hat geklappt")
+            } else {
+                router.put('/question_results', {
+                    question_count: questionCount++,
+                    question_correct_count: questionCorrectCount,
+                    question_incorrect_count: questionIncorrectCount++,
+                })
+                console.log("put falsche antwort hat geklappt")
+            }
+            console.log("questionCount"+questionCount)
+            console.log("questionCorrectCount"+questionCorrectCount)
+            console.log("questionIncorrectCount"+questionIncorrectCount)
             
         } else if(data.status === "error") {
+            console.log("Nooo Frage existiert nicht, Result muss angelegt werden")
             // if the entry does not exist, create a new entry
-            //TODO: Beachten, ob Frage richtig oder Falsch beantwortet wurde
             router.post('/question_results', {
                 user_id: usePage().props.auth.user.id,
                 question_id: props.questions[currentIndex.value].id,
-                question_type: 100,
+                question_type: 100, //TODO
                 question_count: 1,
-                question_correct_count: 1, //TODO
-                question_incorrect_count: 0, //TODO
+                question_correct_count: 0, //TODO if answer correct
+                question_incorrect_count: 0, //TODO if answer incorrect
                 lecture: props.questions[currentIndex.value].lecture,
                 unit: props.questions[currentIndex.value].unit,
             })
+            console.log("Frage wurde angelegt")
         }
     })
     .catch(error => {
         console.error('Fehler beim Überprüfen des Ergebnisses:', error);
     });
 };
+
 function saveQuestionResult() {
-    checkResultExistence(usePage().props.auth.user.id, props.questions[currentIndex.value].id)
-
-
+    console.log("User id:")
+    console.log(usePage().props.auth.user.id)
+    console.log("richtig beantwortet?")
+    console.log(props.questions[currentIndex.value].multiple_choice_answers[selectedAnswer.value].correct_answer)
+    databaseEntry(usePage().props.auth.user.id, props.questions[currentIndex.value].id, props.questions[currentIndex.value].multiple_choice_answers[selectedAnswer.value].correct_answer)
 }
 
 function calculateResult() {

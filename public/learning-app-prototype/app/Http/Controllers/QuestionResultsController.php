@@ -32,7 +32,7 @@ class QuestionResultsController extends Controller
 
         //save question as new record in database
         $newQuestionResult = new QuestionResults;
-        $newQuestionResult->user = $requestdata['user_id'];
+        $newQuestionResult->user_id = $requestdata['user_id'];
         $newQuestionResult->question_id = $requestdata['question_id'];
         $newQuestionResult->question_type = $requestdata['question_type'];
         $newQuestionResult->question_count = $requestdata['question_count'];
@@ -44,17 +44,18 @@ class QuestionResultsController extends Controller
         $newQuestionResult->save();
     }
 
-    public function checkExistence(Request $request) {
+    public function checkExistence(Request $request)
+    {
         $requestdata = $request->all();
 
-        $questionResult = QuestionResults::where('user', $requestdata['user_id'])
+        $questionResult = QuestionResults::where('user_id', $requestdata['user_id'])
             ->where('question_id', $requestdata['question_id'])
             ->first();
 
         if ($questionResult) {
             return response()->json(['status' => 'success', 'data' => $questionResult]);
         } else {
-            return response()->json(['status' => 'error', 'message' => 'No record found']);
+            return response()->json(['status' => 'error', 'data' => $questionResult]);
         }
     }
 
@@ -78,22 +79,46 @@ class QuestionResultsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function updateCounter(Request $request, QuestionResults $questionResults)
+    public function updateCounter(Request $request)
     {
-        $requestdata = $request->all();
-        $editQuestionCount = QuestionResults::where('user', $requestdata['user_id'])
-        ->where('question_id', $requestdata['question_id'])
-        ->first();
-        $editQuestionCount->question_count = $requestdata['question_count']++;
-        //if Frage richtig
-            //TODO
-             $editQuestionCount->question_correct_count = $requestdata['question_correct_count']++;
-        //if Frage falsch
-            //TODO
-             $editQuestionCount->question_incorrect_count = $requestdata['question_incorrect_count']++;
+        // Validierung der eingehenden Anfrage
+        $validatedData = $request->validate([
+            'question_id' => 'required|integer',
+            'user_id' => 'required|integer',
+            'question_count' => 'required|integer',
+            'question_correct_count' => 'required|integer',
+            'question_incorrect_count' => 'required|integer',
+        ]);
+
+        // Debugging-Log hinzufügen
+        // \Log::info('UpdateCounter request data:', $validatedData);
+
+        // Suche nach dem vorhandenen Eintrag
+        $editQuestionCount = QuestionResults::where('question_id', $validatedData['question_id'])
+            ->where('user_id', $validatedData['user_id'])
+            ->first();
+
+        $editQuestionCount->question_count = $validatedData['question_count'];
+        $editQuestionCount->question_correct_count = $validatedData['question_correct_count'];
+        $editQuestionCount->question_incorrect_count = $validatedData['question_incorrect_count'];
         $editQuestionCount->save();
-        return response()->json(['status' => 'success']);
+        return response()->json(['status' => 'erfolgreich geupdated']);
+
+
+        // public function updateCounter(Request $request, QuestionResults $questionResults)
+        // {
+        //     $requestdata = $request->all();
+        //     $editQuestionCount = QuestionResults::where('question_id', $requestdata['question_id'])
+        //         ->where('user_id', $requestdata['user_id'])
+        //         ->first();
+        //     $editQuestionCount->question_count = $requestdata['question_count'];
+        //     $editQuestionCount->question_correct_count = $requestdata['question_correct_count'];
+        //     $editQuestionCount->question_incorrect_count = $requestdata['question_incorrect_count'];
+        //     $editQuestionCount->save();
+        //     return response()->json(['status' => 'erfolgreich geupdated']);
+        // }
     }
+
 
     /**
      * Remove the specified resource from storage.
