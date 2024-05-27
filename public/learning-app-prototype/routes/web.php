@@ -26,7 +26,13 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+//Spielübersicht, braucht neuen Controller (LectureController) hier alle verfügbaren Lectures anzeigen (nur index)
 Route::get('spiel',[SpielController::class, 'index']);
+
+//Spielseite der einzelnen Lektionen
+Route::get('spiel/{lecture}',[SpielController::class, 'index']);
+
+//Ergebnisse nach Lektion 
 Route::post('/results', [SpielController::class, 'results'])->name('results');
 
 Route::post('/question_results', [QuestionResultsController::class, 'store'])->name('results');

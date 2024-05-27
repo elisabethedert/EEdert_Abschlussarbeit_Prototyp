@@ -8,8 +8,9 @@ import { Head, Link } from '@inertiajs/vue3';
 
     <AuthenticatedLayout>
         <h1>You're logged in!</h1>
+        <!-- TODO Button mit richtigem Link -->
         <Link href="spiel" type="button" class="btn btn-yellow">Spiel starten</Link>
-    </AuthenticatedLayout>
+        </AuthenticatedLayout>
 </template>
 
 <style scoped>
