@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\QuestionResults;
 use Illuminate\Http\Request;
+use App\Models\MultipleChoiceAnswer;
+use Illuminate\Support\Facades\Log;
 
 class QuestionResultsController extends Controller
 {
@@ -28,37 +30,41 @@ class QuestionResultsController extends Controller
      */
     public function store(Request $request)
     {
-        $requestdata = $request->all();
+        $requestdata = $request->all(); // TODO: Validate Data
 
-        //save question as new record in database
-        $newQuestionResult = new QuestionResults;
-        $newQuestionResult->user_id = $requestdata['user_id'];
-        $newQuestionResult->question_id = $requestdata['question_id'];
-        $newQuestionResult->question_type = $requestdata['question_type'];
-        $newQuestionResult->question_count = $requestdata['question_count'];
-        $newQuestionResult->question_correct_count = $requestdata['question_correct_count'];
-        $newQuestionResult->question_incorrect_count = $requestdata['question_incorrect_count'];
-        $newQuestionResult->lecture = $requestdata['lecture'];
-        $newQuestionResult->unit = $requestdata['unit'];
+        // richtige Antwort der Frage finden wenn nicht null dann Antwort korekt
+        $answerWasCorrect = MultipleChoiceAnswer::where('multiple_choice_question_id', $requestdata['question_id'])
+            ->where('correct_answer', 1)
+            ->where('id', $requestdata['answer_id'])
+            ->first();
 
-        $newQuestionResult->save();
-    }
+        //TODO: Drag and drop: type mit abfragen und in die Datenbank speichern
 
-    public function checkExistence(Request $request)
-    {
-        $requestdata = $request->all();
-
-        $questionResult = QuestionResults::where('user_id', $requestdata['user_id'])
+        // Frageergebnis in der Datenbank suchen, ob Frage bereits beantwortet
+        $record = QuestionResults::where('user_id', $requestdata['user_id'])
             ->where('question_id', $requestdata['question_id'])
             ->first();
 
-        if ($questionResult) {
-            return response()->json(['status' => 'success', 'data' => $questionResult]);
+        //wenn es schon einen Eintrag gibt, dann die Werte erhöhen (wäre sonst null)
+        if ($record) {
+            $record->question_count = $record->question_count+1;
+            $record->question_correct_count = $answerWasCorrect ? $record->question_correct_count+1 : $record->question_correct_count;
+            $record->question_incorrect_count = $answerWasCorrect ? $record->question_incorrect_count : $record->question_incorrect_count+1;
+            $record->save();
         } else {
-            return response()->json(['status' => 'error', 'data' => $questionResult]);
+            $newQuestionResult = new QuestionResults;
+            $newQuestionResult->user_id = $requestdata['user_id'];
+            $newQuestionResult->question_id = $requestdata['question_id'];
+            $newQuestionResult->question_type = $requestdata['question_type'];
+            $newQuestionResult->question_count = 1;
+            $newQuestionResult->question_correct_count = $answerWasCorrect ? 1 : 0;
+            $newQuestionResult->question_incorrect_count = $answerWasCorrect ? 0 : 1;
+            $newQuestionResult->lecture = $requestdata['lecture'];
+            $newQuestionResult->unit = $requestdata['unit'];
+
+            $newQuestionResult->save();
         }
     }
-
 
     /**
      * Display the specified resource.
@@ -79,46 +85,10 @@ class QuestionResultsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function updateCounter(Request $request)
+    public function update(Request $request)
     {
-        // Validierung der eingehenden Anfrage
-        $validatedData = $request->validate([
-            'question_id' => 'required|integer',
-            'user_id' => 'required|integer',
-            'question_count' => 'required|integer',
-            'question_correct_count' => 'required|integer',
-            'question_incorrect_count' => 'required|integer',
-        ]);
-
-        // Debugging-Log hinzufügen
-        // \Log::info('UpdateCounter request data:', $validatedData);
-
-        // Suche nach dem vorhandenen Eintrag
-        $editQuestionCount = QuestionResults::where('question_id', $validatedData['question_id'])
-            ->where('user_id', $validatedData['user_id'])
-            ->first();
-
-        $editQuestionCount->question_count = $validatedData['question_count'];
-        $editQuestionCount->question_correct_count = $validatedData['question_correct_count'];
-        $editQuestionCount->question_incorrect_count = $validatedData['question_incorrect_count'];
-        $editQuestionCount->save();
-        return response()->json(['status' => 'erfolgreich geupdated']);
-
-
-        // public function updateCounter(Request $request, QuestionResults $questionResults)
-        // {
-        //     $requestdata = $request->all();
-        //     $editQuestionCount = QuestionResults::where('question_id', $requestdata['question_id'])
-        //         ->where('user_id', $requestdata['user_id'])
-        //         ->first();
-        //     $editQuestionCount->question_count = $requestdata['question_count'];
-        //     $editQuestionCount->question_correct_count = $requestdata['question_correct_count'];
-        //     $editQuestionCount->question_incorrect_count = $requestdata['question_incorrect_count'];
-        //     $editQuestionCount->save();
-        //     return response()->json(['status' => 'erfolgreich geupdated']);
-        // }
+        //
     }
-
 
     /**
      * Remove the specified resource from storage.

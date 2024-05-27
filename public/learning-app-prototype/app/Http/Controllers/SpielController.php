@@ -11,11 +11,20 @@ class SpielController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index($lecture)
     {
-        $questions = MultipleChoiceQuestion::with(['multiple_choice_answers'=>function($query) {
-            $query->inRandomOrder();
-        }])->inRandomOrder()->get();
+        $questions = MultipleChoiceQuestion::where('lecture', $lecture)->inRandomOrder()->get();
+
+        //filter to remove correct answer from the response
+        //TODO: Drag and Drop hier mit MultipleChoice mergen und random mischen testen
+        $questions->transform(function ($question) {
+            $question->multiple_choice_answers->transform(function ($answer) {
+                unset($answer->correct_answer); 
+                return $answer;
+            });
+            return $question;
+        });
+
         //View to see by the User
         return Inertia::render('Spiel', [
             'questions' => $questions
