@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('question');
             $table->string('topic');
             $table->integer('level');
+            $table->string('type');
             $table->integer('lecture');
             $table->integer('unit');
             $table->timestamps();

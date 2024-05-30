@@ -31,7 +31,7 @@ Route::middleware('auth')->group(function () {
 Route::get('spiel',[SpielController::class, 'index']);
 
 //Spielseite der einzelnen Lektionen
-Route::get('spiel/lektion{lecture}',[LectureController::class, 'index']);
+Route::get('spiel/lektion{lecture}',[LectureController::class, 'index'])->name('spiel.lektion');
 
 //Ergebnisse nach Lektion 
 Route::post('/results', [LectureController::class, 'results'])->name('results');
