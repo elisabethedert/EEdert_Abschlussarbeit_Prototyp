@@ -1,6 +1,9 @@
 <?php
 
+use App\Http\Controllers\LectureController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SpielController;
+use App\Http\Controllers\QuestionResultsController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -23,5 +26,18 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+//Spielübersicht
+Route::get('spiel',[SpielController::class, 'index']);
+
+//Spielseite der einzelnen Lektionen
+Route::get('spiel/lektion{lecture}',[LectureController::class, 'index'])->name('spiel.lektion');
+
+//Ergebnisse nach Lektion 
+Route::post('/results', [LectureController::class, 'results'])->name('results');
+
+Route::post('/question_results', [QuestionResultsController::class, 'store'])->name('results');
+Route::get('/question_results', [QuestionResultsController::class, 'checkExistence']);
+Route::put('/question_results', [QuestionResultsController::class, 'updateCounter']);
 
 require __DIR__.'/auth.php';
