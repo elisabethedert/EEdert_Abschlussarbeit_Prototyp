@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\LectureController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SpielController;
 use App\Http\Controllers\QuestionResultsController;
@@ -26,14 +27,14 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-//Spielübersicht, braucht neuen Controller (LectureController) hier alle verfügbaren Lectures anzeigen (nur index)
+//Spielübersicht
 Route::get('spiel',[SpielController::class, 'index']);
 
 //Spielseite der einzelnen Lektionen
-Route::get('spiel/{lecture}',[SpielController::class, 'index']);
+Route::get('spiel/lektion{lecture}',[LectureController::class, 'index']);
 
 //Ergebnisse nach Lektion 
-Route::post('/results', [SpielController::class, 'results'])->name('results');
+Route::post('/results', [LectureController::class, 'results'])->name('results');
 
 Route::post('/question_results', [QuestionResultsController::class, 'store'])->name('results');
 Route::get('/question_results', [QuestionResultsController::class, 'checkExistence']);
