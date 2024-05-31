@@ -64,7 +64,11 @@ class QuestionResultsController extends Controller
 
             $newQuestionResult->save();
         }
-        return response()->noContent(200);
+        if ($answerWasCorrect) {
+            return response()->json(['message' => 'correct'], 200);
+        } else {
+            return response()->json(['message' => 'incorrect'], 200);
+        }
     }
 
     /**

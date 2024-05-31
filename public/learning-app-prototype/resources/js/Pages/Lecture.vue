@@ -14,7 +14,7 @@ const props = defineProps({
     questions: Object
 })
 
-const page  = usePage();
+const page = usePage();
 
 const currentIndex = ref(0);
 const resultCorrect = ref(false);
@@ -39,6 +39,12 @@ const isLastQuestion = computed(() => currentIndex.value === props.questions.len
 const answers = computed(() => {
     return props.questions[currentIndex.value].multiple_choice_answers
 })
+const answersDd = computed(() => {
+    const blanks = props.questions[currentIndex.value].blanks;
+    const words = blanks.split(' ');
+    const newWordsArray = words.filter(word => word !== '').map(word => word.replace(/["\[\],]/g, ''));
+    return newWordsArray;
+})
 
 var count = 0;
 
@@ -50,21 +56,30 @@ function hideResult() {
     resultIncorrect.value = false;
 }
 
-function nextQuestion() {
-    var choosenAnswer = props.questions[currentIndex.value].multiple_choice_answers[selectedAnswer.value];
-    console.log("gewählte Antwort:")
-    console.log(choosenAnswer.id)
-    setTimeout(hideResult, 2000);
-
-    // router lädt Seite neu und erstellt neuen get (schlecht)
+function saveResult() {
     axios.post('/question_results', {
         user_id: page.props.auth.user.id,
         question_id: props.questions[currentIndex.value].id,
         answer_id: props.questions[currentIndex.value].multiple_choice_answers[selectedAnswer.value].id,
-        question_type: props.questions[currentIndex.value].type, //TODO in Question mit reinnehmen und hier auslesen aus props
+        question_type: props.questions[currentIndex.value].type,
         lecture: props.questions[currentIndex.value].lecture,
         unit: props.questions[currentIndex.value].unit,
-    })
+    }).then(response => {
+        console.log(response.data.message);
+        if (response.data.message == "correct") {
+            result.value++;
+            resultCorrect.value = true;
+        } else {
+            resultIncorrect.value = true;
+        }
+    }).catch(error => {
+        console.error(error);
+    });
+}
+
+function nextQuestion() {
+    setTimeout(hideResult, 2000);
+    saveResult();
 
     currentIndex.value++;
     selectedAnswer.value = null;
@@ -73,25 +88,14 @@ function nextQuestion() {
     progressbar(count, maxCount);
 }
 
-function calculateResult() {
-    var choosenAnswer = props.questions[currentIndex.value].multiple_choice_answers[selectedAnswer.value];
-    setTimeout(hideResult, 2000);
-    if (choosenAnswer.correct_answer == 1) {
-        result.value++;
-        console.log(result.value)
-        resultCorrect.value = true;
-    } else {
-        resultIncorrect.value = true;
-    }
-    axios.post('/question_results', {
-        user_id: page.props.auth.user.id,
-        question_id: props.questions[currentIndex.value].id,
-        answer_id: props.questions[currentIndex.value].multiple_choice_answers[selectedAnswer.value].id,
-        question_type: props.questions[currentIndex.value].type, //TODO in Question mit reinnehmen und hier auslesen aus props
-        lecture: props.questions[currentIndex.value].lecture,
-        unit: props.questions[currentIndex.value].unit,
-    })
+console.log(currentQuestion.blanks)
 
+function calculateResult() {
+    setTimeout(hideResult, 2000);
+    saveResult();
+
+    // TODO: länger warten, bis das Ergebnis der Lektion angezeigt wird und das Ergebnis der Frage zunächst zeigen
+    // Button verzögert zeigen, der auf das Lektionsergebnis führt
     router.post('/results', [
         {
             results: {
@@ -99,13 +103,14 @@ function calculateResult() {
                 'totalQuestions': totalQuestions.value
             }
         }
-    ])
+    ]);
 }
 
 function progressbar(count, maxCount) {
     var newWidth = (count / maxCount) * 100 + "%";
     document.getElementsByClassName("progress-bar")[0].style.width = newWidth;
 }
+
 </script>
 
 <template>
@@ -117,24 +122,22 @@ function progressbar(count, maxCount) {
             <h2>{{ currentQuestion.topic }}</h2>
         </div>
 
-        <div v-if="currentQuestion.type === 'mc'" class="question-counter">
-
-            <div class="question-container">
-                <div class="question-header">
-                    <div class="question-counter">
-                        <p class="question-counter"><b>Frage {{ currentIndex + 1 }} von {{ totalQuestions }}</b></p>
-                        <div class="progress">
-                            <div class="progress-bar">
-                                <span style="width: 40%;"></span>
-                            </div>
+        <div class="question-container">
+            <div class="question-header">
+                <div class="question-counter">
+                    <p class="question-counter"><b>Frage {{ currentIndex + 1 }} von {{ totalQuestions }}</b></p>
+                    <div class="progress">
+                        <div class="progress-bar">
+                            <span style="width: 40%;"></span>
                         </div>
-                    </div>
-
-                    <div class="help-icon">
-                        <p>i</p>
                     </div>
                 </div>
 
+                <div class="help-icon">
+                    <p>i</p>
+                </div>
+            </div>
+            <div v-if="currentQuestion.type === 'mc'">
                 <div class="question-main">
                     <div class="question">
                         <div class="">
@@ -152,19 +155,31 @@ function progressbar(count, maxCount) {
 
                     </div>
                 </div>
+            </div>
 
-                <div class="question-footer">
-                    <div v-if="resultCorrect">
-                        Resuuuuult richtig
+            <div v-if="currentQuestion.type === 'dd'" class="question-counter">
+                <div class="question-main">
+                    <div class="question">
+                        <div class="">
+                            <h2>{{ currentQuestion.question }}</h2>
+                        </div>
                     </div>
-                    <div v-if="resultIncorrect">
-                        Resuuuuult falsch
+                    <div class="answer-dd">
+                        <button v-for="(item, index) in answersDd" :key="index">
+                            {{ item }}
+                        </button>
                     </div>
-                    <button @click="nextQuestion" v-if="!isLastQuestion" class="btn btn-green">Bestätigen</button>
-                    <button @click="calculateResult" v-if="isLastQuestion" class="btn btn-yellow">Lektion
-                        beenden
-                    </button>
                 </div>
+            </div>
+            <div class="question-footer">
+                <div v-if="resultCorrect">
+                    Resuuuuult richtig
+                </div>
+                <div v-if="resultIncorrect">
+                    Resuuuuult falsch
+                </div>
+                <button @click="nextQuestion" v-if="!isLastQuestion" class="btn btn-green">Bestätigen</button>
+                <button @click="calculateResult" v-if="isLastQuestion" class="btn btn-yellow">Lektion</button>
             </div>
         </div>
     </AuthenticatedLayout>

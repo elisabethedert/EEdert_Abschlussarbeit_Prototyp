@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DragDropQuestion;
 use Illuminate\Http\Request;
 use App\Models\MultipleChoiceQuestion;
 use Inertia\Inertia;
@@ -13,17 +14,20 @@ class LectureController extends Controller
      */
     public function index($lecture)
     {
-        $questions = MultipleChoiceQuestion::where('lecture', $lecture)->inRandomOrder()->get();
+        $questionsMc = MultipleChoiceQuestion::where('lecture', $lecture)->inRandomOrder()->get();
+        $questionsDd = DragDropQuestion::where('lecture', $lecture)->inRandomOrder()->get();
 
         //filter to remove correct answer from the response
         //TODO: Drag and Drop hier mit MultipleChoice mergen und random mischen testen
-        $questions->transform(function ($question) {
+        $questionsMc->transform(function ($question) {
             $question->multiple_choice_answers->transform(function ($answer) {
                 unset($answer->correct_answer); 
                 return $answer;
             });
             return $question;
         });
+
+        $questions = $questionsDd->concat($questionsMc)->shuffle();
 
         //View to see by the User
         return Inertia::render('Lecture', [
