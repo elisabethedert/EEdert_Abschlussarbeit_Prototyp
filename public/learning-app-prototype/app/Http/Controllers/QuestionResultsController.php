@@ -64,6 +64,7 @@ class QuestionResultsController extends Controller
 
             $newQuestionResult->save();
         }
+        return response()->noContent(200);
     }
 
     /**

@@ -7,11 +7,14 @@ import { Head, router } from '@inertiajs/vue3';
 import { ref, computed } from 'vue';
 import { usePage } from '@inertiajs/vue3'
 import { useForm } from '@inertiajs/vue3'
+import axios from 'axios';
 
 
 const props = defineProps({
     questions: Object
 })
+
+const page  = usePage();
 
 const currentIndex = ref(0);
 const resultCorrect = ref(false);
@@ -54,8 +57,8 @@ function nextQuestion() {
     setTimeout(hideResult, 2000);
 
     // router lädt Seite neu und erstellt neuen get (schlecht)
-    router.post('/question_results', {
-        user_id: usePage().props.auth.user.id,
+    axios.post('/question_results', {
+        user_id: page.props.auth.user.id,
         question_id: props.questions[currentIndex.value].id,
         answer_id: props.questions[currentIndex.value].multiple_choice_answers[selectedAnswer.value].id,
         question_type: props.questions[currentIndex.value].type, //TODO in Question mit reinnehmen und hier auslesen aus props
@@ -80,6 +83,14 @@ function calculateResult() {
     } else {
         resultIncorrect.value = true;
     }
+    axios.post('/question_results', {
+        user_id: page.props.auth.user.id,
+        question_id: props.questions[currentIndex.value].id,
+        answer_id: props.questions[currentIndex.value].multiple_choice_answers[selectedAnswer.value].id,
+        question_type: props.questions[currentIndex.value].type, //TODO in Question mit reinnehmen und hier auslesen aus props
+        lecture: props.questions[currentIndex.value].lecture,
+        unit: props.questions[currentIndex.value].unit,
+    })
 
     router.post('/results', [
         {
