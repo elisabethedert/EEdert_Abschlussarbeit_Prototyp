@@ -18,7 +18,6 @@ class LectureController extends Controller
         $questionsDd = DragDropQuestion::where('lecture', $lecture)->inRandomOrder()->get();
 
         //filter to remove correct answer from the response
-        //TODO: Drag and Drop hier mit MultipleChoice mergen und random mischen testen
         $questionsMc->transform(function ($question) {
             $question->multiple_choice_answers->transform(function ($answer) {
                 unset($answer->correct_answer); 
@@ -27,6 +26,7 @@ class LectureController extends Controller
             return $question;
         });
 
+        // merge question types and shuffle them
         $questions = $questionsDd->concat($questionsMc)->shuffle();
 
         //View to see by the User
