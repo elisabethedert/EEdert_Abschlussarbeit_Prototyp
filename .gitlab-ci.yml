@@ -6,12 +6,20 @@ variables:
   DOCKER_DRIVER: overlay2
   IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
 
+stages: 
+  - prepare 
+  - build 
+  
 before_script:
   - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+
+test-job:
+  stage: prepare
+  script:
+    - kubectl get nodes
 
 build:
   stage: build
   script:
     - docker build -t $IMAGE_TAG .
     - docker push $IMAGE_TAG
-
