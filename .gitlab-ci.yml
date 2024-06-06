@@ -1,14 +1,15 @@
-services:
-  - docker:dind
+image: thlmylab/swakkd:stable
 
 variables:
   DOCKER_HOST: tcp://docker:2375
   DOCKER_DRIVER: overlay2
   IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
+  NAMESPACE: stud-eedert-ba
 
 stages: 
   - prepare 
   - build 
+  - deploy
 
 test-job:
   stage: prepare
@@ -18,7 +19,25 @@ test-job:
 
 build:
   stage: build
+  services: ["docker:dind"]
+  rules:
+    - if: $CI_COMMIT_REF_SLUG == "master"
+      changes:
+        - ./Dockerfile
   script:
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
     - docker build -t $IMAGE_TAG .
     - docker push $IMAGE_TAG
+
+kubernetes:
+  stage: deploy
+  environment:
+    name: $CI_COMMIT_REF_SLUG
+  script: 
+    - cd deploy
+    - kubectl apply -f deployment.yaml -n $NAMESPACE
+    - kubectl apply -f service.yaml -n $NAMESPACE
+  rules:
+    - if: $CI_COMMIT_REF_SLUG == "master"
+      changes:
+        - ./deploy/*

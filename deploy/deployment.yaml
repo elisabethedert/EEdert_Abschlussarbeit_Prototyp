@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: learning-app-deployment
+  labels:
+    app: learning-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: learning-app
+  template:
+    metadata:
+      labels:
+        app: learning-app
+    spec:
+      containers:
+      - name: learning-app-pod
+        image: git.mylab.th-luebeck.de:4181/elisabeth.edert/eedert_abschlussarbeit_prototyp:master
+        ports:
+        - containerPort: 80
+        resources:
+          limits:
+            cpu: "1000m"
+            memory: "2Gi"
