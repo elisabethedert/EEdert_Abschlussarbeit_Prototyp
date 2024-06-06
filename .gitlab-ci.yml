@@ -14,7 +14,7 @@ test-job:
   stage: prepare
   image: 'thlmylab/swakkd:stable'  
   script:
-    - kubectl get nodes
+    - kubectl get pods -n stud-eedert-ba
 
 build:
   stage: build
