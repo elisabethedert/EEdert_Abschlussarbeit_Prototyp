@@ -63,41 +63,73 @@ function hideResult() {
     resultIncorrect.value = false;
 }
 
-function saveResult() {
+function saveMcResult() {
+    axios.post('/question_results', {
+        user_id: page.props.auth.user.id,
+        question_id: props.questions[currentIndex.value].id,
+        answer_id: props.questions[currentIndex.value].multiple_choice_answers[selectedAnswer.value].id,
+        question_type: props.questions[currentIndex.value].type,
+        lecture: props.questions[currentIndex.value].lecture,
+        unit: props.questions[currentIndex.value].unit,
+    }).then(response => {
+        console.log(response.data.message);
+        if (response.data.message == "correct") {
+            result.value++;
+            resultCorrect.value = true;
+        } else {
+            resultIncorrect.value = true;
+        }
+    }).catch(error => {
+        console.error(error);
+    });
+}
+
+function saveDdResult() {
+    console.log("dDanswers:")
+    console.log(answersDd.value[0])
+    console.log(answersDd.value[1])
+    const droppedButtons = ref([]);
+    droppedButtons.value = Array.from(document.querySelectorAll('.dragbtn')).map(button => button.textContent);
+    console.log("droppedButtons:");
+    console.log(droppedButtons.value[0]);
+    console.log(droppedButtons.value[1]);
+
+
+    // TODO korrekte Datenweiterletung an BE
+    axios.post('/question_results', {
+        user_id: page.props.auth.user.id,
+        question_id: props.questions[currentIndex.value].id,
+        //
+        dropped_buttons: droppedButtons.value,
+        //
+        question_type: props.questions[currentIndex.value].type,
+        lecture: props.questions[currentIndex.value].lecture,
+        unit: props.questions[currentIndex.value].unit,
+    }).then(response => {
+        console.log(response.data.message);
+        if (response.data.message == "orderCorrect") {
+            result.value++;
+            resultCorrect.value = true;
+        } else {
+            resultIncorrect.value = true;
+        }
+    }).catch(error => {
+        console.error(error);
+    });
+}
+
+
+function nextQuestion() {
+    setTimeout(hideResult, 2000);
     if (props.questions[currentIndex.value].type === "mc") {
-
-        axios.post('/question_results', {
-            user_id: page.props.auth.user.id,
-            question_id: props.questions[currentIndex.value].id,
-            answer_id: props.questions[currentIndex.value].multiple_choice_answers[selectedAnswer.value].id,
-            question_type: props.questions[currentIndex.value].type,
-            lecture: props.questions[currentIndex.value].lecture,
-            unit: props.questions[currentIndex.value].unit,
-        }).then(response => {
-            console.log(response.data.message);
-            if (response.data.message == "correct") {
-                result.value++;
-                resultCorrect.value = true;
-            } else {
-                resultIncorrect.value = true;
-            }
-        }).catch(error => {
-            console.error(error);
-        });
-
+        saveMcResult();
         selectedAnswer.value = null;
-
     } else if (props.questions[currentIndex.value].type === "dd") {
+        saveDdResult();
         console.log("saveResult DD");
         sentenceParts.value = [];
         console.log(answersDd)
     }
-}
-
-function nextQuestion() {
-    setTimeout(hideResult, 2000);
-    saveResult();
-
     currentIndex.value++;
 
     // progressbar
@@ -108,8 +140,15 @@ function nextQuestion() {
 
 function calculateResult() {
     setTimeout(hideResult, 2000);
-    saveResult();
-
+    if (props.questions[currentIndex.value].type === "mc") {
+        saveMcResult();
+        selectedAnswer.value = null;
+    } else if (props.questions[currentIndex.value].type === "dd") {
+        saveDdResult();
+        console.log("saveResult DD");
+        sentenceParts.value = [];
+        console.log(answersDd)
+    }
     // TODO: länger warten, bis das Ergebnis der Lektion angezeigt wird und das Ergebnis der Frage zunächst zeigen
     // Button verzögert zeigen, der auf das Lektionsergebnis führt
     router.post('/results', [
@@ -132,6 +171,7 @@ const draggedItem = ref(null);
 const dropTargets = ref({});
 
 function isGap(part) {
+    // true wenn der Teil aus Unterstrichen besteht
     return /^___+$/.test(part.trim());
 };
 
@@ -140,6 +180,7 @@ const gapIndex = (index) => {
 };
 
 function splitString(currentQ) {
+    // Rexex erkennt Unterstriche im String
     const regex = /(___+)(\s|$)/g;
     let parts = currentQ.split(regex);
 
@@ -185,6 +226,24 @@ function drop(event, gapIndex) {
         dropTargets.value[`div${gapIndex}`] = draggedElement;
     }
 }
+
+function dropToAnswerDD(event) {
+    event.preventDefault();
+    const data = event.dataTransfer.getData("text");
+    const draggedElement = document.getElementById(data);
+
+    if (draggedElement && draggedItem.value.originalContainer.className !== "answer-dd") {
+        // Entfernen des existierenden Elements aus der Lücke
+        const gapIndexKey = Object.keys(dropTargets.value).find(key => dropTargets.value[key] === draggedElement);
+        if (gapIndexKey) {
+            dropTargets.value[gapIndexKey] = null;
+        }
+
+        // Zurücksetzen des existierenden Elements in den ursprünglichen Container
+        event.target.appendChild(draggedElement);
+        answersDd.value.push(draggedElement.textContent);
+    }
+}
 </script>
 
 <template>
@@ -211,6 +270,7 @@ function drop(event, gapIndex) {
                     <p>i</p>
                 </div>
             </div>
+            <!-- MC Section -->
             <div v-if="currentQuestion.type === 'mc'">
                 <div class="question-main">
                     <div class="question">
@@ -230,26 +290,26 @@ function drop(event, gapIndex) {
                     </div>
                 </div>
             </div>
-
+            <!-- DD Section -->
             <div v-if="currentQuestion.type === 'dd'" class="question-counter">
                 <div class="question-main">
                     <div class="question">
                         <template v-for="(part, index) in sentenceParts" :key="index">
-                            <h2 v-if="isGap(part)" class="dropbox" :id="'div' + gapIndex(index)"
+                            <span v-if="isGap(part)" class="dropbox" :id="'div' + gapIndex(index)"
                                 @drop="drop($event, gapIndex(index))" @dragover="allowDrop">
-                                {{ part }}
-                            </h2>
-                            <h2 v-else>{{ part }}</h2>
+                            </span>
+                            <span v-else>{{ part }}</span>
                         </template>
                     </div>
-                    <div class="answer-dd">
-                        <button v-for="(item, index) in answersDd" :key="index" class="dragbtn" :id="'drag' + index"
-                            draggable="true" @dragstart="drag($event, index)">
+                    <div class="answer-dd" @drop="dropToAnswerDD" @dragover="allowDrop">
+                        <button v-for="(item, index) in answersDd" :key="index" class="dragbtn btn btn-yellow"
+                            :id="'drag' + index" draggable="true" @dragstart="drag($event, index)">
                             {{ item }}
                         </button>
                     </div>
                 </div>
             </div>
+
             <div class="question-footer">
                 <div v-if="resultCorrect">
                     Resuuuuult richtig
@@ -268,18 +328,47 @@ function drop(event, gapIndex) {
 @import '../../css/_main.scss';
 
 .dropbox {
-    width: 250px;
-    height: 70px;
-    padding: 10px;
-    border: 1px solid #aaaaaa;
+    height: 55px;
+    border-radius: 50px;
+    border: none;
+    text-decoration: none;
+    background: $grey-light;
+    color: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.question span {
+    font-size: 2rem;
+    color: $blue;
+    font-weight: bold;
+}
+
+.answer-dd {
+    width: 300px;
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    @include breakpoint("mobile") {
+        justify-content: normal;
+        align-items: flex-start
+    }
 }
 
 .dragbtn {
-    margin: 5px;
-    padding: 5px;
-    border: 1px solid #aaaaaa;
-    display: inline-block;
-    background: $green;
+    margin-block: 10px;
+
+    &:hover {
+        cursor: grab;
+    }
+
+    &:active {
+        cursor: grabbing;
+    }
 }
 
 .info-header {
@@ -355,12 +444,21 @@ function drop(event, gapIndex) {
         display: flex;
         flex-direction: row;
         align-items: center;
-        justify-content: center;
+        justify-content: space-between;
         gap: 3rem;
-        margin: 4rem;
+        margin: 1rem;
+
+        @include breakpoint("mobile") {
+            flex-direction: column;
+            margin: 1rem
+        }
 
         .question {
             width: 40%;
+
+            @include breakpoint("mobile") {
+                width: auto;
+            }
 
             h2 {
                 font-size: 2rem;
