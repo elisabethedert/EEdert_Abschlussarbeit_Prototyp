@@ -31,8 +31,6 @@ build:
 
 kubernetes:
   stage: deploy
-  environment:
-    name: $CI_COMMIT_REF_SLUG
   script: 
     - cd deploy
     - kubectl apply -f deployment.yaml -n $NAMESPACE
@@ -40,4 +38,4 @@ kubernetes:
   rules:
     - if: $CI_COMMIT_REF_SLUG == "master"
       changes:
-        - ./deploy/*
+        - deploy/*
