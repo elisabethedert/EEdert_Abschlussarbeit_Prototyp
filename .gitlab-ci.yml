@@ -9,9 +9,6 @@ variables:
 stages: 
   - prepare 
   - build 
-  
-before_script:
-  - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
 
 test-job:
   stage: prepare
@@ -22,5 +19,6 @@ test-job:
 build:
   stage: build
   script:
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
     - docker build -t $IMAGE_TAG .
     - docker push $IMAGE_TAG
