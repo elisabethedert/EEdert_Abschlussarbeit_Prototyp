@@ -4,7 +4,7 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, router } from '@inertiajs/vue3';
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { usePage } from '@inertiajs/vue3'
 import { useForm } from '@inertiajs/vue3'
 import axios from 'axios';
@@ -31,6 +31,11 @@ const selectedAnswer = ref(null)
 const result = ref(0)
 
 const currentQuestion = computed(() => {
+    if (props.questions[currentIndex.value].type === 'dd') {
+        splitString(props.questions[currentIndex.value].question);
+    }
+    console.log("computed:")
+    console.log(props.questions[currentIndex.value])
     return props.questions[currentIndex.value]
 })
 
@@ -39,10 +44,12 @@ const isLastQuestion = computed(() => currentIndex.value === props.questions.len
 const answers = computed(() => {
     return props.questions[currentIndex.value].multiple_choice_answers
 })
+
 const answersDd = computed(() => {
     const blanks = props.questions[currentIndex.value].blanks;
     const words = blanks.split(' ');
     const newWordsArray = words.filter(word => word !== '').map(word => word.replace(/["\[\],]/g, ''));
+    console.log(newWordsArray);
     return newWordsArray;
 })
 
@@ -57,24 +64,34 @@ function hideResult() {
 }
 
 function saveResult() {
-    axios.post('/question_results', {
-        user_id: page.props.auth.user.id,
-        question_id: props.questions[currentIndex.value].id,
-        answer_id: props.questions[currentIndex.value].multiple_choice_answers[selectedAnswer.value].id,
-        question_type: props.questions[currentIndex.value].type,
-        lecture: props.questions[currentIndex.value].lecture,
-        unit: props.questions[currentIndex.value].unit,
-    }).then(response => {
-        console.log(response.data.message);
-        if (response.data.message == "correct") {
-            result.value++;
-            resultCorrect.value = true;
-        } else {
-            resultIncorrect.value = true;
-        }
-    }).catch(error => {
-        console.error(error);
-    });
+    if (props.questions[currentIndex.value].type === "mc") {
+
+        axios.post('/question_results', {
+            user_id: page.props.auth.user.id,
+            question_id: props.questions[currentIndex.value].id,
+            answer_id: props.questions[currentIndex.value].multiple_choice_answers[selectedAnswer.value].id,
+            question_type: props.questions[currentIndex.value].type,
+            lecture: props.questions[currentIndex.value].lecture,
+            unit: props.questions[currentIndex.value].unit,
+        }).then(response => {
+            console.log(response.data.message);
+            if (response.data.message == "correct") {
+                result.value++;
+                resultCorrect.value = true;
+            } else {
+                resultIncorrect.value = true;
+            }
+        }).catch(error => {
+            console.error(error);
+        });
+
+        selectedAnswer.value = null;
+
+    } else if (props.questions[currentIndex.value].type === "dd") {
+        console.log("saveResult DD");
+        sentenceParts.value = [];
+        console.log(answersDd)
+    }
 }
 
 function nextQuestion() {
@@ -82,13 +99,12 @@ function nextQuestion() {
     saveResult();
 
     currentIndex.value++;
-    selectedAnswer.value = null;
+
+    // progressbar
     var maxCount = props.questions.length;
     count = count === maxCount ? maxCount : count + 1;
     progressbar(count, maxCount);
 }
-
-console.log(currentQuestion.blanks)
 
 function calculateResult() {
     setTimeout(hideResult, 2000);
@@ -111,6 +127,64 @@ function progressbar(count, maxCount) {
     document.getElementsByClassName("progress-bar")[0].style.width = newWidth;
 }
 
+const sentenceParts = ref([]);
+const draggedItem = ref(null);
+const dropTargets = ref({});
+
+function isGap(part) {
+    return /^___+$/.test(part.trim());
+};
+
+const gapIndex = (index) => {
+    return sentenceParts.value.slice(0, index).filter(isGap).length;
+};
+
+function splitString(currentQ) {
+    const regex = /(___+)(\s|$)/g;
+    let parts = currentQ.split(regex);
+
+    // Entferne leere Einträge aus dem parts Array
+    parts = parts.filter(part => part !== undefined && part !== "");
+    for (let i = 0; i < parts.length; i++) {
+        sentenceParts.value.push(parts[i]);
+    }
+};
+
+function allowDrop(event) {
+    event.preventDefault();
+}
+
+function drag(event) {
+    draggedItem.value = { id: event.target.id, originalContainer: event.target.parentElement };
+    event.dataTransfer.setData("text", event.target.id);
+}
+
+function drop(event, gapIndex) {
+    event.preventDefault();
+    const data = event.dataTransfer.getData("text");
+    const targetElement = document.getElementById(`div${gapIndex}`);
+    const draggedElement = document.getElementById(data);
+
+    if (targetElement && draggedElement) {
+        // Prüfen ob der Zielbereich bereits ein Element enthält
+        if (dropTargets.value[`div${gapIndex}`]) {
+            const existingElement = dropTargets.value[`div${gapIndex}`];
+            // Entfernen des existierenden Elements aus dem Zielbereich
+            if (existingElement.parentElement === targetElement) {
+                targetElement.removeChild(existingElement);
+            }
+            // Zurücksetzen des existierenden Elements in den ursprünglichen Container
+            draggedItem.value.originalContainer.appendChild(existingElement);
+        }
+
+        // Füge das neue Element hinzu und entferne es aus der ursprünglichen Liste
+        targetElement.appendChild(draggedElement);
+        answersDd.value = answersDd.value.filter(item => item !== draggedElement.textContent);
+
+        // Aktualisiere den dropTargets Eintrag
+        dropTargets.value[`div${gapIndex}`] = draggedElement;
+    }
+}
 </script>
 
 <template>
@@ -160,12 +234,17 @@ function progressbar(count, maxCount) {
             <div v-if="currentQuestion.type === 'dd'" class="question-counter">
                 <div class="question-main">
                     <div class="question">
-                        <div class="">
-                            <h2>{{ currentQuestion.question }}</h2>
-                        </div>
+                        <template v-for="(part, index) in sentenceParts" :key="index">
+                            <h2 v-if="isGap(part)" class="dropbox" :id="'div' + gapIndex(index)"
+                                @drop="drop($event, gapIndex(index))" @dragover="allowDrop">
+                                {{ part }}
+                            </h2>
+                            <h2 v-else>{{ part }}</h2>
+                        </template>
                     </div>
                     <div class="answer-dd">
-                        <button v-for="(item, index) in answersDd" :key="index">
+                        <button v-for="(item, index) in answersDd" :key="index" class="dragbtn" :id="'drag' + index"
+                            draggable="true" @dragstart="drag($event, index)">
                             {{ item }}
                         </button>
                     </div>
@@ -187,6 +266,21 @@ function progressbar(count, maxCount) {
 
 <style scoped lang="scss">
 @import '../../css/_main.scss';
+
+.dropbox {
+    width: 250px;
+    height: 70px;
+    padding: 10px;
+    border: 1px solid #aaaaaa;
+}
+
+.dragbtn {
+    margin: 5px;
+    padding: 5px;
+    border: 1px solid #aaaaaa;
+    display: inline-block;
+    background: $green;
+}
 
 .info-header {
     text-align: center;
