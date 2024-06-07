@@ -11,11 +11,17 @@ stages:
   - build 
   - deploy
 
-test-job:
+gitlab-registry:
   stage: prepare
   image: 'thlmylab/swakkd:stable'  
   script:
-    - kubectl get pods -n stud-eedert-ba
+    - kubectl delete secret gitlab-registry-secret -n $NAMESPACE || true
+    - |
+      kubectl create secret docker-registry gitlab-registry-secret \
+      --docker-server=$CI_REGISTRY \
+      --docker-username=image-registry \
+      --docker-password=$CI_REGISTRY_TOKEN -n $NAMESPACE
+
 
 build:
   stage: build
