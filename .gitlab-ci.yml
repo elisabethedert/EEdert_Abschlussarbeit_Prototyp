@@ -43,7 +43,7 @@ learnapp-deployment:
   rules:
     - if: $CI_COMMIT_REF_SLUG == "master"
       changes:
-        - deploy/*
+        - deploy/deployment.yaml
 
 mysql-deployment: 
   stage: deploy
@@ -55,3 +55,14 @@ mysql-deployment:
     - if: $CI_COMMIT_REF_SLUG == "master"
       changes:
         - deploy/mysql.yaml
+
+phpmyadmin-deployment: 
+  stage: deploy
+  script: 
+    - cd deploy 
+    - kubectl apply -f phpmyadmin.yaml -n $NAMESPACE
+  rules:
+    - if: $CI_COMMIT_REF_SLUG == "master"
+      changes:
+        - deploy/phpmyadmin.yaml
+
