@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: learning-app-deployment
+  name: learningapp-deployment
   labels:
-    app: learning-app
+    app: learningapp
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: learning-app
+      app: learningapp
   template:
     metadata:
       labels:
-        app: learning-app
+        app: learningapp
     spec:
       containers:
-      - name: learning-app-pod
+      - name: learningapp-pod
         image: git.mylab.th-luebeck.de:4181/elisabeth.edert/eedert_abschlussarbeit_prototyp:master
         ports:
         - containerPort: 80
