@@ -18,7 +18,7 @@ spec:
         image: phpmyadmin/phpmyadmin:latest
         env:
         - name: PMA_HOST
-          value: "mysql" # Name des MySQL-Services
+          value: "learningapp-mysql" # Name des MySQL-Services
         - name: PMA_PORT
           value: "3306"
         ports:
