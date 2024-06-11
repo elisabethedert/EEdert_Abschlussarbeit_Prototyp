@@ -28,7 +28,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: learningapp-phpmyadmin
+  name: phpmyadmin-service
   namespace: stud-eedert-ba
 spec:
   selector:
