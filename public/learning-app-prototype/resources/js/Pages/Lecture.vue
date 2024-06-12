@@ -23,10 +23,6 @@ const totalQuestions = computed(() =>
     props.questions.length
 )
 
-const currentLecture = ref(0);
-
-const endLecture = ref(false);
-
 const selectedAnswer = ref(null)
 const result = ref(0)
 
@@ -47,11 +43,19 @@ const answers = computed(() => {
 
 const answersDd = computed(() => {
     const blanks = props.questions[currentIndex.value].blanks;
-    const words = blanks.split(' ');
-    const newWordsArray = words.filter(word => word !== '').map(word => word.replace(/["\[\],]/g, ''));
-    console.log(newWordsArray);
-    return newWordsArray;
-})
+    
+    // Regex, um die Begriffe in Anführungszeichen zu erkennen
+    const matches = blanks.match(/"([^"]+)"/g);
+    
+    if (matches) {
+        // Anführungsstriche entfernen und leere Wörter filtern
+        const newWordsArray = matches.map(match => match.replace(/"/g, '')).filter(word => word !== '');
+        console.log(newWordsArray);
+        return newWordsArray;
+    } else {
+        return [];
+    }
+});
 
 var count = 0;
 
@@ -181,7 +185,7 @@ const gapIndex = (index) => {
 
 function splitString(currentQ) {
     // Rexex erkennt Unterstriche im String
-    const regex = /(___+)(\s|$)/g;
+    const regex = /(_{3})(?=[,.\s]|$)/g
     let parts = currentQ.split(regex);
 
     // Entferne leere Einträge aus dem parts Array
@@ -318,7 +322,7 @@ function dropToAnswerDD(event) {
                     Resuuuuult falsch
                 </div>
                 <button @click="nextQuestion" v-if="!isLastQuestion" class="btn btn-green">Bestätigen</button>
-                <button @click="calculateResult" v-if="isLastQuestion" class="btn btn-yellow">Lektion</button>
+                <button @click="calculateResult" v-if="isLastQuestion" class="btn btn-yellow">Lektion beenden</button>
             </div>
         </div>
     </AuthenticatedLayout>
