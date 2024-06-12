@@ -3,6 +3,7 @@
 </style>
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import MultipleChoice from '@/Components/QuestionTypes/MultipleChoice.vue';
 import { Head, router } from '@inertiajs/vue3';
 import { ref, computed, onMounted } from 'vue';
 import { usePage } from '@inertiajs/vue3'
@@ -43,10 +44,11 @@ const answers = computed(() => {
 
 const answersDd = computed(() => {
     const blanks = props.questions[currentIndex.value].blanks;
-    
+    console.log("Blanks:")
+    console.log(blanks)
     // Regex, um die Begriffe in Anführungszeichen zu erkennen
     const matches = blanks.match(/"([^"]+)"/g);
-    
+
     if (matches) {
         // Anführungsstriche entfernen und leere Wörter filtern
         const newWordsArray = matches.map(match => match.replace(/"/g, '')).filter(word => word !== '');
@@ -122,7 +124,6 @@ function saveDdResult() {
     });
 }
 
-
 function nextQuestion() {
     setTimeout(hideResult, 2000);
     if (props.questions[currentIndex.value].type === "mc") {
@@ -135,6 +136,17 @@ function nextQuestion() {
         console.log(answersDd)
     }
     currentIndex.value++;
+
+    //Check if there are associated buttons in dropbox spans
+    const dropboxSpans = document.querySelectorAll('.dropbox button');
+    if (dropboxSpans.length > 0) {
+        // Move the buttons back to the answer-dd div
+        const answerDdDiv = document.querySelector('.answer-dd');
+        dropboxSpans.forEach(btn => {
+            btn.remove();
+            answerDdDiv.appendChild(btn)
+        });
+    }
 
     // progressbar
     var maxCount = props.questions.length;
@@ -275,6 +287,7 @@ function dropToAnswerDD(event) {
                 </div>
             </div>
             <!-- MC Section -->
+            <!-- <MultipleChoice/> -->
             <div v-if="currentQuestion.type === 'mc'">
                 <div class="question-main">
                     <div class="question">

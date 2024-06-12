@@ -11,6 +11,10 @@ class DragDropQuestion extends Model
 
     protected $fillable=['question','topic','level','type','lecture','unit'];
 
+    // protected $casts = [
+    //     'blanks' => 'array',
+    // ];
+
     public function multiple_choice_answers()
     {
         return $this->hasMany(DragDropAnswer::class);
