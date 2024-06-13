@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\DragDropQuestion;
 use Illuminate\Http\Request;
 use App\Models\MultipleChoiceQuestion;
+use App\Models\QuestionResults;
 use Inertia\Inertia;
 
 class LectureController extends Controller
@@ -16,6 +17,7 @@ class LectureController extends Controller
     {
         $questionsMc = MultipleChoiceQuestion::where('lecture', $lecture)->inRandomOrder()->get();
         $questionsDd = DragDropQuestion::where('lecture', $lecture)->inRandomOrder()->get();
+        // Möglichkeit unter alle Fragen die falsch beantworteten der letzten Lektionen untermischen aus der letzten Session mit dem höchsten Timestamp
 
         //filter to remove correct answer from the response
         $questionsMc->transform(function ($question) {
@@ -28,7 +30,7 @@ class LectureController extends Controller
 
         $questionsDd = $questionsDd->map(function ($question) {
             $shuffledBlanks = $question->blanks;
-            // shuffle($shuffledBlanks);
+            shuffle($shuffledBlanks);
             $question->blanks = $shuffledBlanks;
             return $question;
         });
@@ -44,21 +46,30 @@ class LectureController extends Controller
 
     public function results(Request $request)
     {
-        $score = $request[0]['results']['score'];
-        $totalQuestions = $request[0]['results']['totalQuestions'];
-        $percentage = ceil(($score / $totalQuestions) * 100);
+        $numCorrectAnswered = QuestionResults::where('user_id', $request->user()->id)
+            ->where('session', $request->route('session')) //sessionnummer
+            ->sum('question_correct_count');
 
-        $comment = match (true) {
-            $percentage >= 80 && $percentage <= 100 => 'Sehr gut',
-            $percentage >= 60 && $percentage <= 79 => 'Gut',
-            $percentage >= 40 && $percentage <= 59 => 'Ok',
-            $percentage < 39 => 'schlecht',
-            default => 'Well how did you reach here?'
-        };
+        $numIncorrectAnswered = QuestionResults::where('user_id', $request->user()->id)
+            ->where('session', $request->route('session')) //sessionnummer
+            ->sum('question_incorrect_count');
+
+        $firstLectureResult = QuestionResults::where('user_id', $request->user()->id)
+            ->where('session', $request->route('session')) //sessionnummer
+            ->first();
+
+        if (!$firstLectureResult) {
+            abort(404);
+        } 
+
+        $lecture = $firstLectureResult->lecture;
+
+
 
         return Inertia::render('LectureResult', [
-            'percentage' => $percentage,
-            'comment' => $comment,
+            'correctAnswered' => (int)$numCorrectAnswered,
+            'incorrectAnswered' => (int)$numIncorrectAnswered,
+            'lecture' => (int)$lecture,
         ]);
     }
 

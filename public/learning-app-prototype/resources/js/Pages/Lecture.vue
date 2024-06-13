@@ -14,6 +14,8 @@ import { useForm } from '@inertiajs/vue3'
 import axios from 'axios';
 
 
+const currentSession = crypto.randomUUID();
+
 const props = defineProps({
     questions: Object
 })
@@ -23,8 +25,6 @@ const isPopupVisible = ref(false);
 function showHelpPopup() {
     isPopupVisible.value = true;
 }
-
-const page = usePage();
 
 const currentIndex = ref(0);
 const resultCorrect = ref(false);
@@ -67,12 +67,12 @@ function hideResult() {
 
 function saveMcResult() {
     axios.post('/question_results', {
-        user_id: page.props.auth.user.id,
         question_id: props.questions[currentIndex.value].id,
         answer_id: props.questions[currentIndex.value].multiple_choice_answers[selectedAnswer.value].id,
         question_type: props.questions[currentIndex.value].type,
         lecture: props.questions[currentIndex.value].lecture,
         unit: props.questions[currentIndex.value].unit,
+        session: currentSession
     }).then(response => {
         if (response.data.message == "correct") {
             result.value++;
@@ -90,9 +90,9 @@ function saveDdResult() {
     const droppedButtons = ref([]);
     droppedButtons.value = Array.from(document.querySelectorAll('.dragbtn')).map(button => button.textContent);
 
+    console.log(droppedButtons.value);
     // TODO korrekte Datenweiterletung an BE
     axios.post('/question_results', {
-        user_id: page.props.auth.user.id,
         question_id: props.questions[currentIndex.value].id,
         //
         dropped_buttons: droppedButtons.value,
@@ -100,6 +100,7 @@ function saveDdResult() {
         question_type: props.questions[currentIndex.value].type,
         lecture: props.questions[currentIndex.value].lecture,
         unit: props.questions[currentIndex.value].unit,
+        session: currentSession
     }).then(response => {
         if (response.data.message == "orderCorrect") {
             result.value++;
@@ -156,14 +157,7 @@ function calculateResult() {
     }
     // TODO: länger warten, bis das Ergebnis der Lektion angezeigt wird und das Ergebnis der Frage zunächst zeigen
     // Button verzögert zeigen, der auf das Lektionsergebnis führt
-    router.post('/results', [
-        {
-            results: {
-                'score': result.value,
-                'totalQuestions': totalQuestions.value
-            }
-        }
-    ]);
+    router.get(`/results/${currentSession}`);
 }
 
 function progressbar(count, maxCount) {

@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\DragDropAnswer;
 use App\Models\DragDropQuestion;
 use App\Models\QuestionResults;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\MultipleChoiceAnswer;
 use Illuminate\Support\Facades\Log;
+
 
 class QuestionResultsController extends Controller
 {
@@ -35,9 +37,10 @@ class QuestionResultsController extends Controller
         $requestdata = $request->all(); // TODO: Validate Data
 
         // Frageergebnis in der Datenbank suchen, ob Frage bereits beantwortet
-        $record = QuestionResults::where('user_id', $requestdata['user_id'])
+        $record = QuestionResults::where('user_id', $request->user()->id)
             ->where('question_id', $requestdata['question_id'])
             ->where('question_type', $requestdata['question_type'])
+            ->where('session', $requestdata['session'])
             ->first();
 
         if ($requestdata['question_type'] == 'mc') {
@@ -56,7 +59,7 @@ class QuestionResultsController extends Controller
                 $record->save();
             } else {
                 $newQuestionResult = new QuestionResults;
-                $newQuestionResult->user_id = $requestdata['user_id'];
+                $newQuestionResult->user_id = $request->user()->id;
                 $newQuestionResult->question_id = $requestdata['question_id'];
                 $newQuestionResult->question_type = $requestdata['question_type'];
                 $newQuestionResult->question_count = 1;
@@ -64,45 +67,55 @@ class QuestionResultsController extends Controller
                 $newQuestionResult->question_incorrect_count = $answerWasCorrect ? 0 : 1;
                 $newQuestionResult->lecture = $requestdata['lecture'];
                 $newQuestionResult->unit = $requestdata['unit'];
+                $newQuestionResult->session = $requestdata['session'];
 
                 $newQuestionResult->save();
             }
             if ($answerWasCorrect) {
+                $user = User::where('id', $request->user()->id)
+                ->first();
+        
+                $user->experience_points = $user->experience_points + 3; //3 Points pro Frage richtig
+                $user->save();
                 return response()->json(['message' => 'correct'], 200);
             } else {
                 return response()->json(['message' => 'incorrect'], 200);
             }
         } else if ($requestdata['question_type'] == 'dd') {
 
-            //TODO: prüfen ob Antwort korrekt war
-            // $droppedButtonsOrder = json_encode($requestdata['dropped_buttons']);
-            // $droppedButtonsOrder = str_replace(',', ', ', $droppedButtonsOrder);
-
-            // findet bisher keinen passenden Eintrag
-            $orderCorrect = DragDropQuestion::where('id', $requestdata['question_id'])
-                ->where('blanks', $requestdata['dropped_buttons'])
+            // Derzeitige Frage ermitteln und mit der Antwortsreihenfolge vergleichen
+            $currentQuestion = DragDropQuestion::where('id', $requestdata['question_id'])
                 ->first();
+            $orderCorrect = $currentQuestion->blanks === $requestdata['dropped_buttons'];
 
             //wenn es schon einen Eintrag gibt, dann die Werte erhöhen (wäre sonst null)
             if ($record) {
                 $record->question_count = $record->question_count + 1;
-                $record->question_correct_count = 0;
-                $record->question_incorrect_count = 0;
+                $record->question_correct_count = $orderCorrect ? $record->question_correct_count + 1 : $record->question_correct_count;
+                $record->question_incorrect_count = $orderCorrect ? $record->question_incorrect_count : $record->question_incorrect_count + 1;
                 $record->save();
             } else {
                 $newQuestionResult = new QuestionResults;
-                $newQuestionResult->user_id = $requestdata['user_id'];
+                $newQuestionResult->user_id = $request->user()->id;
                 $newQuestionResult->question_id = $requestdata['question_id'];
                 $newQuestionResult->question_type = $requestdata['question_type'];
                 $newQuestionResult->question_count = 1;
-                $newQuestionResult->question_correct_count = 0;
-                $newQuestionResult->question_incorrect_count = 0;
+                $newQuestionResult->question_correct_count = $orderCorrect ? 1 : 0;
+                $newQuestionResult->question_incorrect_count = $orderCorrect ? 0 : 1;
                 $newQuestionResult->lecture = $requestdata['lecture'];
                 $newQuestionResult->unit = $requestdata['unit'];
+                $newQuestionResult->session = $requestdata['session'];
 
                 $newQuestionResult->save();
+
             }
             if ($orderCorrect) {
+                $user = User::where('id', $request->user()->id)
+                ->first();
+        
+                $user->experience_points = $user->experience_points + 3; //3 Points pro Frage richtig
+                $user->save();
+
                 return response()->json(['message' => 'orderCorrect'], 200);
             } else {
                 return response()->json(['message' => $requestdata['dropped_buttons']], 200);

@@ -64,6 +64,7 @@ const toggleProfile = () => {
                                     as="button">
                                     Log Out
                                 </DropdownLink>
+                                <p>{{ $page.props.auth.user.experience_points }}</p>
                             </div>
                         </div>
                     </div>
