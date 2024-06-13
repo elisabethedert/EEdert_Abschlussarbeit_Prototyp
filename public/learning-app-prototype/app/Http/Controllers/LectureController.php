@@ -26,12 +26,12 @@ class LectureController extends Controller
             return $question;
         });
 
-        // $questionsDd = $questionsDd->map(function ($question) {
-        //     $shuffledBlanks = $question->blanks;
-        //     shuffle($shuffledBlanks);
-        //     $question->blanks = $shuffledBlanks;
-        //     return $question;
-        // });
+        $questionsDd = $questionsDd->map(function ($question) {
+            $shuffledBlanks = $question->blanks;
+            // shuffle($shuffledBlanks);
+            $question->blanks = $shuffledBlanks;
+            return $question;
+        });
 
         // merge question types and shuffle them
         $questions = $questionsDd->concat($questionsMc)->shuffle();

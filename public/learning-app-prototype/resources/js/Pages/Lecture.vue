@@ -3,7 +3,10 @@
 </style>
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import Dance3 from '@/Components/Animations/Dance3.vue';
+import Dance2 from '@/Components/Animations/Dance2.vue';
 import MultipleChoice from '@/Components/QuestionTypes/MultipleChoice.vue';
+import HelpPopup from '@/Components/HelpPopup.vue';
 import { Head, router } from '@inertiajs/vue3';
 import { ref, computed, onMounted } from 'vue';
 import { usePage } from '@inertiajs/vue3'
@@ -14,6 +17,12 @@ import axios from 'axios';
 const props = defineProps({
     questions: Object
 })
+
+const isPopupVisible = ref(false);
+
+function showHelpPopup() {
+    isPopupVisible.value = true;
+}
 
 const page = usePage();
 
@@ -26,13 +35,12 @@ const totalQuestions = computed(() =>
 
 const selectedAnswer = ref(null)
 const result = ref(0)
+const showQuestion = ref(true);
 
 const currentQuestion = computed(() => {
     if (props.questions[currentIndex.value].type === 'dd') {
         splitString(props.questions[currentIndex.value].question);
     }
-    console.log("computed:")
-    console.log(props.questions[currentIndex.value])
     return props.questions[currentIndex.value]
 })
 
@@ -43,20 +51,7 @@ const answers = computed(() => {
 })
 
 const answersDd = computed(() => {
-    const blanks = props.questions[currentIndex.value].blanks;
-    console.log("Blanks:")
-    console.log(blanks)
-    // Regex, um die Begriffe in Anführungszeichen zu erkennen
-    const matches = blanks.match(/"([^"]+)"/g);
-
-    if (matches) {
-        // Anführungsstriche entfernen und leere Wörter filtern
-        const newWordsArray = matches.map(match => match.replace(/"/g, '')).filter(word => word !== '');
-        console.log(newWordsArray);
-        return newWordsArray;
-    } else {
-        return [];
-    }
+    return props.questions[currentIndex.value].blanks;
 });
 
 var count = 0;
@@ -67,6 +62,7 @@ function selectedOption(index) {
 function hideResult() {
     resultCorrect.value = false;
     resultIncorrect.value = false;
+    showQuestion.value = true;
 }
 
 function saveMcResult() {
@@ -78,7 +74,6 @@ function saveMcResult() {
         lecture: props.questions[currentIndex.value].lecture,
         unit: props.questions[currentIndex.value].unit,
     }).then(response => {
-        console.log(response.data.message);
         if (response.data.message == "correct") {
             result.value++;
             resultCorrect.value = true;
@@ -91,15 +86,9 @@ function saveMcResult() {
 }
 
 function saveDdResult() {
-    console.log("dDanswers:")
-    console.log(answersDd.value[0])
-    console.log(answersDd.value[1])
+
     const droppedButtons = ref([]);
     droppedButtons.value = Array.from(document.querySelectorAll('.dragbtn')).map(button => button.textContent);
-    console.log("droppedButtons:");
-    console.log(droppedButtons.value[0]);
-    console.log(droppedButtons.value[1]);
-
 
     // TODO korrekte Datenweiterletung an BE
     axios.post('/question_results', {
@@ -112,7 +101,6 @@ function saveDdResult() {
         lecture: props.questions[currentIndex.value].lecture,
         unit: props.questions[currentIndex.value].unit,
     }).then(response => {
-        console.log(response.data.message);
         if (response.data.message == "orderCorrect") {
             result.value++;
             resultCorrect.value = true;
@@ -124,17 +112,18 @@ function saveDdResult() {
     });
 }
 
+
 function nextQuestion() {
-    setTimeout(hideResult, 2000);
+    // showQuestion.value = false;
+    setTimeout(hideResult, 3000);
     if (props.questions[currentIndex.value].type === "mc") {
         saveMcResult();
         selectedAnswer.value = null;
     } else if (props.questions[currentIndex.value].type === "dd") {
         saveDdResult();
-        console.log("saveResult DD");
         sentenceParts.value = [];
-        console.log(answersDd)
     }
+    // show next question
     currentIndex.value++;
 
     //Check if there are associated buttons in dropbox spans
@@ -147,6 +136,8 @@ function nextQuestion() {
             answerDdDiv.appendChild(btn)
         });
     }
+
+    dropTargets.value = {};
 
     // progressbar
     var maxCount = props.questions.length;
@@ -161,9 +152,7 @@ function calculateResult() {
         selectedAnswer.value = null;
     } else if (props.questions[currentIndex.value].type === "dd") {
         saveDdResult();
-        console.log("saveResult DD");
         sentenceParts.value = [];
-        console.log(answersDd)
     }
     // TODO: länger warten, bis das Ergebnis der Lektion angezeigt wird und das Ergebnis der Frage zunächst zeigen
     // Button verzögert zeigen, der auf das Lektionsergebnis führt
@@ -219,24 +208,16 @@ function drag(event) {
 function drop(event, gapIndex) {
     event.preventDefault();
     const data = event.dataTransfer.getData("text");
-    const targetElement = document.getElementById(`div${gapIndex}`);
+    const targetElement = document.getElementById(`div${gapIndex}`); // div class="dropbox"
     const draggedElement = document.getElementById(data);
 
     if (targetElement && draggedElement) {
-        // Prüfen ob der Zielbereich bereits ein Element enthält
-        if (dropTargets.value[`div${gapIndex}`]) {
-            const existingElement = dropTargets.value[`div${gapIndex}`];
-            // Entfernen des existierenden Elements aus dem Zielbereich
-            if (existingElement.parentElement === targetElement) {
-                targetElement.removeChild(existingElement);
-            }
-            // Zurücksetzen des existierenden Elements in den ursprünglichen Container
-            draggedItem.value.originalContainer.appendChild(existingElement);
+        if (targetElement.children.length > 0) {
+            return;
         }
 
         // Füge das neue Element hinzu und entferne es aus der ursprünglichen Liste
         targetElement.appendChild(draggedElement);
-        answersDd.value = answersDd.value.filter(item => item !== draggedElement.textContent);
 
         // Aktualisiere den dropTargets Eintrag
         dropTargets.value[`div${gapIndex}`] = draggedElement;
@@ -256,8 +237,9 @@ function dropToAnswerDD(event) {
         }
 
         // Zurücksetzen des existierenden Elements in den ursprünglichen Container
-        event.target.appendChild(draggedElement);
-        answersDd.value.push(draggedElement.textContent);
+        if (event.target.className == "answer-dd") {
+            event.target.appendChild(draggedElement);
+        }
     }
 }
 </script>
@@ -283,13 +265,24 @@ function dropToAnswerDD(event) {
                 </div>
 
                 <div class="help-icon">
-                    <p>i</p>
+                    <button @click="showHelpPopup"><svg width="8" height="18" viewBox="0 0 8 31" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M1.26552 11.4094C0.782478 19.6357 0.800904 19.2007 0.808079 27.4404C0.805653 28.7934 1.71479 30.0084 3.13147 30.1054C4.40848 30.1928 5.80327 29.1456 5.80638 27.7826C5.78923 19.5422 5.7708 19.9772 6.25385 11.751C6.44387 8.53645 1.45555 8.19491 1.26552 11.4094Z" />
+                            <ellipse cx="4.5" cy="3" rx="2.5" ry="3" />
+                        </svg>
+                    </button>
+                    <HelpPopup :visible="isPopupVisible" @showhelp="isPopupVisible = $event">
+                        <p v-if="currentQuestion.type === 'mc'"><b>Tipp:</b> Wähle die richtige Antwort aus</p>
+                        <p v-if="currentQuestion.type === 'dd'"><b>Tipp:</b> Ziehe die gelben Buttons in die Lücke</p>
+                    </HelpPopup>
                 </div>
             </div>
             <!-- MC Section -->
             <!-- <MultipleChoice/> -->
+
             <div v-if="currentQuestion.type === 'mc'">
-                <div class="question-main">
+                <div class="question-main" v-if="showQuestion">
                     <div class="question">
                         <div class="">
                             <h2>{{ currentQuestion.question }}</h2>
@@ -309,7 +302,7 @@ function dropToAnswerDD(event) {
             </div>
             <!-- DD Section -->
             <div v-if="currentQuestion.type === 'dd'" class="question-counter">
-                <div class="question-main">
+                <div class="question-main" v-if="showQuestion">
                     <div class="question">
                         <template v-for="(part, index) in sentenceParts" :key="index">
                             <span v-if="isGap(part)" class="dropbox" :id="'div' + gapIndex(index)"
@@ -327,13 +320,17 @@ function dropToAnswerDD(event) {
                 </div>
             </div>
 
-            <div class="question-footer">
-                <div v-if="resultCorrect">
-                    Resuuuuult richtig
+            <div class="question-animation">
+                <!-- <div v-if="resultCorrect">
+                    <Dance3 />
                 </div>
                 <div v-if="resultIncorrect">
-                    Resuuuuult falsch
+                    <Dance2 />
                 </div>
+                -->
+            </div>
+
+            <div class="question-footer">
                 <button @click="nextQuestion" v-if="!isLastQuestion" class="btn btn-green">Bestätigen</button>
                 <button @click="calculateResult" v-if="isLastQuestion" class="btn btn-yellow">Lektion beenden</button>
             </div>
@@ -357,14 +354,14 @@ function dropToAnswerDD(event) {
 }
 
 .question span {
-    font-size: 2rem;
+    font-size: 1.5rem;
     color: $blue;
     font-weight: bold;
 }
 
 .answer-dd {
     width: 300px;
-    height: 300px;
+    height: 150px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -402,6 +399,10 @@ function dropToAnswerDD(event) {
 }
 
 .question-container {
+    height: 450px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 
     .question-header {
         display: flex;
@@ -441,15 +442,24 @@ function dropToAnswerDD(event) {
         }
     }
 
-    .help-icon {
+    .help-icon button {
         background-color: $green;
         width: 30px;
         height: 30px;
         border-radius: 25px;
+        border: none;
         text-align: center;
         line-height: 30px;
         color: $white;
         font-size: 1.5rem;
+
+        &:hover {
+            cursor: pointer;
+        }
+
+        svg {
+            fill: $white;
+        }
     }
 
     background-color: $background-light;
@@ -471,14 +481,13 @@ function dropToAnswerDD(event) {
         }
 
         .question {
-            width: 40%;
 
             @include breakpoint("mobile") {
                 width: auto;
             }
 
             h2 {
-                font-size: 2rem;
+                font-size: 1.5rem;
             }
         }
 
@@ -495,7 +504,7 @@ function dropToAnswerDD(event) {
                     align-items: center;
 
                     span {
-                        font-size: 1.5rem;
+                        font-size: 1.25rem;
                         color: $blue;
                     }
                 }
@@ -527,20 +536,6 @@ function dropToAnswerDD(event) {
                 }
             }
         }
-
-    }
-
-    .question-footer {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-between;
-
-        button {
-            margin-bottom: 2rem;
-        }
-
-
     }
 }
 </style>
