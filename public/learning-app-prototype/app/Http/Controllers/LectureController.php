@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DragDropQuestion;
 use Illuminate\Http\Request;
 use App\Models\MultipleChoiceQuestion;
+use App\Models\QuestionResults;
 use Inertia\Inertia;
 
 class LectureController extends Controller
@@ -13,41 +15,61 @@ class LectureController extends Controller
      */
     public function index($lecture)
     {
-        $questions = MultipleChoiceQuestion::where('lecture', $lecture)->inRandomOrder()->get();
+        $questionsMc = MultipleChoiceQuestion::where('lecture', $lecture)->inRandomOrder()->get();
+        $questionsDd = DragDropQuestion::where('lecture', $lecture)->inRandomOrder()->get();
+        // Möglichkeit unter alle Fragen die falsch beantworteten der letzten Lektionen untermischen aus der letzten Session mit dem höchsten Timestamp
 
         //filter to remove correct answer from the response
-        //TODO: Drag and Drop hier mit MultipleChoice mergen und random mischen testen
-        $questions->transform(function ($question) {
+        $questionsMc->transform(function ($question) {
             $question->multiple_choice_answers->transform(function ($answer) {
-                unset($answer->correct_answer); 
+                unset($answer->correct_answer);
                 return $answer;
             });
             return $question;
         });
 
+        $questionsDd = $questionsDd->map(function ($question) {
+            $shuffledBlanks = $question->blanks;
+            shuffle($shuffledBlanks);
+            $question->blanks = $shuffledBlanks;
+            return $question;
+        });
+
+        // merge question types and shuffle them
+        $questions = $questionsDd->concat($questionsMc)->shuffle();
+
         //View to see by the User
         return Inertia::render('Lecture', [
             'questions' => $questions
-        ]); 
+        ]);
     }
 
     public function results(Request $request)
     {
-        $score = $request[0]['results']['score'];
-        $totalQuestions = $request[0]['results']['totalQuestions'];
-        $percentage = ceil(($score/$totalQuestions)*100);
+        $numCorrectAnswered = QuestionResults::where('user_id', $request->user()->id)
+            ->where('session', $request->route('session')) //sessionnummer
+            ->sum('question_correct_count');
 
-        $comment = match(true) {
-            $percentage>=80 && $percentage<=100 => 'Sehr gut',
-            $percentage>=60 && $percentage<=79 => 'Gut',
-            $percentage>=40 && $percentage<=59 => 'Ok',
-            $percentage<39 => 'schlecht',
-            default=>'Well how did you reach here?'
-        };
+        $numIncorrectAnswered = QuestionResults::where('user_id', $request->user()->id)
+            ->where('session', $request->route('session')) //sessionnummer
+            ->sum('question_incorrect_count');
+
+        $firstLectureResult = QuestionResults::where('user_id', $request->user()->id)
+            ->where('session', $request->route('session')) //sessionnummer
+            ->first();
+
+        if (!$firstLectureResult) {
+            abort(404);
+        } 
+
+        $lecture = $firstLectureResult->lecture;
+
+
 
         return Inertia::render('LectureResult', [
-            'percentage'=>$percentage,
-            'comment'=>$comment,
+            'correctAnswered' => (int)$numCorrectAnswered,
+            'incorrectAnswered' => (int)$numIncorrectAnswered,
+            'lecture' => (int)$lecture,
         ]);
     }
 

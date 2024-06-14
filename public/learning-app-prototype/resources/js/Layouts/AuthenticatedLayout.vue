@@ -64,6 +64,7 @@ const toggleProfile = () => {
                                     as="button">
                                     Log Out
                                 </DropdownLink>
+                                <p>{{ $page.props.auth.user.experience_points }}</p>
                             </div>
                         </div>
                     </div>
@@ -97,7 +98,7 @@ const toggleProfile = () => {
 @import '../../css/_main.scss';
 
 .main {
-    margin-top: 4rem;
+    margin-top: 3rem;
 
     @include breakpoint("mobile") {
         margin-top: 0rem;

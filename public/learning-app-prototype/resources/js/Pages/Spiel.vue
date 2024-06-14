@@ -5,9 +5,10 @@ import { ref, computed } from 'vue';
 
 // function goToLesson(number) {
 //     //TODO abfragen welches die höchste Lecture number des Users ist
-//     router.post('/spiel/lektion{number}', [
-
-
+//     axios.post('/spiel/lektion{number}', [
+    // neue Route im Backend
+    //wenn in L1alle richtig sind kann l2 angezeigt sind
+    // get reqeust an /lectures hier die höchste lecture number zurückgeben
 // }
 </script>
 <template>

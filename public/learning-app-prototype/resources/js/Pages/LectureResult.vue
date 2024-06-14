@@ -3,8 +3,9 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link } from '@inertiajs/vue3';
 
 defineProps({
-    percentage: Number,
-    comment: String
+    correctAnswered: Number,
+    incorrectAnswered: Number,
+    lecture: Number,
 })
 </script>
 
@@ -12,8 +13,10 @@ defineProps({
     <Head title="Ergebnis" />
 
     <AuthenticatedLayout>
-        <h1>{{ comment }}</h1>
-        <p class="lead mb-4">Your Score is {{ percentage }}%</p>
+        <h1>richtige: {{ correctAnswered }}</h1>
+        <h1>falsche: {{ incorrectAnswered }}</h1>
+        <h1>Lektion: {{ lecture }}</h1>
+        <p>{{ $page.props.auth.user.experience_points }}</p>
     </AuthenticatedLayout>
 </template>
 <style scoped>

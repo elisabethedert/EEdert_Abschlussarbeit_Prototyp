@@ -28,16 +28,16 @@ Route::middleware('auth')->group(function () {
 });
 
 //Spielübersicht
-Route::get('spiel',[SpielController::class, 'index']);
+Route::get('spiel',[SpielController::class, 'index'])->middleware(['auth', 'verified']);
 
 //Spielseite der einzelnen Lektionen
-Route::get('spiel/lektion{lecture}',[LectureController::class, 'index'])->name('spiel.lektion');
+Route::get('spiel/lektion{lecture}',[LectureController::class, 'index'])->middleware(['auth', 'verified'])->name('spiel.lektion');
 
 //Ergebnisse nach Lektion 
-Route::post('/results', [LectureController::class, 'results'])->name('results');
+Route::get('/results/{session}', [LectureController::class, 'results'])->middleware(['auth', 'verified'])->name('results');
 
-Route::post('/question_results', [QuestionResultsController::class, 'store'])->name('results');
-Route::get('/question_results', [QuestionResultsController::class, 'checkExistence']);
-Route::put('/question_results', [QuestionResultsController::class, 'updateCounter']);
+Route::post('/question_results', [QuestionResultsController::class, 'store'])->middleware(['auth', 'verified'])->name('results');
+Route::get('/question_results', [QuestionResultsController::class, 'checkExistence'])->middleware(['auth', 'verified']);
+Route::put('/question_results', [QuestionResultsController::class, 'updateCounter'])->middleware(['auth', 'verified']);
 
 require __DIR__.'/auth.php';
