@@ -37,6 +37,10 @@
         transform: translate(-50%, -50%);
         display: flex;
         justify-content: center;
+        
+        @include breakpoint('mobile') {
+            top: 60%;
+        }
     }
 }
 </style>

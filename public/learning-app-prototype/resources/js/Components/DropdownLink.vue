@@ -21,7 +21,7 @@ defineProps({
 .dropdown-link {
     display: block;
     width: auto;
-    padding: 0.5rem 1rem;
+    padding: 0 1rem;
     text-align: left;
     font-size: 1rem;
     color: $grey;

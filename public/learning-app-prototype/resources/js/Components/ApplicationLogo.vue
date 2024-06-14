@@ -1,7 +1,8 @@
 <template>
-    <svg width="119" height="92" viewBox="0 0 119 92" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="59.6637" cy="45.6637" r="45.6637" fill="#2E83D2" />
-        <circle cx="93.4867" cy="25.4867" r="22.8319" stroke="black" stroke-width="5.30973" />
-        <circle cx="25.6811" cy="25.4867" r="22.8319" stroke="black" stroke-width="5.30973" />
+    <svg width="80" viewBox="0 0 182 158" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="91" cy="83" r="75" fill="#67917B" />
+        <circle cx="91" cy="75" r="75" fill="#E3A328" />
+        <circle cx="35" cy="50" r="32.5" stroke="#103A51" stroke-width="7" />
+        <circle cx="147" cy="50" r="32.5" stroke="#103A51" stroke-width="7" />
     </svg>
 </template>

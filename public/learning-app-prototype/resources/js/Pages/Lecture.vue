@@ -8,6 +8,7 @@ import HappyDance from '@/Components/Animations/HappyDance.vue';
 import SadDance from '@/Components/Animations/SadDance.vue';
 import MultipleChoice from '@/Components/QuestionTypes/MultipleChoice.vue';
 import HelpPopup from '@/Components/HelpPopup.vue';
+import Arrow from '@/assets/Arrow.vue';
 import { Head, router } from '@inertiajs/vue3';
 import { ref, computed, onMounted } from 'vue';
 import { usePage } from '@inertiajs/vue3'
@@ -213,6 +214,8 @@ function drop(event, gapIndex) {
 
         // Füge das neue Element hinzu und entferne es aus der ursprünglichen Liste
         targetElement.appendChild(draggedElement);
+        // Füge das neue Element hinzu und entferne es aus der ursprünglichen Liste
+        targetElement.insertBefore(draggedElement, targetElement.firstChild);
 
         // Aktualisiere den dropTargets Eintrag
         dropTargets.value[`div${gapIndex}`] = draggedElement;
@@ -242,6 +245,7 @@ const showXp = ref(false);
 </script>
 
 <template>
+
     <Head title="Spiel" />
 
     <AuthenticatedLayout>
@@ -288,8 +292,8 @@ const showXp = ref(false);
                     <div class="answers">
                         <div v-for="(answer, index) in answers" :key="index" class="answer">
                             <label :class="{ 'selected': index === selectedAnswer }">
-                                <input type="radio" :value="index" v-model="selectedAnswer" @change="selectedOption(index)"
-                                    aria-current="true" class="btn-radio">
+                                <input type="radio" :value="index" v-model="selectedAnswer"
+                                    @change="selectedOption(index)" aria-current="true" class="btn-radio">
                                 <span class="answer-text">{{ answer.answer }}</span>
                             </label>
                         </div>
@@ -303,9 +307,9 @@ const showXp = ref(false);
                     <div class="question">
                         <template v-for="(part, index) in sentenceParts" :key="index">
                             <span v-if="isGap(part)" class="dropbox" :id="'div' + gapIndex(index)"
-                                @drop="drop($event, gapIndex(index))" @dragover="allowDrop">
+                                @drop="drop($event, gapIndex(index))" @dragover="allowDrop">________________
                             </span>
-                            <span v-else>{{ part }}</span>
+                            <span class="text" v-else>{{ part }}</span>
                         </template>
                     </div>
                     <div class="answer-dd" @drop="dropToAnswerDD" @dragover="allowDrop">
@@ -342,7 +346,9 @@ const showXp = ref(false);
 
             <div class="question-footer" v-if="showQuestion">
                 <button @click="nextQuestion" v-if="!isLastQuestion" class="btn btn-green">Bestätigen</button>
-                <button @click="calculateResult" v-if="isLastQuestion" class="btn btn-yellow">Lektion beenden</button>
+                <button @click="calculateResult" v-if="isLastQuestion" class="btn btn-yellow">Lektion beenden
+                    <Arrow/>
+                </button>
             </div>
         </div>
     </AuthenticatedLayout>
@@ -357,22 +363,29 @@ const showXp = ref(false);
         color: $blue;
     }
 }
+
 .dropbox {
     height: 55px;
-    border-radius: 50px;
     border: none;
     text-decoration: none;
-    background: $grey-light;
-    color: transparent;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display: inline-block;
 }
 
 .question span {
+    line-height: 0;
+    width: 200px;
     font-size: 1.5rem;
     color: $blue;
     font-weight: bold;
+}
+
+.question {
+    &:hover {
+        cursor: default;
+    }
+    .text {
+        line-height: 3rem;
+    }
 }
 
 .answer-dd {
@@ -382,6 +395,7 @@ const showXp = ref(false);
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    gap: 1rem;
 
     @include breakpoint("mobile") {
         justify-content: normal;
@@ -390,7 +404,7 @@ const showXp = ref(false);
 }
 
 .dragbtn {
-    margin-block: 10px;
+    margin-block: 0;
 
     &:hover {
         cursor: grab;
@@ -497,6 +511,8 @@ const showXp = ref(false);
         }
 
         .question {
+
+            width: 70%;
 
             @include breakpoint("mobile") {
                 width: auto;

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\MultipleChoiceQuestion;
 use App\Models\QuestionResults;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class LectureController extends Controller
@@ -61,23 +62,33 @@ class LectureController extends Controller
 
         if (!$firstLectureResult) {
             abort(404);
-        } 
+        }
 
         $lecture = $firstLectureResult->lecture;
 
         $user = User::where('id', $request->user()->id)
-        ->first();
+            ->first();
 
         $highestLecture = QuestionResults::where('user_id', auth()->user()->id)
-        ->max('lecture');
+            ->max('lecture');
 
-        $user->current_lecture = $highestLecture+1;
+        $user->current_lecture = $highestLecture + 1;
         $user->save();
+
+        // $bestScore = QuestionResults::where('user_id', $request->user()->id)
+        //     ->whereIn('lecture', [$lecture])
+        //     ->where('session', $request->route('session'))
+        //     ->groupBy('session')
+        //     ->select(DB::raw('SUM(question_correct_count) as total_correct_answers'))
+        //     ->orderBy('total_correct_answers', 'desc')
+        //     ->first();
 
         return Inertia::render('LectureResult', [
             'correctAnswered' => (int)$numCorrectAnswered,
             'incorrectAnswered' => (int)$numIncorrectAnswered,
+            'allAnswered' => (int)$numCorrectAnswered + (int)$numIncorrectAnswered,
             'lecture' => (int)$lecture,
+            // 'bestScore' => (int)$bestScore,
         ]);
     }
 

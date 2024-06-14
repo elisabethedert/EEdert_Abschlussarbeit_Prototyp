@@ -1,26 +1,37 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import HappyDance from '@/Components/Animations/HappyDance.vue';
+import Arrow from '@/assets/Arrow.vue';
 import { Head, Link } from '@inertiajs/vue3';
 
 defineProps({
     correctAnswered: Number,
     incorrectAnswered: Number,
+    allAnswered: Number,
     lecture: Number,
+    // bestScore: Number
 })
 
 </script>
 
 <template>
+
     <Head title="Ergebnis" />
 
     <AuthenticatedLayout>
         <h1>Lektion {{ lecture }} <br> abgeschlossen!</h1>
         <div class="result-text">
-            <p><b>Super, du hast {{ correctAnswered }} richtig beantwortet!</b></p>
-            <p>Damit erhälst du {{ correctAnswered*3 }} Punkte dazu und hast insgesamt {{ $page.props.auth.user.experience_points }} Punkte</p>
+            <p><b>Super, du hast {{ correctAnswered }} von {{ allAnswered }} richtig beantwortet!</b></p>
+            <p><b>Dein bestes Ergebnis ist xxxx von {{ allAnswered }}</b></p>
+            <p v-if="lecture === $page.props.auth.user.current_lecture">Damit erhälst du {{ correctAnswered * 3 }}
+                Punkte
+                dazu und hast insgesamt {{ $page.props.auth.user.experience_points }} Punkte</p>
+            <HappyDance />
             <div class="links">
-                <Link :href="'/spiel/lektion' + (lecture + 1)" type="button" class="btn btn-yellow">Nächste Lektion</Link>
-                <Link :href="'/spiel'" class="btn btn-green">Zurück zum Dashboard</Link>
+                <Link :href="'/spiel'" class="btn btn-green">Zurück zur Lektionsübersicht</Link>
+                <Link :href="'/spiel/lektion' + (lecture + 1)" type="button" class="btn btn-yellow">Nächste Lektion
+                <Arrow />
+                </Link>
             </div>
         </div>
     </AuthenticatedLayout>
