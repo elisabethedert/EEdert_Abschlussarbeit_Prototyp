@@ -6,6 +6,7 @@ use App\Models\DragDropQuestion;
 use Illuminate\Http\Request;
 use App\Models\MultipleChoiceQuestion;
 use App\Models\QuestionResults;
+use App\Models\User;
 use Inertia\Inertia;
 
 class LectureController extends Controller
@@ -64,7 +65,14 @@ class LectureController extends Controller
 
         $lecture = $firstLectureResult->lecture;
 
+        $user = User::where('id', $request->user()->id)
+        ->first();
 
+        $highestLecture = QuestionResults::where('user_id', auth()->user()->id)
+        ->max('lecture');
+
+        $user->current_lecture = $highestLecture+1;
+        $user->save();
 
         return Inertia::render('LectureResult', [
             'correctAnswered' => (int)$numCorrectAnswered,

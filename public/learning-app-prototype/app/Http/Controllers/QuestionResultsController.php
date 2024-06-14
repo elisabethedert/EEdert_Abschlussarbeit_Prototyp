@@ -70,13 +70,15 @@ class QuestionResultsController extends Controller
                 $newQuestionResult->session = $requestdata['session'];
 
                 $newQuestionResult->save();
+                if ($answerWasCorrect) {
+                    $user = User::where('id', $request->user()->id)
+                        ->first();
+
+                    $user->experience_points = $user->experience_points + 3; //3 Points pro Frage richtig
+                    $user->save();
+                }
             }
             if ($answerWasCorrect) {
-                $user = User::where('id', $request->user()->id)
-                ->first();
-        
-                $user->experience_points = $user->experience_points + 3; //3 Points pro Frage richtig
-                $user->save();
                 return response()->json(['message' => 'correct'], 200);
             } else {
                 return response()->json(['message' => 'incorrect'], 200);
@@ -108,14 +110,15 @@ class QuestionResultsController extends Controller
 
                 $newQuestionResult->save();
 
+                if ($orderCorrect) {
+                    $user = User::where('id', $request->user()->id)
+                        ->first();
+
+                    $user->experience_points = $user->experience_points + 3; //3 Points pro Frage richtig
+                    $user->save();
+                }
             }
             if ($orderCorrect) {
-                $user = User::where('id', $request->user()->id)
-                ->first();
-        
-                $user->experience_points = $user->experience_points + 3; //3 Points pro Frage richtig
-                $user->save();
-
                 return response()->json(['message' => 'orderCorrect'], 200);
             } else {
                 return response()->json(['message' => $requestdata['dropped_buttons']], 200);

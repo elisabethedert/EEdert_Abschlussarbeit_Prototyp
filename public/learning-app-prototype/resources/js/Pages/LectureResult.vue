@@ -7,6 +7,7 @@ defineProps({
     incorrectAnswered: Number,
     lecture: Number,
 })
+
 </script>
 
 <template>
@@ -16,9 +17,9 @@ defineProps({
         <h1>Lektion {{ lecture }} <br> abgeschlossen!</h1>
         <div class="result-text">
             <p><b>Super, du hast {{ correctAnswered }} richtig beantwortet!</b></p>
-            <p>Damit erhälst du xx Punkte dazu und hast insgesamt {{ $page.props.auth.user.experience_points }} Punkte</p>
+            <p>Damit erhälst du {{ correctAnswered*3 }} Punkte dazu und hast insgesamt {{ $page.props.auth.user.experience_points }} Punkte</p>
             <div class="links">
-                <Link :href="'/spiel/' + (lecture + 1)" type="button" class="btn btn-yellow">Nächste Lektion</Link>
+                <Link :href="'/spiel/lektion' + (lecture + 1)" type="button" class="btn btn-yellow">Nächste Lektion</Link>
                 <Link :href="'/spiel'" class="btn btn-green">Zurück zum Dashboard</Link>
             </div>
         </div>
