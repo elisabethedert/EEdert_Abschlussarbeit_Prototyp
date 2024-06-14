@@ -3,8 +3,9 @@
 </style>
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import Dance3 from '@/Components/Animations/Dance3.vue';
-import Dance2 from '@/Components/Animations/Dance2.vue';
+import AnimationContainer from '@/Components/Animations/AnimationContainer.vue';
+import HappyDance from '@/Components/Animations/HappyDance.vue';
+import SadDance from '@/Components/Animations/SadDance.vue';
 import MultipleChoice from '@/Components/QuestionTypes/MultipleChoice.vue';
 import HelpPopup from '@/Components/HelpPopup.vue';
 import { Head, router } from '@inertiajs/vue3';
@@ -115,8 +116,8 @@ function saveDdResult() {
 
 
 function nextQuestion() {
-    // showQuestion.value = false;
-    setTimeout(hideResult, 3000);
+    showQuestion.value = false;
+    setTimeout(hideResult, 4500);
     if (props.questions[currentIndex.value].type === "mc") {
         saveMcResult();
         selectedAnswer.value = null;
@@ -236,6 +237,8 @@ function dropToAnswerDD(event) {
         }
     }
 }
+
+const showXp = ref(false);
 </script>
 
 <template>
@@ -315,16 +318,29 @@ function dropToAnswerDD(event) {
             </div>
 
             <div class="question-animation">
-                <!-- <div v-if="resultCorrect">
-                    <Dance3 />
+                <div v-if="resultCorrect">
+                    <AnimationContainer :showXp="true">
+                        <template #result>
+                            <h3>Richtig!</h3>
+                        </template>
+                        <template #figure>
+                            <HappyDance />
+                        </template>
+                    </AnimationContainer>
                 </div>
                 <div v-if="resultIncorrect">
-                    <Dance2 />
+                    <AnimationContainer :showXp="false">
+                        <template #result>
+                            <h3>Leider falsch..</h3>
+                        </template>
+                        <template #figure>
+                            <SadDance />
+                        </template>
+                    </AnimationContainer>
                 </div>
-                -->
             </div>
 
-            <div class="question-footer">
+            <div class="question-footer" v-if="showQuestion">
                 <button @click="nextQuestion" v-if="!isLastQuestion" class="btn btn-green">Bestätigen</button>
                 <button @click="calculateResult" v-if="isLastQuestion" class="btn btn-yellow">Lektion beenden</button>
             </div>
@@ -335,6 +351,12 @@ function dropToAnswerDD(event) {
 <style scoped lang="scss">
 @import '../../css/_main.scss';
 
+.question-animation {
+    h3 {
+        font-size: 1.5rem;
+        color: $blue;
+    }
+}
 .dropbox {
     height: 55px;
     border-radius: 50px;
