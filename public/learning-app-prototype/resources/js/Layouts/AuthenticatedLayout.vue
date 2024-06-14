@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from 'vue';
+import Footer from '@/Layouts/Footer.vue';
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
@@ -90,6 +91,10 @@ const toggleProfile = () => {
             <main class="main">
                 <slot />
             </main>
+            <Footer class="footer">
+                <p>AGB</p>
+                <p>Datenschutz</p>
+            </Footer>
         </div>
     </div>
 </template>
@@ -105,8 +110,16 @@ const toggleProfile = () => {
     }
 }
 
+.footer {
+    padding-top: 4rem;
+
+    p {
+        padding: 0.25rem;
+        color: white;
+    }
+}
+
 .authenticated-layout {
-    min-height: 100vh;
     background-color: $background;
     align-items: center;
 
