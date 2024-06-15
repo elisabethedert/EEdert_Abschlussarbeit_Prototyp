@@ -51,7 +51,7 @@ const props = defineProps({
         </div>
         <h2>Zeit für eine neue Lektion?</h2>
         <div class="links">
-            <Link :href="'/spiel'" class="btn btn-yellow">Lektionsübersicht
+            <Link :href="'/units'" class="btn btn-yellow">Zur Unit-Übersicht
                 <Arrow/>
             </Link>
         </div>

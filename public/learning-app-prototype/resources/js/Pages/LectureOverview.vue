@@ -6,21 +6,10 @@ import { ref, computed } from 'vue';
 import Fig1 from '@/assets/Fig1.vue';
 import Fig2 from '@/assets/Fig2.vue';
 import Fig3 from '@/assets/Fig3.vue';
-
-// function goToLesson(number) {
-//     //TODO abfragen welches die höchste Lecture number des Users ist
-//     axios.post('/spiel/lektion{number}', [
-// neue Route im Backend
-//wenn in L1alle richtig sind kann l2 angezeigt sind
-// get reqeust an /lectures hier die höchste lecture number zurückgeben
-// }
-
-
-
 </script>
 <template>
 
-    <Head title="Spiel" />
+    <Head title="Lektionsübersicht" />
 
     <AuthenticatedLayout>
         <div class="intro-text">
@@ -33,7 +22,7 @@ import Fig3 from '@/assets/Fig3.vue';
                     <Fig1 />
                     <h3>Begriff und Einordnung</h3>
                 </div>
-                <Link href="spiel/lektion1" type="button" class="btn btn-yellow">Lektion 1
+                <Link href="lektion1" type="button" class="btn btn-green">Lektion 1
                 <Arrow />
                 </Link>
             </div>
@@ -43,8 +32,8 @@ import Fig3 from '@/assets/Fig3.vue';
                     <Fig2 />
                     <h3>Schutzziele</h3>
                 </div>
-                <Link :class="{ disabled: $page.props.auth.user.current_lecture <= 1 }" href="spiel/lektion2"
-                    type="button" class="btn btn-yellow">Lektion 2
+                <Link :class="{ disabled: $page.props.auth.user.current_lecture <= 1 }" href="lektion2" type="button"
+                    class="btn btn-green">Lektion 2
                 <Arrow />
                 </Link>
             </div>
@@ -54,8 +43,8 @@ import Fig3 from '@/assets/Fig3.vue';
                     <Fig3 />
                     <h3>Identity Management</h3>
                 </div>
-                <Link :class="{ disabled: $page.props.auth.user.current_lecture <= 2 }" href="spiel/lektion3"
-                    type="button" class="btn btn-yellow">Lektion 3
+                <Link :class="{ disabled: $page.props.auth.user.current_lecture <= 2 }" href="lektion3" type="button"
+                    class="btn btn-green">Lektion 3
                 <Arrow />
                 </Link>
             </div>
@@ -65,8 +54,8 @@ import Fig3 from '@/assets/Fig3.vue';
                     <Fig1 />
                     <h3>Security/Privacy by Design/Default</h3>
                 </div>
-                <Link :class="{ disabled: $page.props.auth.user.current_lecture <= 3 }" href="spiel/lektion4"
-                    type="button" class="btn btn-yellow">Lektion 4
+                <Link :class="{ disabled: $page.props.auth.user.current_lecture <= 3 }" href="lektion4" type="button"
+                    class="btn btn-green">Lektion 4
                 <Arrow />
                 </Link>
             </div>
@@ -76,11 +65,14 @@ import Fig3 from '@/assets/Fig3.vue';
                     <Fig2 />
                     <h3>Abschluss der Unit</h3>
                 </div>
-                <Link :class="{ disabled: $page.props.auth.user.current_lecture <= 4 }" href="spiel/lektion4"
-                    type="button" class="btn btn-yellow">Lektion 5
+                <Link :class="{ disabled: $page.props.auth.user.current_lecture <= 4 }" href="lektion5" type="button"
+                    class="btn btn-green">Lektion 5
                 <Arrow />
                 </Link>
             </div>
+        </div>
+        <div class="links">
+            <Link href="/units" type="button" class="btn btn-yellow">Link zurück zur Unit-Übersicht</Link>
         </div>
     </AuthenticatedLayout>
 </template>
@@ -137,5 +129,11 @@ import Fig3 from '@/assets/Fig3.vue';
             margin-top: 2rem;
         }
     }
+}
+
+.links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 </style>

@@ -159,7 +159,7 @@ function calculateResult() {
     }
     // TODO: länger warten, bis das Ergebnis der Lektion angezeigt wird und das Ergebnis der Frage zunächst zeigen
     // Button verzögert zeigen, der auf das Lektionsergebnis führt
-    router.get(`/results/${currentSession}`);
+    router.get(`/unit1/lektion${props.questions[currentIndex.value].lecture}/result/${currentSession}`);
 }
 
 function progressbar(count, maxCount) {

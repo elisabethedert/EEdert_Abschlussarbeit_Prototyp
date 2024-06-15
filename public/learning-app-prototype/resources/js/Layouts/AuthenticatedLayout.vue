@@ -47,7 +47,7 @@ const toggleProfile = () => {
                                 <NavLink class="item" :href="route('dashboard')" :active="route().current('dashboard')">
                                     Dashboard
                                 </NavLink>
-                                <NavLink href="/spiel"
+                                <NavLink href="/units"
                                     :class="{ 'nav-link active': $page.url === '/spiel', 'nav-link': $page.url != '/spiel' }">
                                     Spiel</NavLink>
                             </div>
