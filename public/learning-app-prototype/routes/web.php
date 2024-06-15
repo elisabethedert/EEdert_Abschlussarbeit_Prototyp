@@ -46,4 +46,7 @@ Route::post('/question_results', [QuestionResultsController::class, 'store'])->m
 Route::get('/question_results', [QuestionResultsController::class, 'checkExistence'])->middleware(['auth', 'verified']);
 Route::put('/question_results', [QuestionResultsController::class, 'updateCounter'])->middleware(['auth', 'verified']);
 
+Route::fallback(function () {
+    return Inertia::render('NotFound');
+});
 require __DIR__.'/auth.php';
