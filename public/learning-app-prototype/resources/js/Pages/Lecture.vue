@@ -115,8 +115,21 @@ function saveDdResult() {
     });
 }
 
+function dropboxEmpty() {
+    const dropboxes = document.querySelectorAll('.dropbox');
+    for (let dropbox of dropboxes) {
+        if (dropbox.children.length === 0) {
+            return true
+        }
+    }
+    return false
+}
+
 
 function nextQuestion() {
+    if (props.questions[currentIndex.value].type === "dd" && (dropboxEmpty())) {
+        return;
+    }
     showQuestion.value = false;
     setTimeout(hideResult, 4500);
     if (props.questions[currentIndex.value].type === "mc") {
@@ -347,7 +360,7 @@ const showXp = ref(false);
             <div class="question-footer" v-if="showQuestion">
                 <button @click="nextQuestion" v-if="!isLastQuestion" class="btn btn-green">Bestätigen</button>
                 <button @click="calculateResult" v-if="isLastQuestion" class="btn btn-yellow">Lektion beenden
-                    <Arrow/>
+                    <Arrow />
                 </button>
             </div>
         </div>
@@ -383,6 +396,7 @@ const showXp = ref(false);
     &:hover {
         cursor: default;
     }
+
     .text {
         line-height: 3rem;
     }
