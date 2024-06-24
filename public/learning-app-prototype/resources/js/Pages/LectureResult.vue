@@ -28,8 +28,8 @@ defineProps({
                 dazu und hast insgesamt {{ $page.props.auth.user.experience_points }} Punkte</p>
             <HappyDance />
             <div class="links">
-                <Link :href="'/spiel'" class="btn btn-green">Zurück zur Lektionsübersicht</Link>
-                <Link :href="'/spiel/lektion' + (lecture + 1)" type="button" class="btn btn-yellow">Nächste Lektion
+                <Link :href="'/unit1/lektionen'" class="btn btn-green">Zurück zur Lektionsübersicht</Link>
+                <Link :href="'/unit1/lektion' + (lecture + 1)" type="button" class="btn btn-yellow">Nächste Lektion
                 <Arrow />
                 </Link>
             </div>
