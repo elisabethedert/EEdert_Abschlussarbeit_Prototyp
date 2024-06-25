@@ -9,6 +9,8 @@ defineProps({
     incorrectAnswered: Number,
     allAnswered: Number,
     lecture: Number,
+    unit: Number,
+    isHighestLectureInUnit: Boolean,
     // bestScore: Number
 })
 
@@ -19,7 +21,8 @@ defineProps({
     <Head title="Ergebnis" />
 
     <AuthenticatedLayout>
-        <h1>Lektion {{ lecture }} <br> abgeschlossen!</h1>
+        <h1 v-if="!isHighestLectureInUnit">Lektion {{ lecture }} <br> abgeschlossen!</h1>
+        <h1 v-if="isHighestLectureInUnit">Unit {{ unit }} <br> abgeschlossen!</h1>
         <div class="result-text">
             <p><b>Super, du hast {{ correctAnswered }} von {{ allAnswered }} richtig beantwortet!</b></p>
             <p><b>Dein bestes Ergebnis ist xxxx von {{ allAnswered }}</b></p>
@@ -29,7 +32,12 @@ defineProps({
             <HappyDance />
             <div class="links">
                 <Link :href="'/unit1/lektionen'" class="btn btn-green">Zurück zur Lektionsübersicht</Link>
-                <Link :href="'/unit1/lektion' + (lecture + 1)" type="button" class="btn btn-yellow">Nächste Lektion
+                <Link v-if="!isHighestLectureInUnit" :href="'/unit1/lektion' + (lecture + 1)" type="button"
+                    class="btn btn-yellow">Nächste Lektion
+                <Arrow />
+                </Link>
+                <Link v-if="isHighestLectureInUnit" :href="'/units'" type="button"
+                    class="btn btn-danger">Zurück zur Unit-Übersicht
                 <Arrow />
                 </Link>
             </div>

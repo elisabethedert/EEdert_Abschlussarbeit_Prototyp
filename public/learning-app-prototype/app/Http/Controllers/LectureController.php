@@ -64,6 +64,18 @@ class LectureController extends Controller
             abort(404);
         }
 
+        $currentUnit = $firstLectureResult->unit;
+        $highestLectureInUnit = MultipleChoiceQuestion::where('unit', $currentUnit)
+            ->max('lecture');
+
+        $checkIfLastLecture = $firstLectureResult->lecture;
+
+        if ($highestLectureInUnit === $checkIfLastLecture) {
+            $isHighestLectureInUnit = true;
+        } else {
+            $isHighestLectureInUnit = false;
+        }
+
         $lecture = $firstLectureResult->lecture;
 
         $user = User::where('id', $request->user()->id)
@@ -88,6 +100,8 @@ class LectureController extends Controller
             'incorrectAnswered' => (int)$numIncorrectAnswered,
             'allAnswered' => (int)$numCorrectAnswered + (int)$numIncorrectAnswered,
             'lecture' => (int)$lecture,
+            'unit' => $currentUnit,
+            'isHighestLectureInUnit' => $isHighestLectureInUnit,
             // 'bestScore' => (int)$bestScore,
         ]);
     }
