@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DragDropAnswer;
 use App\Models\DragDropQuestion;
 use Illuminate\Http\Request;
 use App\Models\MultipleChoiceQuestion;
@@ -30,10 +31,9 @@ class LectureController extends Controller
             return $question;
         });
 
-        $questionsDd = $questionsDd->map(function ($question) {
-            $shuffledBlanks = $question->blanks;
-            shuffle($shuffledBlanks);
-            $question->blanks = $shuffledBlanks;
+        $questionsDd->transform(function ($question) {
+            unset($question->blanks);
+            $question->drag_drop_answers = DragDropAnswer::where('drag_drop_question_id', $question->id)->pluck('answer');
             return $question;
         });
 

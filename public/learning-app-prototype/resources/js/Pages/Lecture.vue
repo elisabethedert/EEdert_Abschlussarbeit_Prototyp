@@ -11,8 +11,6 @@ import HelpPopup from '@/Components/HelpPopup.vue';
 import Arrow from '@/assets/Arrow.vue';
 import { Head, router } from '@inertiajs/vue3';
 import { ref, computed, onMounted } from 'vue';
-import { usePage } from '@inertiajs/vue3'
-import { useForm } from '@inertiajs/vue3'
 import axios from 'axios';
 
 
@@ -53,7 +51,7 @@ const answers = computed(() => {
 })
 
 const answersDd = computed(() => {
-    return props.questions[currentIndex.value].blanks;
+    return props.questions[currentIndex.value].drag_drop_answers;
 });
 
 var count = 0;
@@ -90,15 +88,11 @@ function saveMcResult() {
 function saveDdResult() {
 
     const droppedButtons = ref([]);
-    droppedButtons.value = Array.from(document.querySelectorAll('.dragbtn')).map(button => button.textContent);
-
-    console.log(droppedButtons.value);
+    droppedButtons.value = Array.from(document.querySelectorAll('.dropbox button')).map(button => button.textContent);
     // TODO korrekte Datenweiterletung an BE
     axios.post('/question_results', {
         question_id: props.questions[currentIndex.value].id,
-        //
         dropped_buttons: droppedButtons.value,
-        //
         question_type: props.questions[currentIndex.value].type,
         lecture: props.questions[currentIndex.value].lecture,
         unit: props.questions[currentIndex.value].unit,
