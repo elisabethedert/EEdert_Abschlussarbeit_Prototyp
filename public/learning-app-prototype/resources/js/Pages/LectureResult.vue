@@ -36,8 +36,8 @@ defineProps({
                     class="btn btn-yellow">Nächste Lektion
                 <Arrow />
                 </Link>
-                <Link v-if="isHighestLectureInUnit" :href="'/units'" type="button"
-                    class="btn btn-danger">Zurück zur Unit-Übersicht
+                <Link v-if="isHighestLectureInUnit" :href="'/dashboard'" type="button"
+                    class="btn btn-danger">Zurück zum Dashboard
                 <Arrow />
                 </Link>
             </div>
