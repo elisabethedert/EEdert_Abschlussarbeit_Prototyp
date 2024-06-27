@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DragDropAnswer;
 use App\Models\DragDropQuestion;
 use Illuminate\Http\Request;
 use App\Models\MultipleChoiceQuestion;
 use App\Models\QuestionResults;
+use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class LectureController extends Controller
@@ -28,10 +31,9 @@ class LectureController extends Controller
             return $question;
         });
 
-        $questionsDd = $questionsDd->map(function ($question) {
-            $shuffledBlanks = $question->blanks;
-            shuffle($shuffledBlanks);
-            $question->blanks = $shuffledBlanks;
+        $questionsDd->transform(function ($question) {
+            unset($question->blanks);
+            $question->drag_drop_answers = DragDropAnswer::where('drag_drop_question_id', $question->id)->pluck('answer');
             return $question;
         });
 
@@ -60,16 +62,47 @@ class LectureController extends Controller
 
         if (!$firstLectureResult) {
             abort(404);
-        } 
+        }
+
+        $currentUnit = $firstLectureResult->unit;
+        $highestLectureInUnit = MultipleChoiceQuestion::where('unit', $currentUnit)
+            ->max('lecture');
+
+        $checkIfLastLecture = $firstLectureResult->lecture;
+
+        if ($highestLectureInUnit === $checkIfLastLecture) {
+            $isHighestLectureInUnit = true;
+        } else {
+            $isHighestLectureInUnit = false;
+        }
 
         $lecture = $firstLectureResult->lecture;
 
+        $user = User::where('id', $request->user()->id)
+            ->first();
 
+        $highestLecture = QuestionResults::where('user_id', auth()->user()->id)
+            ->max('lecture');
+
+        $user->current_lecture = $highestLecture + 1;
+        $user->save();
+
+        // $bestScore = QuestionResults::where('user_id', $request->user()->id)
+        //     ->whereIn('lecture', [$lecture])
+        //     ->where('session', $request->route('session'))
+        //     ->groupBy('session')
+        //     ->select(DB::raw('SUM(question_correct_count) as total_correct_answers'))
+        //     ->orderBy('total_correct_answers', 'desc')
+        //     ->first();
 
         return Inertia::render('LectureResult', [
             'correctAnswered' => (int)$numCorrectAnswered,
             'incorrectAnswered' => (int)$numIncorrectAnswered,
+            'allAnswered' => (int)$numCorrectAnswered + (int)$numIncorrectAnswered,
             'lecture' => (int)$lecture,
+            'unit' => $currentUnit,
+            'isHighestLectureInUnit' => $isHighestLectureInUnit,
+            // 'bestScore' => (int)$bestScore,
         ]);
     }
 

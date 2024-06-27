@@ -3,14 +3,14 @@
 </style>
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import Dance3 from '@/Components/Animations/Dance3.vue';
-import Dance2 from '@/Components/Animations/Dance2.vue';
+import AnimationContainer from '@/Components/Animations/AnimationContainer.vue';
+import HappyDance from '@/Components/Animations/HappyDance.vue';
+import SadDance from '@/Components/Animations/SadDance.vue';
 import MultipleChoice from '@/Components/QuestionTypes/MultipleChoice.vue';
 import HelpPopup from '@/Components/HelpPopup.vue';
+import Arrow from '@/assets/Arrow.vue';
 import { Head, router } from '@inertiajs/vue3';
 import { ref, computed, onMounted } from 'vue';
-import { usePage } from '@inertiajs/vue3'
-import { useForm } from '@inertiajs/vue3'
 import axios from 'axios';
 
 
@@ -51,7 +51,7 @@ const answers = computed(() => {
 })
 
 const answersDd = computed(() => {
-    return props.questions[currentIndex.value].blanks;
+    return props.questions[currentIndex.value].drag_drop_answers;
 });
 
 var count = 0;
@@ -88,15 +88,11 @@ function saveMcResult() {
 function saveDdResult() {
 
     const droppedButtons = ref([]);
-    droppedButtons.value = Array.from(document.querySelectorAll('.dragbtn')).map(button => button.textContent);
-
-    console.log(droppedButtons.value);
+    droppedButtons.value = Array.from(document.querySelectorAll('.dropbox button')).map(button => button.textContent);
     // TODO korrekte Datenweiterletung an BE
     axios.post('/question_results', {
         question_id: props.questions[currentIndex.value].id,
-        //
         dropped_buttons: droppedButtons.value,
-        //
         question_type: props.questions[currentIndex.value].type,
         lecture: props.questions[currentIndex.value].lecture,
         unit: props.questions[currentIndex.value].unit,
@@ -113,10 +109,23 @@ function saveDdResult() {
     });
 }
 
+function dropboxEmpty() {
+    const dropboxes = document.querySelectorAll('.dropbox');
+    for (let dropbox of dropboxes) {
+        if (dropbox.children.length === 0) {
+            return true
+        }
+    }
+    return false
+}
+
 
 function nextQuestion() {
-    // showQuestion.value = false;
-    setTimeout(hideResult, 3000);
+    if (props.questions[currentIndex.value].type === "dd" && (dropboxEmpty())) {
+        return;
+    }
+    showQuestion.value = false;
+    setTimeout(hideResult, 4500);
     if (props.questions[currentIndex.value].type === "mc") {
         saveMcResult();
         selectedAnswer.value = null;
@@ -157,7 +166,7 @@ function calculateResult() {
     }
     // TODO: länger warten, bis das Ergebnis der Lektion angezeigt wird und das Ergebnis der Frage zunächst zeigen
     // Button verzögert zeigen, der auf das Lektionsergebnis führt
-    router.get(`/results/${currentSession}`);
+    router.get(`/unit1/lektion${props.questions[currentIndex.value].lecture}/result/${currentSession}`);
 }
 
 function progressbar(count, maxCount) {
@@ -212,6 +221,8 @@ function drop(event, gapIndex) {
 
         // Füge das neue Element hinzu und entferne es aus der ursprünglichen Liste
         targetElement.appendChild(draggedElement);
+        // Füge das neue Element hinzu und entferne es aus der ursprünglichen Liste
+        targetElement.insertBefore(draggedElement, targetElement.firstChild);
 
         // Aktualisiere den dropTargets Eintrag
         dropTargets.value[`div${gapIndex}`] = draggedElement;
@@ -236,9 +247,12 @@ function dropToAnswerDD(event) {
         }
     }
 }
+
+const showXp = ref(false);
 </script>
 
 <template>
+
     <Head title="Spiel" />
 
     <AuthenticatedLayout>
@@ -285,8 +299,8 @@ function dropToAnswerDD(event) {
                     <div class="answers">
                         <div v-for="(answer, index) in answers" :key="index" class="answer">
                             <label :class="{ 'selected': index === selectedAnswer }">
-                                <input type="radio" :value="index" v-model="selectedAnswer" @change="selectedOption(index)"
-                                    aria-current="true" class="btn-radio">
+                                <input type="radio" :value="index" v-model="selectedAnswer"
+                                    @change="selectedOption(index)" aria-current="true" class="btn-radio">
                                 <span class="answer-text">{{ answer.answer }}</span>
                             </label>
                         </div>
@@ -300,9 +314,9 @@ function dropToAnswerDD(event) {
                     <div class="question">
                         <template v-for="(part, index) in sentenceParts" :key="index">
                             <span v-if="isGap(part)" class="dropbox" :id="'div' + gapIndex(index)"
-                                @drop="drop($event, gapIndex(index))" @dragover="allowDrop">
+                                @drop="drop($event, gapIndex(index))" @dragover="allowDrop">________________
                             </span>
-                            <span v-else>{{ part }}</span>
+                            <span class="text" v-else>{{ part }}</span>
                         </template>
                     </div>
                     <div class="answer-dd" @drop="dropToAnswerDD" @dragover="allowDrop">
@@ -315,18 +329,33 @@ function dropToAnswerDD(event) {
             </div>
 
             <div class="question-animation">
-                <!-- <div v-if="resultCorrect">
-                    <Dance3 />
+                <div v-if="resultCorrect">
+                    <AnimationContainer :showXp="true">
+                        <template #result>
+                            <h3>Richtig!</h3>
+                        </template>
+                        <template #figure>
+                            <HappyDance />
+                        </template>
+                    </AnimationContainer>
                 </div>
                 <div v-if="resultIncorrect">
-                    <Dance2 />
+                    <AnimationContainer :showXp="false">
+                        <template #result>
+                            <h3>Leider falsch..</h3>
+                        </template>
+                        <template #figure>
+                            <SadDance />
+                        </template>
+                    </AnimationContainer>
                 </div>
-                -->
             </div>
 
-            <div class="question-footer">
+            <div class="question-footer" v-if="showQuestion">
                 <button @click="nextQuestion" v-if="!isLastQuestion" class="btn btn-green">Bestätigen</button>
-                <button @click="calculateResult" v-if="isLastQuestion" class="btn btn-yellow">Lektion beenden</button>
+                <button @click="calculateResult" v-if="isLastQuestion" class="btn btn-yellow">Lektion beenden
+                    <Arrow />
+                </button>
             </div>
         </div>
     </AuthenticatedLayout>
@@ -335,22 +364,36 @@ function dropToAnswerDD(event) {
 <style scoped lang="scss">
 @import '../../css/_main.scss';
 
+.question-animation {
+    h3 {
+        font-size: 1.5rem;
+        color: $blue;
+    }
+}
+
 .dropbox {
     height: 55px;
-    border-radius: 50px;
     border: none;
     text-decoration: none;
-    background: $grey-light;
-    color: transparent;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display: inline-block;
 }
 
 .question span {
+    line-height: 0;
+    width: 200px;
     font-size: 1.5rem;
     color: $blue;
     font-weight: bold;
+}
+
+.question {
+    &:hover {
+        cursor: default;
+    }
+
+    .text {
+        line-height: 3rem;
+    }
 }
 
 .answer-dd {
@@ -360,6 +403,7 @@ function dropToAnswerDD(event) {
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    gap: 1rem;
 
     @include breakpoint("mobile") {
         justify-content: normal;
@@ -368,7 +412,7 @@ function dropToAnswerDD(event) {
 }
 
 .dragbtn {
-    margin-block: 10px;
+    margin-block: 0;
 
     &:hover {
         cursor: grab;
@@ -397,6 +441,9 @@ function dropToAnswerDD(event) {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    @include breakpoint("mobile") {
+        height: auto;
+    }
 
     .question-header {
         display: flex;
@@ -475,6 +522,8 @@ function dropToAnswerDD(event) {
         }
 
         .question {
+
+            width: 70%;
 
             @include breakpoint("mobile") {
                 width: auto;

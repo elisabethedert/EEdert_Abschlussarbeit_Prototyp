@@ -1,14 +1,58 @@
-main, header, footer {
+main,
+header,
+footer {
     max-width: 1200px;
     align-items: center;
     margin-inline: auto;
+}
+
+// breakpoints
+$breakpoints: (
+    "default": (0px),
+    "mobile": (667px),
+    "tablet": (1280px),
+    "desktop": (1440px)) !default;
+
+$media-direction: max;
+
+@mixin breakpoint($breakpoint, $direction: $media-direction) {
+    @if map-has-key($breakpoints, $breakpoint) {
+        @if $direction ==only {
+            $smaller: 0px;
+
+            @each $name, $width in breakpoints {
+                @if width < map-get($breakpoints, $breakpoint) {
+                    $smaller: max($smaller, $width
+                    );
+            }
+        }
+
+        @media (min-width: $smaller) and (max-width: map-get($breakpoints, $breakpoint)) {
+            @content;
+        }
+    }
+
+    @else {
+        @media(#{$direction}-width: #{map-get($breakpoints, $breakpoint)}) {
+            @content;
+        }
+    }
+}
+
+@else if unitless($breakpoint) {
+    $breakpoint: $breakpoints + px;
+
+    @media(#{direction}-width: $breakpoint) {
+        @content;
+    }
+}
 }
 
 //colors
 $background: #FBF4CE;
 $background-light: #FCF9E7;
 $yellow: #FFD521;
-$yellow-dark: #e9c10f;
+$yellow-dark: #E3A328;
 $blue: #103A51;
 $blue-light: #3888b3;
 $green: #67917B;
@@ -23,11 +67,16 @@ $white: #FFFFFF;
 .btn {
     border-radius: 50px;
     padding: 10px 20px;
-    font-size: 1.25rem;
+    font-size: 1.125rem;
     font-weight: bold;
     border: none;
     text-decoration: none;
     margin-bottom: 1rem;
+
+    @include breakpoint("mobile") {
+        padding: 10px 15px;
+    }
+
     &:hover {
         cursor: pointer;
     }
@@ -36,6 +85,7 @@ $white: #FFFFFF;
         background: $green;
         color: $white;
         box-shadow: 0px 5px 0px $grey;
+
         &:hover {
             background: $green-dark;
         }
@@ -45,6 +95,7 @@ $white: #FFFFFF;
         background: $yellow;
         color: $blue;
         box-shadow: 0px 5px 0px $green;
+
         &:hover {
             background: $yellow-dark;
         }
@@ -54,6 +105,7 @@ $white: #FFFFFF;
         background: $danger-red;
         color: $white;
         box-shadow: 0px 5px 0px $yellow;
+
         &:hover {
             background: $danger-red-dark;
         }
@@ -66,6 +118,7 @@ $white: #FFFFFF;
         background: none;
         border: none;
         text-decoration: none;
+
         &:hover {
             text-decoration: underline;
         }
@@ -78,52 +131,36 @@ p {
 }
 
 h1 {
-    font-size: 4rem;
+    font-size: 2.75rem;
     color: $blue;
     text-align: center;
     padding-top: 4rem;
+
+    @include breakpoint("mobile") {
+        font-size: 2.5rem;
+    }
 }
 
 h2 {
-    font-size: 3rem;
+    font-size: 2rem;
     color: $blue;
+    text-align: center;
+
+    @include breakpoint("mobile") {
+        font-size: 1.75rem;
+    }
 }
 
 h3 {
-    font-size: 2rem;
+    font-size: 1.25rem;
+
+    @include breakpoint("mobile") {
+        font-size: 1.25rem;
+    }
 }
 
-$breakpoints: (
-    "default": (0px),
-    "mobile": (667px),
-    "tablet": (1280px),
-    "desktop": (1440px)
-) !default;
-
-$media-direction: max;
-
-@mixin breakpoint($breakpoint, $direction: $media-direction) {
-    @if map-has-key($breakpoints, $breakpoint) {
-        @if $direction == only {
-            $smaller: 0px;
-            @each $name, $width in breakpoints {
-                @if width < map-get($breakpoints, $breakpoint) {
-                    $smaller: max($smaller, $width);
-                }
-            }
-            @media (min-width: $smaller) and (max-width: map-get($breakpoints, $breakpoint)) {
-                @content;
-            }
-        } @else {
-            @media(#{$direction}-width: #{map-get($breakpoints, $breakpoint)}) {
-                @content;
-            }
-        }
-    } @else if unitless($breakpoint) {
-        $breakpoint: $breakpoints + px;
-
-        @media(#{direction}-width: $breakpoint) {
-            @content;
-        }
+p, h1, h2, h3, h4 {
+    &:hover {
+        cursor: default;
     }
 }

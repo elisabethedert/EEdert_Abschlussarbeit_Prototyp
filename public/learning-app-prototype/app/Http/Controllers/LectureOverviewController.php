@@ -1,12 +1,13 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Inertia\Inertia;
 
-class SpielController extends Controller
+class LectureOverviewController extends Controller
 {
     public function index()
     {
-        return Inertia::render('Spiel');
+        return Inertia::render('LectureOverview');
     }
 }
