@@ -11,7 +11,7 @@ defineProps({
     lecture: Number,
     unit: Number,
     isHighestLectureInUnit: Boolean,
-    // bestScore: Number
+    bestScore: Number
 })
 
 </script>
@@ -25,7 +25,7 @@ defineProps({
         <h1 v-if="isHighestLectureInUnit">Unit {{ unit }} <br> abgeschlossen!</h1>
         <div class="result-text">
             <p><b>Super, du hast {{ correctAnswered }} von {{ allAnswered }} richtig beantwortet!</b></p>
-            <p><b>Dein bestes Ergebnis ist xxxx von {{ allAnswered }}</b></p>
+            <p><b>Dein bestes Ergebnis ist {{ bestScore }} von {{ allAnswered }}</b></p>
             <p v-if="lecture === $page.props.auth.user.current_lecture">Damit erhälst du {{ correctAnswered * 3 }}
                 Punkte
                 dazu und hast insgesamt {{ $page.props.auth.user.experience_points }} Punkte</p>

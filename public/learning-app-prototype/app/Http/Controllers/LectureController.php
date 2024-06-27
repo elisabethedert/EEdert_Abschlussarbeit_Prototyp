@@ -87,13 +87,14 @@ class LectureController extends Controller
         $user->current_lecture = $highestLecture + 1;
         $user->save();
 
-        // $bestScore = QuestionResults::where('user_id', $request->user()->id)
-        //     ->whereIn('lecture', [$lecture])
-        //     ->where('session', $request->route('session'))
-        //     ->groupBy('session')
-        //     ->select(DB::raw('SUM(question_correct_count) as total_correct_answers'))
-        //     ->orderBy('total_correct_answers', 'desc')
-        //     ->first();
+        $bestScore = QuestionResults::where('user_id', $request->user()->id)
+            ->where('lecture', $lecture)
+            ->groupBy('session')
+            ->select(DB::raw('SUM(question_correct_count) as total_correct_answers'))
+            ->orderBy('total_correct_answers', 'desc')
+            ->first();
+
+        $totalCorrectAnswers = $bestScore->total_correct_answers;
 
         return Inertia::render('LectureResult', [
             'correctAnswered' => (int)$numCorrectAnswered,
@@ -102,7 +103,7 @@ class LectureController extends Controller
             'lecture' => (int)$lecture,
             'unit' => $currentUnit,
             'isHighestLectureInUnit' => $isHighestLectureInUnit,
-            // 'bestScore' => (int)$bestScore,
+            'bestScore' => (int)$totalCorrectAnswers,
         ]);
     }
 
