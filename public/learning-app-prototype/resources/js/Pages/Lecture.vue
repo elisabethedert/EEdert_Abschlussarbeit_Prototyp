@@ -441,6 +441,9 @@ const showXp = ref(false);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    @include breakpoint("mobile") {
+        height: auto;
+    }
 
     .question-header {
         display: flex;

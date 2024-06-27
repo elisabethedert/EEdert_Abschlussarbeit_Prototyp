@@ -46,9 +46,6 @@ const toggleProfile = () => {
                             <NavLink class="item" :href="route('dashboard')" :active="route().current('dashboard')">
                                 Dashboard
                             </NavLink>
-                            <NavLink href="/units"
-                                :class="{ 'nav-link active': $page.url === '/spiel', 'nav-link': $page.url != '/spiel' }">
-                                Spiel</NavLink>
                         </div>
                     </div>
                     <div class="dropdown">
@@ -98,10 +95,9 @@ const toggleProfile = () => {
 
 <style scoped lang="scss">
 @import '../../css/_main.scss';
-
 .main {
     margin-top: 3rem;
-
+    
     @include breakpoint("mobile") {
         margin-top: 0rem;
     }
@@ -109,10 +105,6 @@ const toggleProfile = () => {
 
 .footer {
     padding-top: 4rem;
-    
-    @include breakpoint("mobile") {
-        padding-top: 0;
-    }
 
     p {
         padding: 0.25rem;
@@ -125,7 +117,6 @@ const toggleProfile = () => {
     align-items: center;
 
     @include breakpoint("mobile") {
-        height: 100vh;
     }
 
     .nav-wrapper {
@@ -135,6 +126,7 @@ const toggleProfile = () => {
         top: 0;
         left: 0;
         padding-top: 1rem;
+        z-index: 100;
 
         @include breakpoint("mobile") {
             position: relative;

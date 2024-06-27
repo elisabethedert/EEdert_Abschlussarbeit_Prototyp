@@ -5,7 +5,6 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LectureOverviewController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\QuestionResultsController;
-use App\Http\Controllers\UnitController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -33,11 +32,8 @@ Route::middleware('auth')->group(function () {
 //Spielübersicht
 Route::get('unit{unit}/lektionen',[LectureOverviewController::class, 'index'])->middleware(['auth', 'verified']);
 
-//Unitübersicht
-Route::get('units',[UnitController::class, 'index'])->middleware(['auth', 'verified']);
-
 //Spielseite der einzelnen Lektionen
-Route::get('unit1/lektion{lecture}',[LectureController::class, 'index'])->middleware(['auth', 'verified'])->name('spiel.lektion');
+Route::get('unit1/lektion{lecture}',[LectureController::class, 'index'])->middleware(['auth', 'verified']);
 
 //Ergebnisse nach Lektion 
 Route::get('unit1/lektion{lecture}/result/{session}', [LectureController::class, 'results'])->middleware(['auth', 'verified'])->name('results');

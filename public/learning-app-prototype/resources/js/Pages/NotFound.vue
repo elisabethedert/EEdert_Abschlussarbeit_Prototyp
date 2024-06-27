@@ -19,7 +19,7 @@ const props = defineProps({
 
         <div class="links">
             <Fig2 class="figure" />
-            <Link :href="'/units'" class="btn btn-yellow">Zur zum Dashboard
+            <Link :href="'/dashboard'" class="btn btn-yellow">Zur zum Dashboard
             <Arrow />
             </Link>
         </div>
