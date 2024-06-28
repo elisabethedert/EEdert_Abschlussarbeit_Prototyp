@@ -36,7 +36,7 @@ Route::get('unit{unit}/lektionen',[LectureOverviewController::class, 'index'])->
 Route::get('unit1/lektion{lecture}',[LectureController::class, 'index'])->middleware(['auth', 'verified']);
 
 //Ergebnisse nach Lektion 
-Route::get('unit1/lektion{lecture}/result/{session}', [LectureController::class, 'results'])->middleware(['auth', 'verified'])->name('results');
+Route::get('unit1/lektion{lecture}/result{session}', [LectureController::class, 'results'])->middleware(['auth', 'verified'])->name('results');
 
 Route::post('/question_results', [QuestionResultsController::class, 'store'])->middleware(['auth', 'verified'])->name('results');
 Route::get('/question_results', [QuestionResultsController::class, 'checkExistence'])->middleware(['auth', 'verified']);

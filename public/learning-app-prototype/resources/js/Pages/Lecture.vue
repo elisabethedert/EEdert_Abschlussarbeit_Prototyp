@@ -20,6 +20,9 @@ const props = defineProps({
     questions: Object
 })
 
+const lectureQuestionCount = props.questions.length;
+const lecureQuestionRepeatCount = ref(0);
+
 const isPopupVisible = ref(false);
 
 function showHelpPopup() {
@@ -79,6 +82,9 @@ function saveMcResult() {
             resultCorrect.value = true;
         } else {
             resultIncorrect.value = true;
+            // add wrong answered question to the end of the questions array
+            lecureQuestionRepeatCount.value++;
+            props.questions.push(props.questions[currentIndex.value]);
         }
     }).catch(error => {
         console.error(error);
@@ -103,6 +109,9 @@ function saveDdResult() {
             resultCorrect.value = true;
         } else {
             resultIncorrect.value = true;
+            // add wrong answered question to the end of the questions array
+            lecureQuestionRepeatCount.value++;
+            props.questions.push(props.questions[currentIndex.value]);
         }
     }).catch(error => {
         console.error(error);
@@ -150,7 +159,7 @@ function nextQuestion() {
     dropTargets.value = {};
 
     // progressbar
-    var maxCount = props.questions.length;
+    var maxCount = lectureQuestionCount;
     count = count === maxCount ? maxCount : count + 1;
     progressbar(count, maxCount);
 }
@@ -264,7 +273,8 @@ const showXp = ref(false);
         <div class="question-container">
             <div class="question-header">
                 <div class="question-counter">
-                    <p class="question-counter"><b>Frage {{ currentIndex + 1 }} von {{ totalQuestions }}</b></p>
+                    <p class="question-counter"><b>Frage {{ currentIndex + 1 }} von {{ lectureQuestionCount }}</b></p>
+                    <p class="question-counter"><b>+ {{ lecureQuestionRepeatCount}}</b></p>
                     <div class="progress">
                         <div class="progress-bar">
                             <span style="width: 40%;"></span>
@@ -406,8 +416,7 @@ const showXp = ref(false);
     gap: 1rem;
 
     @include breakpoint("mobile") {
-        justify-content: normal;
-        align-items: flex-start
+        align-items: center;
     }
 }
 
@@ -441,8 +450,9 @@ const showXp = ref(false);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+
     @include breakpoint("mobile") {
-        height: auto;
+        height: 700px;
     }
 
     .question-header {
@@ -518,7 +528,8 @@ const showXp = ref(false);
 
         @include breakpoint("mobile") {
             flex-direction: column;
-            margin: 1rem
+            margin: 1rem;
+            gap: 1rem;
         }
 
         .question {
@@ -579,6 +590,14 @@ const showXp = ref(false);
                 }
             }
         }
+    }
+}
+
+.question-footer {
+    @include breakpoint("mobile") {
+        display: flex;
+        margin-top: 1rem;
+        justify-content: center;
     }
 }
 </style>

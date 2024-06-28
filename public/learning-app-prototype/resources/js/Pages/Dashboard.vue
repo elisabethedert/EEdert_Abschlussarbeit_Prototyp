@@ -17,8 +17,8 @@ const handleScroll = (event) => {
     event.preventDefault();
 };
 
-const scrollContainer = document.querySelector('.units');
 onMounted(() => {
+    const scrollContainer = document.querySelector('.units');
     if (scrollContainer === null) {
         return;
     }
@@ -27,6 +27,7 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
+    const scrollContainer = document.querySelector('.units');
     if (scrollContainer === null) {
         return;
     }
@@ -70,7 +71,7 @@ onUnmounted(() => {
         <div class="intro-text">
             <p><b>Hinter jeder Unit verbirgt sich ein neuer Schwerpunkt, den du vertiefen kannst.</b></p>
         </div>
-        <div class="units" id="scroll">
+        <div class="units">
             <div class="circle">
                 <svg width="300" height="258" viewBox="0 0 250 258" fill="none" xmlns="http://www.w3.org/2000/svg">
 
