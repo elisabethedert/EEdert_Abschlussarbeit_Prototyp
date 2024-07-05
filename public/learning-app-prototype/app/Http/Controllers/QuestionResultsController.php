@@ -65,7 +65,7 @@ class QuestionResultsController extends Controller
         if ($requestdata['question_type'] == 'mc') {
 
             // richtige Antwort der Frage finden wenn nicht null dann Antwort korekt
-            $answerWasCorrect = MultipleChoiceAnswer::where('multiple_choice_question_id', $requestdata['question_id'])
+            $answerWasCorrect = Answer::where('question_id', $requestdata['question_id'])
                 ->where('correct_answer', 1)
                 ->where('id', $requestdata['answer_id'])
                 ->first();
