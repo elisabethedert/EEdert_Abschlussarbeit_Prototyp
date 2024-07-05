@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\DragDropAnswer;
-use App\Models\DragDropQuestion;
+use App\Models\Answer;
+use App\Models\Question;
 use Illuminate\Http\Request;
-use App\Models\MultipleChoiceQuestion;
 use App\Models\QuestionResults;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
@@ -18,28 +17,27 @@ class LectureController extends Controller
      */
     public function index($lecture)
     {
-        $questionsMc = MultipleChoiceQuestion::where('lecture', $lecture)->inRandomOrder()->get();
-        $questionsDd = DragDropQuestion::where('lecture', $lecture)->inRandomOrder()->get();
+        // $questions = MultipleChoiceQuestion::where('lecture', $lecture)->inRandomOrder()->get();
+        $questions = Question::where('lecture', $lecture)->inRandomOrder()->get();
         // Möglichkeit unter alle Fragen die falsch beantworteten der letzten Lektionen untermischen aus der letzten Session mit dem höchsten Timestamp
 
         //filter to remove correct answer from the response
-        $questionsMc->transform(function ($question) {
-            $question->multiple_choice_answers->transform(function ($answer) {
+        $questions->transform(function ($question) {
+            $question->answers->transform(function ($answer) {
                 unset($answer->correct_answer);
                 return $answer;
             });
             return $question;
         });
 
-        $questionsDd->transform(function ($question) {
+        $questions->transform(function ($question) {
             unset($question->blanks);
-            $question->drag_drop_answers = DragDropAnswer::where('drag_drop_question_id', $question->id)->pluck('answer');
+            $question->answers = Answer::where('question_id', $question->id)->pluck('answer');
             return $question;
         });
 
         // merge question types and shuffle them
-        $questions = $questionsDd->concat($questionsMc)->shuffle();
-
+        $questions = $questions->shuffle();
         //View to see by the User
         return Inertia::render('Lecture', [
             'questions' => $questions
@@ -65,7 +63,7 @@ class LectureController extends Controller
         }
 
         $currentUnit = $firstLectureResult->unit;
-        $highestLectureInUnit = MultipleChoiceQuestion::where('unit', $currentUnit)
+        $highestLectureInUnit = Question::where('unit', $currentUnit)
             ->max('lecture');
 
         $checkIfLastLecture = $firstLectureResult->lecture;

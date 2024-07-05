@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\DragDropAnswer;
-use App\Models\DragDropQuestion;
+use App\Models\Answer;
+use App\Models\Question;
 use App\Models\QuestionResults;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -69,65 +69,71 @@ class QuestionResultsController extends Controller
                 ->where('correct_answer', 1)
                 ->where('id', $requestdata['answer_id'])
                 ->first();
-
-            //wenn es schon einen Eintrag gibt, dann die Werte erhöhen (wäre sonst null)
-            if ($record) {
-                $record->question_count = $record->question_count + 1;
-                $record->question_correct_count = $answerWasCorrect ? $record->question_correct_count + 1 : $record->question_correct_count;
-                $record->question_incorrect_count = $answerWasCorrect ? $record->question_incorrect_count : $record->question_incorrect_count + 1;
-                $record->save();
-            } else {
-                $newQuestionResult = new QuestionResults;
-                $newQuestionResult->user_id = $request->user()->id;
-                $newQuestionResult->question_id = $requestdata['question_id'];
-                $newQuestionResult->question_type = $requestdata['question_type'];
-                $newQuestionResult->question_count = 1;
-                $newQuestionResult->question_correct_count = $answerWasCorrect ? 1 : 0;
-                $newQuestionResult->question_incorrect_count = $answerWasCorrect ? 0 : 1;
-                $newQuestionResult->lecture = $requestdata['lecture'];
-                $newQuestionResult->unit = $requestdata['unit'];
-                $newQuestionResult->session = $requestdata['session'];
-
-                $newQuestionResult->save();
-            }
-            if ($answerWasCorrect) {
-                return response()->json(['message' => 'correct'], 200);
-            } else {
-                return response()->json(['message' => 'incorrect'], 200);
-            }
         } else if ($requestdata['question_type'] == 'dd') {
 
             // Derzeitige Frage ermitteln und mit der Antwortsreihenfolge vergleichen
-            $currentQuestion = DragDropQuestion::where('id', $requestdata['question_id'])
+            $currentQuestion = Question::where('id', $requestdata['question_id'])
                 ->first();
-            $orderCorrect = $currentQuestion->blanks === $requestdata['dropped_buttons'];
-
-            //wenn es schon einen Eintrag gibt, dann die Werte erhöhen (wäre sonst null)
-            if ($record) {
-                $record->question_count = $record->question_count + 1;
-                $record->question_correct_count = $orderCorrect ? $record->question_correct_count + 1 : $record->question_correct_count;
-                $record->question_incorrect_count = $orderCorrect ? $record->question_incorrect_count : $record->question_incorrect_count + 1;
-                $record->save();
-            } else {
-                $newQuestionResult = new QuestionResults;
-                $newQuestionResult->user_id = $request->user()->id;
-                $newQuestionResult->question_id = $requestdata['question_id'];
-                $newQuestionResult->question_type = $requestdata['question_type'];
-                $newQuestionResult->question_count = 1;
-                $newQuestionResult->question_correct_count = $orderCorrect ? 1 : 0;
-                $newQuestionResult->question_incorrect_count = $orderCorrect ? 0 : 1;
-                $newQuestionResult->lecture = $requestdata['lecture'];
-                $newQuestionResult->unit = $requestdata['unit'];
-                $newQuestionResult->session = $requestdata['session'];
-
-                $newQuestionResult->save();
-            }
-            if ($orderCorrect) {
-                return response()->json(['message' => 'orderCorrect'], 200);
-            } else {
-                return response()->json(['message' => $requestdata['dropped_buttons']], 200);
-            }
+            $answerWasCorrect = $currentQuestion->blanks === $requestdata['dropped_buttons'];
         }
+        //wenn es schon einen Eintrag gibt, dann die Werte erhöhen (wäre sonst null)
+        if ($record) {
+            $record->question_count = $record->question_count + 1;
+            $record->question_correct_count = $answerWasCorrect ? $record->question_correct_count + 1 : $record->question_correct_count;
+            $record->question_incorrect_count = $answerWasCorrect ? $record->question_incorrect_count : $record->question_incorrect_count + 1;
+            $record->save();
+        } else {
+            $newQuestionResult = new QuestionResults;
+            $newQuestionResult->user_id = $request->user()->id;
+            $newQuestionResult->question_id = $requestdata['question_id'];
+            $newQuestionResult->question_type = $requestdata['question_type'];
+            $newQuestionResult->question_count = 1;
+            $newQuestionResult->question_correct_count = $answerWasCorrect ? 1 : 0;
+            $newQuestionResult->question_incorrect_count = $answerWasCorrect ? 0 : 1;
+            $newQuestionResult->lecture = $requestdata['lecture'];
+            $newQuestionResult->unit = $requestdata['unit'];
+            $newQuestionResult->session = $requestdata['session'];
+
+            $newQuestionResult->save();
+        }
+        if ($answerWasCorrect) {
+            return response()->json(['message' => 'correct'], 200);
+        } else {
+            return response()->json(['message' => 'incorrect'], 200);
+        }
+        // } else if ($requestdata['question_type'] == 'dd') {
+
+        //     // Derzeitige Frage ermitteln und mit der Antwortsreihenfolge vergleichen
+        //     $currentQuestion = DragDropQuestion::where('id', $requestdata['question_id'])
+        //         ->first();
+        //     $orderCorrect = $currentQuestion->blanks === $requestdata['dropped_buttons'];
+
+        //     //wenn es schon einen Eintrag gibt, dann die Werte erhöhen (wäre sonst null)
+        //     if ($record) {
+        //         $record->question_count = $record->question_count + 1;
+        //         $record->question_correct_count = $orderCorrect ? $record->question_correct_count + 1 : $record->question_correct_count;
+        //         $record->question_incorrect_count = $orderCorrect ? $record->question_incorrect_count : $record->question_incorrect_count + 1;
+        //         $record->save();
+        //     } else {
+        //         $newQuestionResult = new QuestionResults;
+        //         $newQuestionResult->user_id = $request->user()->id;
+        //         $newQuestionResult->question_id = $requestdata['question_id'];
+        //         $newQuestionResult->question_type = $requestdata['question_type'];
+        //         $newQuestionResult->question_count = 1;
+        //         $newQuestionResult->question_correct_count = $orderCorrect ? 1 : 0;
+        //         $newQuestionResult->question_incorrect_count = $orderCorrect ? 0 : 1;
+        //         $newQuestionResult->lecture = $requestdata['lecture'];
+        //         $newQuestionResult->unit = $requestdata['unit'];
+        //         $newQuestionResult->session = $requestdata['session'];
+
+        //         $newQuestionResult->save();
+        //     }
+        //     if ($orderCorrect) {
+        //         return response()->json(['message' => 'orderCorrect'], 200);
+        //     } else {
+        //         return response()->json(['message' => $requestdata['dropped_buttons']], 200);
+        //     }
+        // }
     }
 
     /**

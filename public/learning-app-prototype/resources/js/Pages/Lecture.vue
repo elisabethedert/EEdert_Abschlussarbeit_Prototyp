@@ -50,12 +50,8 @@ const currentQuestion = computed(() => {
 const isLastQuestion = computed(() => currentIndex.value === props.questions.length - 1)
 
 const answers = computed(() => {
-    return props.questions[currentIndex.value].multiple_choice_answers
+    return props.questions[currentIndex.value].answers
 })
-
-const answersDd = computed(() => {
-    return props.questions[currentIndex.value].drag_drop_answers;
-});
 
 var count = 0;
 
@@ -71,7 +67,7 @@ function hideResult() {
 function saveMcResult() {
     axios.post('/question_results', {
         question_id: props.questions[currentIndex.value].id,
-        answer_id: props.questions[currentIndex.value].multiple_choice_answers[selectedAnswer.value].id,
+        answer_id: props.questions[currentIndex.value].answers[selectedAnswer.value].id,
         question_type: props.questions[currentIndex.value].type,
         lecture: props.questions[currentIndex.value].lecture,
         unit: props.questions[currentIndex.value].unit,
@@ -104,7 +100,7 @@ function saveDdResult() {
         unit: props.questions[currentIndex.value].unit,
         session: currentSession
     }).then(response => {
-        if (response.data.message == "orderCorrect") {
+        if (response.data.message == "correct") {
             result.value++;
             resultCorrect.value = true;
         } else {
@@ -175,7 +171,7 @@ function calculateResult() {
     }
     // TODO: länger warten, bis das Ergebnis der Lektion angezeigt wird und das Ergebnis der Frage zunächst zeigen
     // Button verzögert zeigen, der auf das Lektionsergebnis führt
-    router.get(`/unit1/lektion${props.questions[currentIndex.value].lecture}/result/${currentSession}`);
+    router.get(`/unit1/lektion${props.questions[currentIndex.value].lecture}/result${currentSession}`);
 }
 
 function progressbar(count, maxCount) {
@@ -330,9 +326,9 @@ const showXp = ref(false);
                         </template>
                     </div>
                     <div class="answer-dd" @drop="dropToAnswerDD" @dragover="allowDrop">
-                        <button v-for="(item, index) in answersDd" :key="index" class="dragbtn btn btn-yellow"
+                        <button v-for="(item, index) in answers" :key="index" class="dragbtn btn btn-yellow"
                             :id="'drag' + index" draggable="true" @dragstart="drag($event, index)">
-                            {{ item }}
+                            {{ item.answer }}
                         </button>
                     </div>
                 </div>

@@ -113,7 +113,19 @@ onUnmounted(() => {
                 <svg width="300" height="258" viewBox="0 0 250 258" fill="none" xmlns="http://www.w3.org/2000/svg">
                 </svg>
                 <div class="content">
-                    <Fig3 class="figure" />
+                    <Fig1 class="figure" />
+                    <h3>Security <br> Fokus Areas</h3>
+                    <Link :class="{ disabled: $page.props.auth.user.unit <= 1 }" href="unit1/lektionen" type="button"
+                        class="btn btn-yellow">Unit 3
+                    <!-- <Arrow /> -->
+                    </Link>
+                </div>
+            </div>
+            <div class="circle">
+                <svg width="300" height="258" viewBox="0 0 250 258" fill="none" xmlns="http://www.w3.org/2000/svg">
+                </svg>
+                <div class="content">
+                    <Fig2 class="figure" />
                     <h3>Security <br> Fokus Areas</h3>
                     <Link :class="{ disabled: $page.props.auth.user.unit <= 1 }" href="unit1/lektionen" type="button"
                         class="btn btn-yellow">Unit 3
@@ -137,19 +149,7 @@ onUnmounted(() => {
                 <svg width="300" height="258" viewBox="0 0 250 258" fill="none" xmlns="http://www.w3.org/2000/svg">
                 </svg>
                 <div class="content">
-                    <Fig3 class="figure" />
-                    <h3>Security <br> Fokus Areas</h3>
-                    <Link :class="{ disabled: $page.props.auth.user.unit <= 1 }" href="unit1/lektionen" type="button"
-                        class="btn btn-yellow">Unit 3
-                    <!-- <Arrow /> -->
-                    </Link>
-                </div>
-            </div>
-            <div class="circle">
-                <svg width="300" height="258" viewBox="0 0 250 258" fill="none" xmlns="http://www.w3.org/2000/svg">
-                </svg>
-                <div class="content">
-                    <Fig3 class="figure" />
+                    <Fig1 class="figure" />
                     <h3>Security <br> Fokus Areas</h3>
                     <Link :class="{ disabled: $page.props.auth.user.unit <= 1 }" href="unit1/lektionen" type="button"
                         class="btn btn-yellow">Unit 3
