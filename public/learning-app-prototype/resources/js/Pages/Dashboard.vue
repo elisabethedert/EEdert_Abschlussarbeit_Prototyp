@@ -8,7 +8,7 @@ import Fig2 from '@/assets/Fig2.vue';
 import Fig3 from '@/assets/Fig3.vue';
 
 const props = defineProps({
-    sessionCount: Number
+    streak: Number
 })
 const handleScroll = (event) => {
     const delta = Math.max(-1, Math.min(1, (event.wheelDelta || -event.detail)));
@@ -63,7 +63,7 @@ onUnmounted(() => {
                     <circle cx="125" cy="125" r="125" transform="matrix(-1 0 0 1 250 0)" fill="#67917B" />
                 </svg>
                 <div class="content">
-                    <h3>{{ sessionCount }}</h3>
+                    <h3>{{ streak }}</h3>
                     <p>Streak</p>
                 </div>
             </div>

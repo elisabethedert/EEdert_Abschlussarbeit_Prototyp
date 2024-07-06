@@ -72,7 +72,7 @@ import Fig3 from '@/assets/Fig3.vue';
             </div>
         </div>
         <div class="links">
-            <Link href="/units" type="button" class="btn btn-yellow">Link zurück zur Unit-Übersicht</Link>
+            <Link href="/dashboard" type="button" class="btn btn-yellow">Link zurück zum Dashboard</Link>
         </div>
     </AuthenticatedLayout>
 </template>

@@ -46,6 +46,9 @@ const toggleProfile = () => {
                             <NavLink class="item" :href="route('dashboard')" :active="route().current('dashboard')">
                                 Dashboard
                             </NavLink>
+                            <NavLink class="item">
+                                Team
+                            </NavLink>
                         </div>
                     </div>
                     <div class="dropdown">
