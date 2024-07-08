@@ -1,29 +1,21 @@
 <script setup>
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import Footer from '@/Layouts/Footer.vue';
+import Nav from '@/Components/Nav.vue';
 
-import { Link } from '@inertiajs/vue3';
 </script>
 
 <template>
-    <!-- Page Content -->
-    <main class="main">
-        <div class="guest-layout">
-            <!-- Logo
-            <div class="logo">
-                <Link :href="route('/')" as="button">
-                    <ApplicationLogo class="logo-icon" />
-                </Link>
-            </div> -->
-            <div>
-                <slot />
-            </div>
-        </div>
-    </main>
-    <Footer class="footer">
-        <p>AGB</p>
-        <p>Datenschutz</p>
-    </Footer>
+    <div class="guest-layout">
+
+        <main class="main">
+            <slot />
+        </main>
+        <Footer class="footer">
+            <p>AGB</p>
+            <p>Datenschutz</p>
+        </Footer>
+    </div>
 </template>
 <style scoped lang="scss">
 @import '../../css/_main.scss';

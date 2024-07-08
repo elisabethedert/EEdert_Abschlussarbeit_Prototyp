@@ -1,6 +1,8 @@
 <script setup>
 import GuestLayout from '@/Layouts/GuestLayout.vue';
 import Arrow from '@/assets/Arrow.vue';
+import DropdownNav from '@/Components/DropdownNav.vue';
+import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 
 import { Head, Link } from '@inertiajs/vue3';
 
@@ -23,14 +25,20 @@ defineProps({
 </script>
 
 <template>
-
     <Head title="Welcome" />
     <header>
         <nav v-if="canLogin" class="topnav">
-            <Link v-if="$page.props.auth.user" :href="route('dashboard')">
+            <div class="logo">
+                <Link>
+                <ApplicationLogo class="logo-icon" />
+                </Link>
+            </div>
+            <Link class="btn-text item" v-if="$page.props.auth.user" :href="route('dashboard')">
             Dashboard
             </Link>
-
+            <Link class="btn-text item" v-if="$page.props.auth.user" :href="route('dashboard')">
+            Team
+            </Link>
             <template v-else>
                 <Link class="btn-text item" :href="route('login')">
                 Log in
@@ -41,9 +49,9 @@ defineProps({
                 </Link>
             </template>
         </nav>
+        <DropdownNav v-if="!canLogin"/>
     </header>
     <GuestLayout>
-
         <div class="intro-text">
             <h1>Circulo</h1>
             <h2>Secure Product Design</h2>
@@ -53,7 +61,6 @@ defineProps({
                 Werde
                 zum Sicherheitsexperten und gestalte zukunftssichere Produkte!
             </p>
-
             <Link class="link btn btn-yellow" :href="route('login')">
             Los geht's!
             <Arrow />
@@ -75,17 +82,25 @@ defineProps({
 @import '../../css/_main.scss';
 
 .topnav {
+    margin-inline: 2rem;
     max-width: 1200px;
     position: fixed;
     width: 100%;
     top: 0;
     left: 0;
     display: flex;
-    justify-content: flex-end;
-
+    align-items: center;
+    padding-top: 1rem;
+    
     .item {
-        margin-top: 1rem;
-        padding: 2rem 1rem 0rem 1rem;
+        padding: 1rem;
+    }
+    .logo svg {
+        padding: 1rem 0rem 1rem 2rem;
+    
+        @include breakpoint("mobile") {
+            display: none;
+        }
     }
 }
 
@@ -116,8 +131,6 @@ defineProps({
         max-width: 800px;
     }
 
-    .arguments {
-
-    }
+    .arguments {}
 }
 </style>
