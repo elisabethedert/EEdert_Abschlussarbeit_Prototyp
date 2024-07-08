@@ -9,6 +9,8 @@ import SadDance from '@/Components/Animations/SadDance.vue';
 import MultipleChoice from '@/Components/QuestionTypes/MultipleChoice.vue';
 import HelpPopup from '@/Components/HelpPopup.vue';
 import Arrow from '@/assets/Arrow.vue';
+import Info from '@/assets/Info.vue';
+import Cross from '@/assets/Cross.vue';
 import { Head, router } from '@inertiajs/vue3';
 import { ref, computed, onMounted } from 'vue';
 import axios from 'axios';
@@ -26,7 +28,11 @@ const lecureQuestionRepeatCount = ref(0);
 const isPopupVisible = ref(false);
 
 function showHelpPopup() {
-    isPopupVisible.value = true;
+    if (isPopupVisible.value) {
+        isPopupVisible.value = false;
+    } else {
+        isPopupVisible.value = true;
+    }
 }
 
 const currentIndex = ref(0);
@@ -267,10 +273,20 @@ const showXp = ref(false);
         </div>
 
         <div class="question-container">
+            <div class="help-icon">
+                <button @click="showHelpPopup">
+                    <Info v-if="!isPopupVisible" />
+                    <Cross v-if="isPopupVisible" />
+                </button>
+                <HelpPopup :visible="isPopupVisible" @showhelp="isPopupVisible = $event">
+                    <p v-if="currentQuestion.type === 'mc'"><b>Tipp:</b> Wähle die richtige Antwort aus</p>
+                    <p v-if="currentQuestion.type === 'dd'"><b>Tipp:</b> Ziehe die gelben Buttons in die Lücke</p>
+                </HelpPopup>
+            </div>
             <div class="question-header">
                 <div class="question-counter">
-                    <p class="question-counter"><b>Frage {{ currentIndex + 1 }} von {{ lectureQuestionCount }}</b></p>
-                    <p class="question-counter"><b>+ {{ lecureQuestionRepeatCount}}</b></p>
+                    <p class="question-counter"><b>Frage {{ currentIndex + 1 }} von {{ lectureQuestionCount }}</b> | +{{
+                        lecureQuestionRepeatCount }} Fragen zur Wiederholung</p>
                     <div class="progress">
                         <div class="progress-bar">
                             <span style="width: 40%;"></span>
@@ -278,19 +294,6 @@ const showXp = ref(false);
                     </div>
                 </div>
 
-                <div class="help-icon">
-                    <button @click="showHelpPopup"><svg width="8" height="18" viewBox="0 0 8 31" fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path
-                                d="M1.26552 11.4094C0.782478 19.6357 0.800904 19.2007 0.808079 27.4404C0.805653 28.7934 1.71479 30.0084 3.13147 30.1054C4.40848 30.1928 5.80327 29.1456 5.80638 27.7826C5.78923 19.5422 5.7708 19.9772 6.25385 11.751C6.44387 8.53645 1.45555 8.19491 1.26552 11.4094Z" />
-                            <ellipse cx="4.5" cy="3" rx="2.5" ry="3" />
-                        </svg>
-                    </button>
-                    <HelpPopup :visible="isPopupVisible" @showhelp="isPopupVisible = $event">
-                        <p v-if="currentQuestion.type === 'mc'"><b>Tipp:</b> Wähle die richtige Antwort aus</p>
-                        <p v-if="currentQuestion.type === 'dd'"><b>Tipp:</b> Ziehe die gelben Buttons in die Lücke</p>
-                    </HelpPopup>
-                </div>
             </div>
             <!-- MC Section -->
             <!-- <MultipleChoice/> -->
@@ -378,7 +381,6 @@ const showXp = ref(false);
 }
 
 .dropbox {
-    height: 55px;
     border: none;
     text-decoration: none;
     display: inline-block;
@@ -399,6 +401,11 @@ const showXp = ref(false);
 
     .text {
         line-height: 3rem;
+
+        @include breakpoint("mobile") {
+            line-height: 2rem;
+            font-size: 1.25rem;
+        }
     }
 }
 
@@ -408,11 +415,11 @@ const showXp = ref(false);
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-direction: column;
+    flex-wrap: wrap;
     gap: 1rem;
 
     @include breakpoint("mobile") {
-        align-items: center;
+        width: 100%;
     }
 }
 
@@ -442,22 +449,19 @@ const showXp = ref(false);
 }
 
 .question-container {
-    height: 450px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-
+    background-color: $background-light;
+    border-radius: 25px;
+    margin-top: 2rem;
+    padding: 2rem;
+    
     @include breakpoint("mobile") {
-        height: 700px;
+        padding: 1rem;
     }
 
     .question-header {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        margin-bottom: 2rem;
-        align-items: center;
-
         .question-counter {
             p {
                 margin-bottom: 1rem;
@@ -489,35 +493,38 @@ const showXp = ref(false);
         }
     }
 
-    .help-icon button {
-        background-color: $green;
-        width: 30px;
-        height: 30px;
-        border-radius: 25px;
-        border: none;
-        text-align: center;
-        line-height: 30px;
-        color: $white;
-        font-size: 1.5rem;
+    .help-icon {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1rem;
+        height: 40px;
 
-        &:hover {
-            cursor: pointer;
-        }
+        button {
+            background-color: $green;
+            min-width: 32px;
+            height: 32px;
+            margin-right: 5px;
+            border-radius: 25px;
+            border: none;
+            line-height: 30px;
+            color: $white;
+            font-size: 1.5rem;
 
-        svg {
-            fill: $white;
+            &:hover {
+                cursor: pointer;
+            }
+
+            svg {
+                fill: $white;
+            }
         }
     }
 
-    background-color: $background-light;
-    border-radius: 25px;
-    margin: 1rem;
-    padding: 2rem;
+
 
     .question-main {
         display: flex;
         flex-direction: row;
-        align-items: center;
         justify-content: space-between;
         gap: 3rem;
         margin: 1rem;
@@ -530,15 +537,14 @@ const showXp = ref(false);
 
         .question {
 
-            width: 70%;
+            h2 {
+                font-size: 1.5rem;
+            }
 
             @include breakpoint("mobile") {
                 width: auto;
             }
 
-            h2 {
-                font-size: 1.5rem;
-            }
         }
 
         .answers {

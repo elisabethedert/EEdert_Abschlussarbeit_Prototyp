@@ -259,10 +259,10 @@ const toggleProfile = () => {
                 color: $blue;
                 font-weight: bold;
                 text-decoration: none;
+                background: none;
 
                 &:hover {
                     text-decoration: underline;
-
                 }
 
                 @include breakpoint("mobile") {
