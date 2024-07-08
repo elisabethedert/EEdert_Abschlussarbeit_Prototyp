@@ -26,14 +26,10 @@
 @import '../../../css/_main.scss';
 
 .figur1-1 {
-    animation-delay: 0.6s;
-}
-
-.figur1-2 {
     animation-delay: 0.4s;
 }
 
-.figur1-3 {
+.figur1-2 {
     animation-delay: 0.2s;
 }
 
@@ -44,7 +40,7 @@
     animation-duration: 0.8s;
     animation-direction: alternate;
     animation-timing-function: ease-in-out;
-    animation-iteration-count: 4;
+    animation-iteration-count: 2;
 }
 
 @keyframes dance1 {

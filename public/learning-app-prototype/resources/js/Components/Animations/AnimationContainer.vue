@@ -38,10 +38,10 @@ defineProps({
 @import '../../../css/_main.scss';
 
 .animation {
-    position: absolute;
-    top: 60%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    // position: absolute;
+    // top: 60%;
+    // left: 50%;
+    // transform: translate(-50%, -50%);
     display: flex;
     align-items: center;
 

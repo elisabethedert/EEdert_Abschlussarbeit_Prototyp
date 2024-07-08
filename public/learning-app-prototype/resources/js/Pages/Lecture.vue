@@ -135,8 +135,6 @@ function nextQuestion() {
     if (props.questions[currentIndex.value].type === "dd" && (dropboxEmpty())) {
         return;
     }
-    showQuestion.value = false;
-    setTimeout(hideResult, 4500);
     if (props.questions[currentIndex.value].type === "mc") {
         saveMcResult();
         selectedAnswer.value = null;
@@ -144,6 +142,8 @@ function nextQuestion() {
         saveDdResult();
         sentenceParts.value = [];
     }
+    showQuestion.value = false;
+    setTimeout(hideResult, 2100);
     // show next question
     currentIndex.value++;
 
@@ -167,7 +167,8 @@ function nextQuestion() {
 }
 
 function calculateResult() {
-    setTimeout(hideResult, 2000);
+    setTimeout(hideResult, 4000);
+    showQuestion.value = false;
     if (props.questions[currentIndex.value].type === "mc") {
         saveMcResult();
         selectedAnswer.value = null;
@@ -175,9 +176,9 @@ function calculateResult() {
         saveDdResult();
         sentenceParts.value = [];
     }
-    // TODO: länger warten, bis das Ergebnis der Lektion angezeigt wird und das Ergebnis der Frage zunächst zeigen
-    // Button verzögert zeigen, der auf das Lektionsergebnis führt
-    router.get(`/unit1/lektion${props.questions[currentIndex.value].lecture}/result${currentSession}`);
+    setTimeout(() => {
+        router.get(`/unit1/lektion${props.questions[currentIndex.value].lecture}/result${currentSession}`);
+    }, 2000);
 }
 
 function progressbar(count, maxCount) {
@@ -216,7 +217,7 @@ function allowDrop(event) {
 
 function drag(event) {
     draggedItem.value = { id: event.target.id, originalContainer: event.target.parentElement };
-    event.dataTransfer.setData("text", event.target.id);
+    event.dataTransfer.setData("text", event.target.id);  
 }
 
 function drop(event, gapIndex) {
@@ -229,10 +230,10 @@ function drop(event, gapIndex) {
         if (targetElement.children.length > 0) {
             return;
         }
+        // targetElement.textContent = '';
 
         // Füge das neue Element hinzu und entferne es aus der ursprünglichen Liste
         targetElement.appendChild(draggedElement);
-        // Füge das neue Element hinzu und entferne es aus der ursprünglichen Liste
         targetElement.insertBefore(draggedElement, targetElement.firstChild);
 
         // Aktualisiere den dropTargets Eintrag
@@ -259,7 +260,6 @@ function dropToAnswerDD(event) {
     }
 }
 
-const showXp = ref(false);
 </script>
 
 <template>
@@ -293,78 +293,76 @@ const showXp = ref(false);
                         </div>
                     </div>
                 </div>
-
             </div>
             <!-- MC Section -->
             <!-- <MultipleChoice/> -->
+            <div class="content">
+                <div v-if="currentQuestion.type === 'mc'">
+                    <div class="question-main" v-if="showQuestion">
+                        <div class="question">
+                            <div class="">
+                                <h2>{{ currentQuestion.question }}</h2>
+                            </div>
+                        </div>
+                        <div class="answers-mc">
+                            <div v-for="(answer, index) in answers" :key="index" class="answer">
+                                <label :class="{ 'selected': index === selectedAnswer }">
+                                    <input type="radio" :value="index" v-model="selectedAnswer"
+                                        @change="selectedOption(index)" aria-current="true" class="btn-radio">
+                                    <span class="answer-text">{{ answer.answer }}</span>
+                                </label>
+                            </div>
 
-            <div v-if="currentQuestion.type === 'mc'">
-                <div class="question-main" v-if="showQuestion">
-                    <div class="question">
-                        <div class="">
-                            <h2>{{ currentQuestion.question }}</h2>
                         </div>
                     </div>
-                    <div class="answers">
-                        <div v-for="(answer, index) in answers" :key="index" class="answer">
-                            <label :class="{ 'selected': index === selectedAnswer }">
-                                <input type="radio" :value="index" v-model="selectedAnswer"
-                                    @change="selectedOption(index)" aria-current="true" class="btn-radio">
-                                <span class="answer-text">{{ answer.answer }}</span>
-                            </label>
+                </div>
+                <!-- DD Section -->
+                <div v-if="currentQuestion.type === 'dd'" class="question-counter">
+                    <div class="question-main" v-if="showQuestion">
+                        <div class="question">
+                            <template v-for="(part, index) in sentenceParts" :key="index">
+                                <span v-if="isGap(part)" class="dropbox" :id="'div' + gapIndex(index)"
+                                    @drop="drop($event, gapIndex(index))" @dragover="allowDrop">__
+                                </span>
+                                <span class="text" v-else>{{ part }}</span>
+                            </template>
                         </div>
-
+                        <div class="answer-dd" @drop="dropToAnswerDD" @dragover="allowDrop">
+                            <button v-for="(item, index) in answers" :key="index" class="dragbtn btn btn-yellow"
+                                :id="'drag' + index" draggable="true" @dragstart="drag($event, index)">
+                                {{ item.answer }}
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <!-- DD Section -->
-            <div v-if="currentQuestion.type === 'dd'" class="question-counter">
-                <div class="question-main" v-if="showQuestion">
-                    <div class="question">
-                        <template v-for="(part, index) in sentenceParts" :key="index">
-                            <span v-if="isGap(part)" class="dropbox" :id="'div' + gapIndex(index)"
-                                @drop="drop($event, gapIndex(index))" @dragover="allowDrop">________________
-                            </span>
-                            <span class="text" v-else>{{ part }}</span>
-                        </template>
+                <div class="question-animation">
+                    <div v-if="resultCorrect">
+                        <AnimationContainer :showXp="true">
+                            <template #result>
+                                <h3>Richtig!</h3>
+                            </template>
+                            <template #figure>
+                                <HappyDance />
+                            </template>
+                        </AnimationContainer>
                     </div>
-                    <div class="answer-dd" @drop="dropToAnswerDD" @dragover="allowDrop">
-                        <button v-for="(item, index) in answers" :key="index" class="dragbtn btn btn-yellow"
-                            :id="'drag' + index" draggable="true" @dragstart="drag($event, index)">
-                            {{ item.answer }}
-                        </button>
+                    <div v-if="resultIncorrect">
+                        <AnimationContainer :showXp="false">
+                            <template #result>
+                                <h3>Leider falsch..</h3>
+                            </template>
+                            <template #figure>
+                                <SadDance />
+                            </template>
+                        </AnimationContainer>
                     </div>
                 </div>
-            </div>
-
-            <div class="question-animation">
-                <div v-if="resultCorrect">
-                    <AnimationContainer :showXp="true">
-                        <template #result>
-                            <h3>Richtig!</h3>
-                        </template>
-                        <template #figure>
-                            <HappyDance />
-                        </template>
-                    </AnimationContainer>
+                <div class="question-footer" v-if="showQuestion">
+                    <button @click="nextQuestion" v-if="!isLastQuestion" class="btn btn-green">Bestätigen</button>
+                    <button @click="calculateResult" v-if="isLastQuestion" class="btn btn-yellow">Lektion beenden
+                        <Arrow />
+                    </button>
                 </div>
-                <div v-if="resultIncorrect">
-                    <AnimationContainer :showXp="false">
-                        <template #result>
-                            <h3>Leider falsch..</h3>
-                        </template>
-                        <template #figure>
-                            <SadDance />
-                        </template>
-                    </AnimationContainer>
-                </div>
-            </div>
-
-            <div class="question-footer" v-if="showQuestion">
-                <button @click="nextQuestion" v-if="!isLastQuestion" class="btn btn-green">Bestätigen</button>
-                <button @click="calculateResult" v-if="isLastQuestion" class="btn btn-yellow">Lektion beenden
-                    <Arrow />
-                </button>
             </div>
         </div>
     </AuthenticatedLayout>
@@ -372,68 +370,6 @@ const showXp = ref(false);
 
 <style scoped lang="scss">
 @import '../../css/_main.scss';
-
-.question-animation {
-    h3 {
-        font-size: 1.5rem;
-        color: $blue;
-    }
-}
-
-.dropbox {
-    border: none;
-    text-decoration: none;
-    display: inline-block;
-}
-
-.question span {
-    line-height: 0;
-    width: 200px;
-    font-size: 1.5rem;
-    color: $blue;
-    font-weight: bold;
-}
-
-.question {
-    &:hover {
-        cursor: default;
-    }
-
-    .text {
-        line-height: 3rem;
-
-        @include breakpoint("mobile") {
-            line-height: 2rem;
-            font-size: 1.25rem;
-        }
-    }
-}
-
-.answer-dd {
-    width: 300px;
-    height: 150px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 1rem;
-
-    @include breakpoint("mobile") {
-        width: 100%;
-    }
-}
-
-.dragbtn {
-    margin-block: 0;
-
-    &:hover {
-        cursor: grab;
-    }
-
-    &:active {
-        cursor: grabbing;
-    }
-}
 
 .info-header {
     text-align: center;
@@ -449,14 +385,12 @@ const showXp = ref(false);
 }
 
 .question-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    background-color: $background-light;
-    border-radius: 25px;
+    min-height: 450px;
     margin-top: 2rem;
     padding: 2rem;
-    
+    background-color: $background-light;
+    border-radius: 25px;
+
     @include breakpoint("mobile") {
         padding: 1rem;
     }
@@ -520,86 +454,165 @@ const showXp = ref(false);
         }
     }
 
-
-
-    .question-main {
+    .content {
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
         justify-content: space-between;
-        gap: 3rem;
-        margin: 1rem;
 
-        @include breakpoint("mobile") {
-            flex-direction: column;
+
+
+
+        .question-main {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            gap: 3rem;
             margin: 1rem;
-            gap: 1rem;
-        }
-
-        .question {
-
-            h2 {
-                font-size: 1.5rem;
-            }
 
             @include breakpoint("mobile") {
-                width: auto;
+                flex-direction: column;
+                margin: 1rem;
+                gap: 1rem;
             }
 
+            .question {
+                h2 {
+                    font-size: 1.5rem;
+                }
+
+                @include breakpoint("mobile") {
+                    width: auto;
+                }
+            }
+
+            .question {
+                span {
+                    line-height: 0;
+                    height: 20px;
+                    width: auto;
+                    font-size: 1.5rem;
+                    color: $blue;
+                    font-weight: bold;
+                }
+
+                &:hover {
+                    cursor: default;
+                }
+
+                .text {
+                    line-height: 3rem;
+
+                    @include breakpoint("mobile") {
+                        line-height: 2rem;
+                        font-size: 1.25rem;
+                    }
+                }
+
+                .dropbox {
+                    border: none;
+                    text-decoration: none;
+                    display: inline-block;
+                }
+            }
+
+            .answers-mc {
+                width: 60%;
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+
+                .answer {
+                    label {
+                        display: flex;
+                        align-items: center;
+
+                        span {
+                            font-size: 1.25rem;
+                            color: $blue;
+                        }
+                    }
+
+                    input[type="radio"] {
+                        appearance: none;
+                        -webkit-appearance: none;
+                        min-width: 23px;
+                        height: 23px;
+                        border: 3px solid #67917B;
+                        border-radius: 50%;
+                        outline: none;
+                        margin-right: 2rem;
+                        position: relative;
+                        background-color: $background-light;
+                        cursor: pointer;
+
+                        &:checked::before {
+                            content: '';
+                            display: block;
+                            width: 10px;
+                            height: 10px;
+                            border-radius: 50%;
+                            background: #67917B;
+                            position: absolute;
+                            top: 4px;
+                            left: 4px;
+                        }
+                    }
+                }
+            }
+
+            .answer-dd {
+                width: 300px;
+                min-height: 150px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-wrap: wrap;
+                gap: 1rem;
+
+                @include breakpoint("mobile") {
+                    width: 100%;
+                }
+
+                .dragbtn {
+                    margin-block: 0;
+
+                    &:hover {
+                        cursor: grab;
+                    }
+
+                    &:active {
+                        cursor: grabbing;
+                    }
+                }
+            }
         }
 
-        .answers {
-            width: 60%;
+        .question-animation {
             display: flex;
             flex-direction: column;
-            gap: 1rem;
+            align-items: center;
+            justify-content: center;
 
-            .answer {
-
-                label {
-                    display: flex;
-                    align-items: center;
-
-                    span {
-                        font-size: 1.25rem;
-                        color: $blue;
-                    }
-                }
-
-                input[type="radio"] {
-                    appearance: none;
-                    -webkit-appearance: none;
-                    width: 23px;
-                    height: 23px;
-                    border: 3px solid #67917B;
-                    border-radius: 50%;
-                    outline: none;
-                    margin-right: 2rem;
-                    position: relative;
-                    background-color: $background-light;
-                    cursor: pointer;
-
-                    &:checked::before {
-                        content: '';
-                        display: block;
-                        width: 10px;
-                        height: 10px;
-                        border-radius: 50%;
-                        background: #67917B;
-                        position: absolute;
-                        top: 4px;
-                        left: 4px;
-                    }
-                }
+            h3 {
+                font-size: 1.5rem;
+                color: $blue;
             }
         }
     }
 }
 
+
 .question-footer {
+    display: flex;
+    justify-content: baseline;
+    align-items: baseline;
+    margin-top: 1rem;
+
     @include breakpoint("mobile") {
         display: flex;
         margin-top: 1rem;
         justify-content: center;
     }
+
 }
 </style>

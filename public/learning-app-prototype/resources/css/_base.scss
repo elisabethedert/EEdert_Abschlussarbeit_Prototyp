@@ -71,7 +71,6 @@ $white: #FFFFFF;
     font-weight: bold;
     border: none;
     text-decoration: none;
-    margin-bottom: 1rem;
     
     @include breakpoint("mobile") {
         font-size: 1rem;
