@@ -2,6 +2,7 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import Footer from '@/Layouts/Footer.vue';
 import Arrow from '@/assets/Arrow.vue';
+import Level from '@/Components/Level.vue';
 import { Head, Link, router } from '@inertiajs/vue3';
 import { ref, computed } from 'vue';
 import Fig1 from '@/assets/Fig1.vue';
@@ -20,9 +21,8 @@ import Fig3 from '@/assets/Fig3.vue';
         <div class="lecture">
             <div class="lecture-container">
                 <div class="description">
-                    <Fig1 />
                     <h3>Sicheres Produktdesign & Secure Development Lifecycle</h3>
-                    <p>Level 1</p>
+                    <Level :level="1" />
                 </div>
                 <Link href="lektion1" type="button" class="btn btn-green">Lektion 1
                 <Arrow />
@@ -31,23 +31,24 @@ import Fig3 from '@/assets/Fig3.vue';
 
             <div class="lecture-container">
                 <div class="description">
-                    <Fig2 />
                     <h3>Schutzziele</h3>
-                    <p>Level 1</p>
+                    <Level :level="1" />
                 </div>
-                <Link :class="{ disabled: $page.props.auth.user.current_lecture <= 1 }" href="lektion2" type="button"
-                    class="btn btn-green">Lektion 2
-                <Arrow />
-                </Link>
+                <div class="figure">
+                    <Fig1 />
+                    <Link :class="{ disabled: $page.props.auth.user.current_lecture <= 1 }" href="lektion2"
+                        type="button" class="btn btn-green">Lektion 2
+                    <Arrow />
+                    </Link>
+                </div>
             </div>
 
             <div class="lecture-container">
                 <div class="description">
-                    <Fig3 />
                     <h3>Schutzziele</h3>
-                    <p>Level 1</p>
+                    <Level :level="1" />
                     <h3>Sicheres Produktdesign & Secure Development Lifecycle</h3>
-                    <p>Level 2</p>
+                    <Level :level="2" />
                 </div>
                 <Link :class="{ disabled: $page.props.auth.user.current_lecture <= 2 }" href="lektion3" type="button"
                     class="btn btn-green">Lektion 3
@@ -57,11 +58,10 @@ import Fig3 from '@/assets/Fig3.vue';
 
             <div class="lecture-container">
                 <div class="description">
-                    <Fig1 />
                     <h3>Identity Management</h3>
-                    <p>Level 1</p>
+                    <Level :level="1" />
                     <h3>Schutzziele</h3>
-                    <p>Level 2</p>
+                    <Level :level="2" />
                 </div>
                 <Link :class="{ disabled: $page.props.auth.user.current_lecture <= 3 }" href="lektion4" type="button"
                     class="btn btn-green">Lektion 4
@@ -71,24 +71,25 @@ import Fig3 from '@/assets/Fig3.vue';
 
             <div class="lecture-container">
                 <div class="description">
-                    <Fig2 />
                     <h3>Schutzziele </h3>
-                    <p>Level 1</p>
-                    <h3>Sicheres Produktdesign Prozesse & Secure Development Lifecycle</h3>
-                    <p>Level 3</p>
+                    <Level :level="1" />
+                    <h3>Sicheres Produktdesign & Secure Development Lifecycle</h3>
+                    <Level :level="3" />
                 </div>
-                <Link :class="{ disabled: $page.props.auth.user.current_lecture <= 4 }" href="lektion5" type="button"
-                    class="btn btn-green">Lektion 5
-                <Arrow />
-                </Link>
+                <div class="figure">
+                    <Fig2 />
+                    <Link :class="{ disabled: $page.props.auth.user.current_lecture <= 4 }" href="lektion5"
+                        type="button" class="btn btn-green">Lektion 5
+                    <Arrow />
+                    </Link>
+                </div>
             </div>
             <div class="lecture-container">
                 <div class="description">
-                    <Fig2 />
                     <h3>Security/Privacy by Design/Default</h3>
-                    <p>Level 1</p>
+                    <Level :level="1" />
                     <h3>Identity Management</h3>
-                    <p>Level 2</p>
+                    <Level :level="2" />
                 </div>
                 <Link :class="{ disabled: $page.props.auth.user.current_lecture <= 5 }" href="lektion6" type="button"
                     class="btn btn-green">Lektion 6
@@ -97,12 +98,12 @@ import Fig3 from '@/assets/Fig3.vue';
             </div>
             <div class="lecture-container">
                 <div class="description">
-                    <Fig2 />
                     <h3>Identity Management</h3>
-                    <p>Level 2</p>
+                    <Level :level="2" />
                     <h3>Schutzziele</h3>
-                    <p>Level 3</p>
+                    <Level :level="3" />
                 </div>
+
                 <Link :class="{ disabled: $page.props.auth.user.current_lecture <= 6 }" href="lektion7" type="button"
                     class="btn btn-green">Lektion 7
                 <Arrow />
@@ -110,22 +111,23 @@ import Fig3 from '@/assets/Fig3.vue';
             </div>
             <div class="lecture-container">
                 <div class="description">
-                    <Fig2 />
                     <h3>Security/Privacy by Design/Default</h3>
-                    <p>Level 2</p>
+                    <Level :level="2" />
                     <h3>Identity Management</h3>
-                    <p>Level 3</p>
+                    <Level :level="3" />
                 </div>
-                <Link :class="{ disabled: $page.props.auth.user.current_lecture <= 7 }" href="lektion8" type="button"
-                    class="btn btn-green">Lektion 8
-                <Arrow />
-                </Link>
+                <div class="figure">
+                    <Fig3 />
+                    <Link :class="{ disabled: $page.props.auth.user.current_lecture <= 7 }" href="lektion8"
+                        type="button" class="btn btn-green">Lektion 8
+                    <Arrow />
+                    </Link>
+                </div>
             </div>
             <div class="lecture-container">
                 <div class="description">
-                    <Fig2 />
                     <h3>Security/Privacy by Design/Default</h3>
-                    <p>Level 3</p>
+                    <Level :level="3" />
                     <h3>+ Wiederholung</h3>
                 </div>
                 <Link :class="{ disabled: $page.props.auth.user.current_lecture <= 8 }" href="lektion9" type="button"
@@ -135,7 +137,6 @@ import Fig3 from '@/assets/Fig3.vue';
             </div>
             <div class="lecture-container">
                 <div class="description">
-                    <Fig2 />
                 </div>
                 <Link :class="{ disabled: $page.props.auth.user.current_lecture <= 9 }" href="lektion10" type="button"
                     class="btn btn-green">Lektion 10
@@ -210,6 +211,13 @@ import Fig3 from '@/assets/Fig3.vue';
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.figure {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
 }
 
 .footer {
