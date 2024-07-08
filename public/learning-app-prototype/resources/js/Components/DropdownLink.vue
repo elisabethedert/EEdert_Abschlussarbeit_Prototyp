@@ -22,7 +22,7 @@ defineProps({
     display: block;
     width: auto;
     padding: 0 1rem;
-    text-align: left;
+    text-align: center;
     font-size: 1rem;
     color: $grey;
 
@@ -35,7 +35,7 @@ defineProps({
     transition-duration: 150ms;
 
     @include breakpoint("mobile") {
-        padding: 0.75rem 0.25rem;
+        padding: 0;
     }
 }
 </style>

@@ -67,30 +67,41 @@ const toggleProfile = () => {
         top: 2rem;
         right: 0;
 
+        @include breakpoint("mobile") {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            left: 1.5rem;
+        }
+
         p {
             cursor: default;
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
         }
 
         .logout {
             color: $danger-red;
             background: none;
             font-size: 1rem;
+
+            @include breakpoint("mobile") {
+                padding-left: 0;
+            }
         }
 
         .profile {
-            text-align: right;
+            text-align: center;
             color: $blue;
             font-weight: bold;
             text-decoration: none;
             background: none;
 
-            &:hover {
-                text-decoration: underline;
-            }
-
             @include breakpoint("mobile") {
                 text-align: left;
+            }
+            
+            &:hover {
+                text-decoration: underline;
             }
         }
     }

@@ -41,8 +41,5 @@ import Nav from '@/Components/Nav.vue';
 .authenticated-layout {
     background-color: $background;
     align-items: center;
-
-    @include breakpoint("mobile") {
-    }
 }
 </style>
