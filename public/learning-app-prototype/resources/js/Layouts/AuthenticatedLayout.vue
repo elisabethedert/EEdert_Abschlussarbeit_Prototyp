@@ -100,6 +100,7 @@ const toggleProfile = () => {
 @import '../../css/_main.scss';
 .main {
     margin-top: 3rem;
+    padding: 0 2rem;
     
     @include breakpoint("mobile") {
         margin-top: 0rem;

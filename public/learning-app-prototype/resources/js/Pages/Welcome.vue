@@ -1,5 +1,7 @@
 <script setup>
 import GuestLayout from '@/Layouts/GuestLayout.vue';
+import Arrow from '@/assets/Arrow.vue';
+
 import { Head, Link } from '@inertiajs/vue3';
 
 defineProps({
@@ -21,40 +23,51 @@ defineProps({
 </script>
 
 <template>
-    <GuestLayout>
 
-        <Head title="Welcome" />
-        <header>
-            <nav v-if="canLogin" class="topnav">
-                <Link v-if="$page.props.auth.user" :href="route('dashboard')">
-                Dashboard
+    <Head title="Welcome" />
+    <header>
+        <nav v-if="canLogin" class="topnav">
+            <Link v-if="$page.props.auth.user" :href="route('dashboard')">
+            Dashboard
+            </Link>
+
+            <template v-else>
+                <Link class="btn-text item" :href="route('login')">
+                Log in
                 </Link>
 
-                <template v-else>
-                    <Link class="btn-text item" :href="route('login')">
-                    Log in
-                    </Link>
+                <Link class="btn-text item" v-if="canRegister" :href="route('register')">
+                Register
+                </Link>
+            </template>
+        </nav>
+    </header>
+    <GuestLayout>
 
-                    <Link class="btn-text item" v-if="canRegister" :href="route('register')">
-                    Register
-                    </Link>
-                </template>
-            </nav>
-        </header>
-        <main>
-            <h1>Spielname</h1>
-            <h2>Subline H2</h2>
-            <h3>Big Text H3 ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
-                labore
-                et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.
-                Stet
-                clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</h3>
+        <div class="intro-text">
+            <h1>Circulo</h1>
+            <h2>Secure Product Design</h2>
+            <p>Entdecke mit Circulo spielerisch die Grundlagen von Secure Product Design. Mit interaktiven
+                Herausforderungen und
+                spannenden Aufgaben erlernst du die wichtigsten Sicherheitsprinzipien in der Produktentwicklung.
+                Werde
+                zum Sicherheitsexperten und gestalte zukunftssichere Produkte!
+            </p>
 
-        </main>
+            <Link class="link btn btn-yellow" :href="route('login')">
+            Los geht's!
+            <Arrow />
+            </Link>
+        </div>
+        <div class="about">
+            <h2>Headline</h2>
+            <p>Mit Circulo meisterst abwechslungsreiche Aufgaben von den Grundlagen bis zum Expertenwissen. Profitiere
+                von einer motivierenden Lernumgebung, die mühelosen Lernfortschritt und zeitliche Flexibilität bietet.
+                Entdecke, wie einfach und spannend Secure Product Design sein kann!</p>
+            <div class="arguments">
 
-        <footer>
-            Laravel v{{ laravelVersion }} (PHP v{{ phpVersion }})
-        </footer>
+            </div>
+        </div>
     </GuestLayout>
 </template>
 
@@ -62,7 +75,7 @@ defineProps({
 @import '../../css/_main.scss';
 
 .topnav {
-    background-color: $background;
+    max-width: 1200px;
     position: fixed;
     width: 100%;
     top: 0;
@@ -76,9 +89,35 @@ defineProps({
     }
 }
 
-main {
-    h1 {
+.intro-text {
+    text-align: center;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+
+    p {
+        margin-top: 2rem;
+        max-width: 800px;
+    }
+
+    .link {
+        margin-top: 2rem;
+    }
+}
+
+.about {
+    h2 {
         margin-top: 4rem;
+        text-align: left;
+    }
+
+    p {
+        margin-top: 1rem;
+        max-width: 800px;
+    }
+
+    .arguments {
+
     }
 }
 </style>
