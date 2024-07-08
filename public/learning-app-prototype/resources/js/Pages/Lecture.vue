@@ -217,7 +217,7 @@ function allowDrop(event) {
 
 function drag(event) {
     draggedItem.value = { id: event.target.id, originalContainer: event.target.parentElement };
-    event.dataTransfer.setData("text", event.target.id);  
+    event.dataTransfer.setData("text", event.target.id);
 }
 
 function drop(event, gapIndex) {
@@ -230,7 +230,12 @@ function drop(event, gapIndex) {
         if (targetElement.children.length > 0) {
             return;
         }
-        // targetElement.textContent = '';
+
+        if(draggedItem.value.originalContainer.className !== "answer-dd") {
+            draggedItem.value.originalContainer.innerText = '_____'
+        }
+
+        targetElement.textContent = '';
 
         // Füge das neue Element hinzu und entferne es aus der ursprünglichen Liste
         targetElement.appendChild(draggedElement);
@@ -253,13 +258,15 @@ function dropToAnswerDD(event) {
             dropTargets.value[gapIndexKey] = null;
         }
 
+        // Fill gap line
+        draggedItem.value.originalContainer.innerText = '_____';
+
         // Zurücksetzen des existierenden Elements in den ursprünglichen Container
         if (event.target.className == "answer-dd") {
             event.target.appendChild(draggedElement);
         }
     }
 }
-
 </script>
 
 <template>
@@ -322,7 +329,7 @@ function dropToAnswerDD(event) {
                         <div class="question">
                             <template v-for="(part, index) in sentenceParts" :key="index">
                                 <span v-if="isGap(part)" class="dropbox" :id="'div' + gapIndex(index)"
-                                    @drop="drop($event, gapIndex(index))" @dragover="allowDrop">__
+                                    @drop="drop($event, gapIndex(index))" @dragover="allowDrop">_____
                                 </span>
                                 <span class="text" v-else>{{ part }}</span>
                             </template>
