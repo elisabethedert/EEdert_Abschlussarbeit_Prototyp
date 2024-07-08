@@ -37,6 +37,11 @@ import Nav from '@/Components/Nav.vue';
 }
 
 .footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
     padding-top: 4rem;
 
     p {

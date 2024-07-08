@@ -1,5 +1,6 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import Footer from '@/Layouts/Footer.vue';
 import Arrow from '@/assets/Arrow.vue';
 import { Head, Link, router } from '@inertiajs/vue3';
 import { ref, computed, onMounted, onUnmounted } from 'vue';
@@ -159,6 +160,10 @@ onUnmounted(() => {
             </div>
         </div>
     </AuthenticatedLayout>
+    <Footer class="footer">
+        <p>AGB</p>
+        <p>Datenschutz</p>
+    </Footer>
 </template>
 
 <style scoped lang="scss">
@@ -167,6 +172,7 @@ onUnmounted(() => {
 
 .intro-text {
     text-align: center;
+    margin-top: 2rem;
 }
 
 .units {
@@ -206,7 +212,6 @@ onUnmounted(() => {
             height: 217px;
         }
 
-
         .content {
             position: absolute;
             top: 50%;
@@ -241,11 +246,8 @@ onUnmounted(() => {
                 font-size: larger;
             }
         }
-
-
     }
 }
-
 
 .player-info {
     display: flex;
@@ -295,6 +297,15 @@ onUnmounted(() => {
                 font-size: larger;
             }
         }
+    }
+}
+
+.footer {
+    padding-top: 4rem;
+
+    p {
+        padding: 0.25rem;
+        color: white;
     }
 }
 </style>

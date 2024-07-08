@@ -1,5 +1,6 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import Footer from '@/Layouts/Footer.vue';
 import Arrow from '@/assets/Arrow.vue';
 import { Head, Link, router } from '@inertiajs/vue3';
 import { ref, computed } from 'vue';
@@ -146,6 +147,10 @@ import Fig3 from '@/assets/Fig3.vue';
             <Link href="/dashboard" type="button" class="btn btn-yellow">Link zurück zum Dashboard</Link>
         </div>
     </AuthenticatedLayout>
+    <Footer class="footer">
+        <p>AGB</p>
+        <p>Datenschutz</p>
+    </Footer>
 </template>
 
 <style scoped lang="scss">
@@ -187,7 +192,6 @@ import Fig3 from '@/assets/Fig3.vue';
         gap: 2rem;
     }
 
-
     .description {
 
         display: flex;
@@ -206,5 +210,14 @@ import Fig3 from '@/assets/Fig3.vue';
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.footer {
+    padding-top: 4rem;
+
+    p {
+        padding: 0.25rem;
+        color: white;
+    }
 }
 </style>
