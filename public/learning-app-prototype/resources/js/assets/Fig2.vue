@@ -1,8 +1,11 @@
 <script setup>
+const props = defineProps({
+    width: Number,
+})
 </script>
 
 <template>
-    <svg width="120" viewBox="0 0 318 282" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg :width="width" viewBox="0 0 318 282" fill="none" xmlns="http://www.w3.org/2000/svg">
         <circle cx="227" cy="83" r="75" fill="#67917B" />
         <circle cx="111" cy="140" r="111" fill="#67917B" />
         <circle cx="227" cy="75" r="75" fill="#E3A328" />

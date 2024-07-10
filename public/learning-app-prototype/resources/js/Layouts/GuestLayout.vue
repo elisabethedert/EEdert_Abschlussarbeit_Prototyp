@@ -11,10 +11,6 @@ import Nav from '@/Components/Nav.vue';
         <main class="main">
             <slot />
         </main>
-        <Footer class="footer">
-            <p>AGB</p>
-            <p>Datenschutz</p>
-        </Footer>
     </div>
 </template>
 <style scoped lang="scss">
@@ -33,20 +29,6 @@ import Nav from '@/Components/Nav.vue';
         align-items: center;
         height: 100vh;
         background-color: $background;
-    }
-}
-
-.footer {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
-    padding-top: 4rem;
-
-    p {
-        padding: 0.25rem;
-        color: white;
     }
 }
 </style>

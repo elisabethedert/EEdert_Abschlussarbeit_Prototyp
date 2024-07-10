@@ -7,10 +7,13 @@ import { ref, computed, onMounted, onUnmounted } from 'vue';
 import Fig1 from '@/assets/Fig1.vue';
 import Fig2 from '@/assets/Fig2.vue';
 import Fig3 from '@/assets/Fig3.vue';
+import Circle from '@/Components/Circle.vue';
+import Blink from '@/assets/Blink.vue';
 
 const props = defineProps({
     streak: Number
 })
+
 const handleScroll = (event) => {
     const delta = Math.max(-1, Math.min(1, (event.wheelDelta || -event.detail)));
     const scrolling = event.target.closest('.units');
@@ -45,7 +48,7 @@ onUnmounted(() => {
 
     <AuthenticatedLayout>
         <div class="intro-text">
-            <h1>Hey {{ $page.props.auth.user.name }}!<br>Schön dich zu sehen!</h1>
+            <h1>Hey {{ $page.props.auth.user.name }},<br>Schön dich zu sehen!</h1>
         </div>
         <div class="player-info">
             <div class="circle">
@@ -58,6 +61,7 @@ onUnmounted(() => {
                     <p>Punkte</p>
                 </div>
             </div>
+            <Fig3 width="75" />
             <div class="circle">
                 <svg width="250" height="258" viewBox="0 0 250 258" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <circle cx="125" cy="125" r="125" transform="matrix(-1 0 0 1 250 8)" fill="#CCC8C8" />
@@ -72,93 +76,42 @@ onUnmounted(() => {
         <div class="intro-text">
             <p><b>Hinter jeder Unit verbirgt sich ein neuer Schwerpunkt, den du vertiefen kannst.</b></p>
         </div>
-        <div class="units">
-            <div class="circle">
-                <svg width="300" height="258" viewBox="0 0 250 258" fill="none" xmlns="http://www.w3.org/2000/svg">
-
-                </svg>
-                <div class="content">
-                    <Fig1 class="figure" />
+        <div class="container">
+            <div class="units">
+                <Circle width="250" bgColor="67917B">
                     <h3>Grundlagen</h3>
                     <Link :class="{ disabled: $page.props.auth.user.unit <= 1 }" href="unit1/lektionen" type="button"
                         class="btn btn-yellow">Unit 1
-                    <!-- <Arrow /> -->
                     </Link>
-                </div>
-            </div>
-            <div class="circle light">
-                <svg width="300" height="258" viewBox="0 0 250 258" fill="none" xmlns="http://www.w3.org/2000/svg">
-                </svg>
-                <div class="content">
-                    <Fig2 class="figure" />
-                    <h3>Security <br>Principles</h3>
+                </Circle>
+                <Circle width="250" bgColor="103A51">
+                    <h3>Grundlagen</h3>
                     <Link :class="{ disabled: $page.props.auth.user.unit <= 1 }" href="unit1/lektionen" type="button"
-                        class="btn btn-yellow">Unit 2
-                    <!-- <Arrow /> -->
+                        class="btn btn-yellow">Unit 1
                     </Link>
-                </div>
-            </div>
-            <div class="circle">
-                <svg width="300" height="258" viewBox="0 0 250 258" fill="none" xmlns="http://www.w3.org/2000/svg">
-                </svg>
-                <div class="content">
-                    <Fig3 class="figure" />
-                    <h3>Security <br> Fokus Areas</h3>
+                </Circle>
+                <Circle width="250" bgColor="FBF4CE">
+                    <h3>Grundlagen</h3>
                     <Link :class="{ disabled: $page.props.auth.user.unit <= 1 }" href="unit1/lektionen" type="button"
-                        class="btn btn-yellow">Unit 3
-                    <!-- <Arrow /> -->
+                        class="btn btn-yellow">Unit 1
                     </Link>
-                </div>
-            </div>
-            <div class="circle">
-                <svg width="300" height="258" viewBox="0 0 250 258" fill="none" xmlns="http://www.w3.org/2000/svg">
-                </svg>
-                <div class="content">
-                    <Fig1 class="figure" />
-                    <h3>Security <br> Fokus Areas</h3>
+                </Circle>
+                <Circle width="250" bgColor="67917B">
+                    <h3>Grundlagen</h3>
                     <Link :class="{ disabled: $page.props.auth.user.unit <= 1 }" href="unit1/lektionen" type="button"
-                        class="btn btn-yellow">Unit 3
-                    <!-- <Arrow /> -->
+                        class="btn btn-yellow">Unit 1
                     </Link>
-                </div>
-            </div>
-            <div class="circle">
-                <svg width="300" height="258" viewBox="0 0 250 258" fill="none" xmlns="http://www.w3.org/2000/svg">
-                </svg>
-                <div class="content">
-                    <Fig2 class="figure" />
-                    <h3>Security <br> Fokus Areas</h3>
+                </Circle>
+                <Circle width="250" bgColor="103A51">
+                    <h3>Grundlagen</h3>
                     <Link :class="{ disabled: $page.props.auth.user.unit <= 1 }" href="unit1/lektionen" type="button"
-                        class="btn btn-yellow">Unit 3
-                    <!-- <Arrow /> -->
+                        class="btn btn-yellow">Unit 1
                     </Link>
-                </div>
+                </Circle>
             </div>
-            <div class="circle">
-                <svg width="300" height="258" viewBox="0 0 250 258" fill="none" xmlns="http://www.w3.org/2000/svg">
-                </svg>
-                <div class="content">
-                    <Fig3 class="figure" />
-                    <h3>Security <br> Fokus Areas</h3>
-                    <Link :class="{ disabled: $page.props.auth.user.unit <= 1 }" href="unit1/lektionen" type="button"
-                        class="btn btn-yellow">Unit 3
-                    <!-- <Arrow /> -->
-                    </Link>
-                </div>
-            </div>
-            <div class="circle">
-                <svg width="300" height="258" viewBox="0 0 250 258" fill="none" xmlns="http://www.w3.org/2000/svg">
-                </svg>
-                <div class="content">
-                    <Fig1 class="figure" />
-                    <h3>Security <br> Fokus Areas</h3>
-                    <Link :class="{ disabled: $page.props.auth.user.unit <= 1 }" href="unit1/lektionen" type="button"
-                        class="btn btn-yellow">Unit 3
-                    <!-- <Arrow /> -->
-                    </Link>
-                </div>
-            </div>
+            <Blink class="blink" width="50"/>
         </div>
+
     </AuthenticatedLayout>
     <Footer class="footer">
         <p>AGB</p>
@@ -175,76 +128,39 @@ onUnmounted(() => {
     margin-top: 2rem;
 }
 
-.units {
-    overflow: auto;
+.container {
     display: flex;
-    flex-direction: row;
-    background-color: $background-light;
-    border-radius: 25px;
-    margin: 2rem;
 
-    .circle {
-        position: relative;
-        margin: 3rem;
-        width: 300px;
-        height: 310px;
+    .units {
+        overflow: auto;
+        display: flex;
+        flex-direction: row;
+        background-color: $background-light;
+        border-radius: 25px;
+        margin: 2rem;
 
-        &:nth-child(3n+1) {
-            background-image: url('data:image/svg+xml,%3Csvg width="250" height="258" viewBox="0 0 250 258" fill="none" xmlns="http://www.w3.org/2000/svg"%3E%3Ccircle cx="125" cy="125" r="125" transform="matrix(-1 0 0 1 250 8)" fill="%23CCC8C8" /%3E%3Ccircle cx="125" cy="125" r="125" transform="matrix(-1 0 0 1 250 0)" fill="%2367917B" /%3E%3C/svg%3E');
-        }
-
-        &:nth-child(3n+2) {
-            background-image: url('data:image/svg+xml,%3Csvg width="250" height="258" viewBox="0 0 250 258" fill="none" xmlns="http://www.w3.org/2000/svg"%3E%3Ccircle cx="125" cy="125" r="125" transform="matrix(-1 0 0 1 250 8)" fill="%23CCC8C8" /%3E%3Ccircle cx="125" cy="125" r="125" transform="matrix(-1 0 0 1 250 0)" fill="%23FBF4CE" /%3E%3C/svg%3E');
-
-            h3 {
-                color: $blue !important;
-            }
-        }
-
-        &:nth-child(3n) {
-            background-image: url('data:image/svg+xml,%3Csvg width="250" height="258" viewBox="0 0 250 258" fill="none" xmlns="http://www.w3.org/2000/svg"%3E%3Ccircle cx="125" cy="125" r="125" transform="matrix(-1 0 0 1 250 8)" fill="%23CCC8C8" /%3E%3Ccircle cx="125" cy="125" r="125" transform="matrix(-1 0 0 1 250 0)" fill="%23103A51" /%3E%3C/svg%3E');
-        }
-
-        background-size: cover;
-
-        @include breakpoint('mobile') {
-            width: 210px;
-            height: 217px;
+        .figure {
+            width: 55px;
         }
 
         .content {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-            display: flex;
-            gap: 1rem;
-            flex-direction: column;
-            align-items: center;
 
-            .figure {
-                position: relative;
-                width: 55px;
-
-                @include breakpoint('mobile') {
-                    display: none;
-                }
-            }
-
-            h3 {
-                color: $white;
-                font-size: 1.75rem;
-
-                @include breakpoint('mobile') {
-                    font-size: 1.25rem;
-                }
-            }
-
+            h3,
             p {
                 color: $white;
-                font-size: larger;
             }
+
+            .btn {
+                margin-top: 1rem;
+            }
+        }
+    }
+
+    .blink {
+        margin-left:-30px;
+        
+        @include breakpoint('mobile') {
+            width: 30%;
         }
     }
 }

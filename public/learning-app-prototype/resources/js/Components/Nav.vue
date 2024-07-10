@@ -69,6 +69,7 @@ const toggleNav = () => {
     z-index: 100;
 
     @include breakpoint("mobile") {
+        padding-top: 2rem;
         position: relative;
     }
 
@@ -81,7 +82,8 @@ const toggleNav = () => {
         position: relative;
 
         .logo svg {
-            padding: 1rem 0rem 1rem 2rem;
+            padding: 1rem 0rem 1rem 0rem;
+            width: 55px;
 
             @include breakpoint("mobile") {
                 display: none;
@@ -113,12 +115,12 @@ const toggleNav = () => {
 }
 
 .topnav {
-    margin-top: 0;
     margin-right: 0;
     display: flex;
     align-items: center;
-
+    
     @include breakpoint("mobile") {
+        gap: 1rem;
         display: none;
         position: absolute;
         top: 0;
@@ -131,14 +133,18 @@ const toggleNav = () => {
         justify-content: space-between;
         align-items: center;
 
-        .item {
-            padding: 1rem;
-        }
-
         @include breakpoint("mobile") {
             flex-direction: column;
             padding: 0rem;
             width: 100%;
+        }
+
+        .item {
+            padding: 1rem;
+
+            @include breakpoint("mobile") {
+                padding: 0;
+            }
         }
 
         .active {
