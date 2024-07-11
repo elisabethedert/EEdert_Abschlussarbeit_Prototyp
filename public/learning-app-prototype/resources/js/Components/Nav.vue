@@ -30,9 +30,9 @@ const toggleNav = () => {
                     <NavLink class="item" :href="route('dashboard')" :active="route().current('dashboard')">
                         Dashboard
                     </NavLink>
-                    <NavLink class="item">
+                    <p class="item">
                         Team
-                    </NavLink>
+                    </p>
                 </div>
             </div>
             <DropdownNav />
@@ -137,6 +137,12 @@ const toggleNav = () => {
             flex-direction: column;
             padding: 0rem;
             width: 100%;
+        }
+
+        p {
+            color: $blue;
+            font-size: 1.25rem;
+            font-weight: bold;
         }
 
         .item {

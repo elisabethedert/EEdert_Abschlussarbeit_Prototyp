@@ -89,9 +89,10 @@ class QuestionResultsController extends Controller
             $user = User::where('id', $request->user()->id)
                 ->first();
 
-            
+
             $user->experience_points = $user->experience_points + 3; //3 Points pro Frage richtig
             $user->save();
+            return response()->json(['message' => 'firstcorrect'], 200);
         } else if (!$record && $answerWasCorrect) {
             Log::debug("+1");
             $user = User::where('id', $request->user()->id)
@@ -99,10 +100,7 @@ class QuestionResultsController extends Controller
 
             $user->experience_points = $user->experience_points + 1; //1 Points pro Frage richtig
             $user->save();
-        }
-
-        if ($answerWasCorrect) {
-            return response()->json(['message' => 'correct'], 200);
+            return response()->json(['message' => 'repeatcorrect'], 200);
         } else {
             return response()->json(['message' => 'incorrect'], 200);
         }

@@ -37,7 +37,8 @@ function showHelpPopup() {
 }
 
 const currentIndex = ref(0);
-const resultCorrect = ref(false);
+const resultFirstCorrect = ref(false);
+const resultRepeatCorrect = ref(false);
 const resultIncorrect = ref(false);
 const totalQuestions = computed(() =>
     props.questions.length
@@ -67,7 +68,8 @@ function selectedOption(index) {
 }
 
 function hideResult() {
-    resultCorrect.value = false;
+    resultFirstCorrect.value = false;
+    resultRepeatCorrect.value = false;
     resultIncorrect.value = false;
     showQuestion.value = true;
 }
@@ -81,14 +83,17 @@ function saveMcResult() {
         unit: props.questions[currentIndex.value].unit,
         session: currentSession
     }).then(response => {
-        if (response.data.message == "correct") {
+        if (response.data.message == "firstcorrect") {
             result.value++;
-            resultCorrect.value = true;
-        } else {
+            resultFirstCorrect.value = true;
+        } else if  (response.data.message == "repeatcorrect") {
+            result.value++;
+            resultRepeatCorrect.value = true;
+        }
+        else {
             resultIncorrect.value = true;
             // add wrong answered question to the end of the questions array
             lecureQuestionRepeatCount.value++;
-            console.log(props.questions[currentIndex.value-1])
             props.questions.push(props.questions[currentIndex.value-1]);
         }
     }).catch(error => {
@@ -109,14 +114,18 @@ function saveDdResult() {
         unit: props.questions[currentIndex.value].unit,
         session: currentSession
     }).then(response => {
-        if (response.data.message == "correct") {
+        if (response.data.message == "firstcorrect") {
             result.value++;
-            resultCorrect.value = true;
-        } else {
+            resultFirstCorrect.value = true;
+
+        } else if  (response.data.message == "repeatcorrect") {
+            result.value++;
+            resultRepeatCorrect.value = true;
+        }
+        else {
             resultIncorrect.value = true;
             // add wrong answered question to the end of the questions array
             lecureQuestionRepeatCount.value++;
-            console.log(props.questions[currentIndex.value])
             props.questions.push(props.questions[currentIndex.value-1]);
         }
     }).catch(error => {
@@ -351,8 +360,18 @@ function dropToAnswerDD(event) {
                 </div>
                 <!-- Animations -->
                 <div class="question-animation">
-                    <div v-if="resultCorrect">
-                        <AnimationContainer :showXp="true">
+                    <div v-if="resultFirstCorrect">
+                        <AnimationContainer :showXp="true" :xp="3">
+                            <template #result>
+                                <h3>Richtig!</h3>
+                            </template>
+                            <template #figure>
+                                <HappyDance />
+                            </template>
+                        </AnimationContainer>
+                    </div>
+                    <div v-if="resultRepeatCorrect">
+                        <AnimationContainer :showXp="true" :xp="1">
                             <template #result>
                                 <h3>Richtig!</h3>
                             </template>
