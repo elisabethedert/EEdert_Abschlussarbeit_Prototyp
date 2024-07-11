@@ -48,7 +48,8 @@ onUnmounted(() => {
 
     <AuthenticatedLayout>
         <div class="intro-text">
-            <h1>Hey {{ $page.props.auth.user.name }},<br>Schön dich zu sehen!</h1>
+            <h1>Hey {{ $page.props.auth.user.name }},</h1>
+            <h2>Schön dich zu sehen!</h2>
         </div>
         <div class="player-info">
             <div class="circle">
@@ -109,7 +110,7 @@ onUnmounted(() => {
                     </Link>
                 </Circle>
             </div>
-            <Blink class="blink" width="50"/>
+            <Blink class="blink" width="50" />
         </div>
 
     </AuthenticatedLayout>
@@ -157,8 +158,8 @@ onUnmounted(() => {
     }
 
     .blink {
-        margin-left:-30px;
-        
+        margin-left: -30px;
+
         @include breakpoint('mobile') {
             width: 30%;
         }

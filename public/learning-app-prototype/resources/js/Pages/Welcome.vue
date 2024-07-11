@@ -78,35 +78,24 @@ defineProps({
                 </Link>
             </div>
         </div>
-        <div class="about">
-            <h2>Headline</h2>
-            <div class="description">
-                <p>Mit Circulo meisterst abwechslungsreiche Aufgaben von den Grundlagen bis zum Expertenwissen.
-                    Profitiere
-                    von einer motivierenden Lernumgebung, die mühelosen Lernfortschritt und zeitliche Flexibilität
-                    bietet.
-                    Entdecke, wie einfach und spannend Secure Product Design sein kann!</p>
-                <ArrowRound class="arrow" width="80" />
-            </div>
-            <div class="arguments">
-                <Circle width="225" bgColor="67917B">
-                    <h3>Alleine oder im Team</h3>
-                    <p>Lerne nur für dich oder mit deinen Kolleg:innen.</p>
-                </Circle>
-                <Circle width="225" bgColor="67917B">
-                    <h3>Von den Grundlagen bis zum Expertenwissen</h3>
-                    <p>Lerne die Konzepte von Secure Design kennen.</p>
-                </Circle>
+        <div class="arguments">
+            <Circle width="225" bgColor="67917B">
+                <h3>Alleine oder im Team</h3>
+                <p>Lerne nur für dich oder mit deinen Kolleg:innen.</p>
+            </Circle>
+            <Circle width="225" bgColor="67917B">
+                <h3>Von den Grundlagen bis zum Expertenwissen</h3>
+                <p>Lerne die Konzepte von Secure Design kennen.</p>
+            </Circle>
 
-                <Circle width="225" bgColor="67917B">
-                    <h3>Müheloser Lernforschritt</h3>
-                    <p>Erlebe kontinuierlichen Lernfortschritt</p>
-                </Circle>
-                <Circle width="225" bgColor="67917B">
-                    <h3>Abwechslungsreiche Aufgaben</h3>
-                    <p>Profitiere von einer motivierenden Lernumgebung.</p>
-                </Circle>
-            </div>
+            <Circle width="225" bgColor="67917B">
+                <h3>Müheloser Lernforschritt</h3>
+                <p>Erlebe kontinuierlichen Lernfortschritt</p>
+            </Circle>
+            <Circle width="225" bgColor="67917B">
+                <h3>Abwechslungsreiche Aufgaben</h3>
+                <p>Profitiere von einer motivierenden Lernumgebung.</p>
+            </Circle>
         </div>
     </GuestLayout>
     <Footer class="footer">
@@ -128,8 +117,10 @@ defineProps({
     display: flex;
     align-items: center;
     padding-top: 1rem;
-
+    z-index: 10;
+    
     @include breakpoint("mobile") {
+        background-color: $background;
         margin-inline: 1rem;
         padding-top: 2rem;
         gap: 1rem;
@@ -139,7 +130,7 @@ defineProps({
         padding: 1rem;
 
         @include breakpoint("mobile") {
-            padding: 0;
+            padding: 0rem 0rem 1rem 0rem;
         }
     }
 
@@ -158,14 +149,17 @@ defineProps({
     display: flex;
     align-items: center;
     flex-direction: column;
-
+    
     .headline {
         display: flex;
         align-items: center;
-
+        
         h1 {
             font-size: 4rem;
             padding-top: 4rem;
+            @include breakpoint("mobile") {
+                padding-top: 6rem;
+            }
         }
     }
 
@@ -182,45 +176,23 @@ defineProps({
     }
 }
 
-.about {
+
+.arguments {
     display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+    justify-content: center;
     align-items: center;
-    flex-direction: column;
-
-    h2 {
-        margin-top: 4rem;
-    }
-
-    .description {
-        display: flex;
-
-        @include breakpoint("mobile") {
-            flex-direction: column;
-            align-items: center;
-        }
-
-        p {
-            text-align: center;
-            margin-top: 1rem;
-            max-width: 800px;
-        }
-    }
-
-    .arguments {
-        display: flex;
-        gap: 1rem;
-        margin-top: 2rem;
-        flex-wrap: wrap;
+    
+    @include breakpoint("mobile") {
+        flex-direction: column;
         justify-content: center;
+    }
 
-        @include breakpoint("mobile") {
-            justify-content: center;
-        }
-
-        h3,
-        p {
-            color: $white;
-        }
+    h3,
+    p {
+        color: $white;
     }
 }
 
