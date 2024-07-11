@@ -4,6 +4,7 @@
 <template>
     <div class="figure">
         <svg width="250" height="250" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <desc>Eine Figur bestehend aus Beinen zwei Kreisen und Kulleraugen bewegt sich traurig</desc>
             <circle class="head" cx="318" cy="208" r="75" fill="#E3A328" />
             <circle class="body" cx="202" cy="265" r="111" fill="#E3A328" />
             <circle class="eyes" cx="374" cy="183" r="32.5" stroke="black" stroke-width="5" fill="#FCF9E7" />

@@ -6,6 +6,7 @@ const props = defineProps({
 
 <template>
     <svg :width="width" viewBox="0 0 242 435" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <desc>Eine Figur bestehend aus Beinen drei Kreisen und Kulleraugen</desc>
         <circle cx="75" cy="204" r="75" fill="#67917B" />
         <circle cx="151" cy="83" r="75" fill="#67917B" />
         <circle cx="150" cy="325" r="75" fill="#67917B" />

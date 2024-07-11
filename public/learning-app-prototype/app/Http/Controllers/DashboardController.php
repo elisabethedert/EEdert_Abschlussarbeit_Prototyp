@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Question;
 use App\Models\QuestionResults;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class DashboardController extends Controller
@@ -34,8 +36,31 @@ class DashboardController extends Controller
             }
         }
 
+        // $currentUnit = $firstLectureResult->unit;
+        // $currentLecture = $firstLectureResult->lecture;
+
+        // $lectureCount = Question::where('unit', $currentUnit)
+        // ->where('lecture', $currentLecture)
+        // ->count();
+
+        // alle Lektionen aus Unit 1
+        $lectures = Question::where('unit', 1)
+            ->select('lecture')
+            ->distinct()
+            ->get();
+
+        $lectureCount = $lectures->count();
+        
+        
+        $currentLecture = QuestionResults::where('user_id', auth()->user()->id)
+        ->where('unit', 1)
+        ->max('lecture');
+        Log::debug($currentLecture);
+
         return Inertia::render('Dashboard', [
             'streak' => $streak,
+            'lectureCount' => (int)$lectureCount,
+            'currentLecture' => (int)$currentLecture+1,
         ]);
     }
 }

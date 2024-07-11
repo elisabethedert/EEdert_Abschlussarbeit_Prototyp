@@ -9,6 +9,7 @@ const props = defineProps({
 <template>
     <div class="circle">
         <svg :width="width" :height="width" viewBox="0 0 421 431" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <desc>Ein farbiger Kreis, der als Hintergrund genutzt wird</desc>
             <circle cx="210.5" cy="220.5" r="210.5" fill="#CCC8C8" />
             <circle cx="210.5" cy="210.5" r="210.5" :fill="'#' + bgColor" />
         </svg>

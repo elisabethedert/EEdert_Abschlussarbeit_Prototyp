@@ -308,7 +308,7 @@ function dropToAnswerDD(event) {
                         {{ lecureQuestionRepeatCount }} Fragen zur Wiederholung</p>
                     <p v-else class="question-counter">Frage {{ lectureQuestionCount }} von {{ lectureQuestionCount }}
                         <Tick class="ticked" /> |
-                        <b> {{ currentIndex + 1 - lectureQuestionCount }} / {{ lecureQuestionRepeatCount }} wiederholt</b>
+                        <b> WIederholungsfrage {{ currentIndex + 1 - lectureQuestionCount }} / {{ lecureQuestionRepeatCount }}</b>
                     </p>
                     <div class="progress">
                         <div class="progress-bar">

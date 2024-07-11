@@ -34,7 +34,7 @@ defineProps({
     <header>
         <nav v-if="canLogin" class="topnav">
             <div class="logo">
-                <Link>
+                <Link href="/">
                 <ApplicationLogo class="logo-icon" />
                 </Link>
             </div>
@@ -59,7 +59,7 @@ defineProps({
         <div class="intro-text">
             <div class="headline">
                 <h1>Circulo</h1>
-                <Blink width="40" />
+                <Blink :width="40" />
             </div>
 
             <h2>Secure Product Design</h2>
@@ -70,7 +70,7 @@ defineProps({
                     zum Sicherheitsexperten und gestalte zukunftssichere Produkte!
                 </b></p>
             <div class="link">
-                <Fig2 width="100" />
+                <Fig2 :width="100" />
                 <Link class="btn btn-yellow" :href="route('login')">
                 Los geht's!
                 <Arrow />
@@ -78,20 +78,20 @@ defineProps({
             </div>
         </div>
         <div class="arguments">
-            <Circle width="225" bgColor="67917B">
+            <Circle :width="225" bgColor="67917B">
                 <h3>Alleine oder im Team</h3>
                 <p>Lerne nur für dich oder mit deinen Kolleg:innen.</p>
             </Circle>
-            <Circle width="225" bgColor="67917B">
+            <Circle :width="225" bgColor="67917B">
                 <h3>Von den Grundlagen bis zum Expertenwissen</h3>
                 <p>Lerne die Konzepte von Secure Design kennen.</p>
             </Circle>
 
-            <Circle width="225" bgColor="67917B">
+            <Circle :width="225" bgColor="67917B">
                 <h3>Müheloser Lernforschritt</h3>
                 <p>Erlebe kontinuierlichen Lernfortschritt</p>
             </Circle>
-            <Circle width="225" bgColor="67917B">
+            <Circle :width="225" bgColor="67917B">
                 <h3>Abwechslungsreiche Aufgaben</h3>
                 <p>Profitiere von einer motivierenden Lernumgebung.</p>
             </Circle>

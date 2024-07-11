@@ -10,7 +10,9 @@ import Circle from '@/Components/Circle.vue';
 import Blink from '@/assets/Blink.vue';
 
 const props = defineProps({
-    streak: Number
+    streak: Number,
+    lectureCount: Number,
+    currentLecture: Number
 })
 
 const handleScroll = (event) => {
@@ -27,6 +29,12 @@ onMounted(() => {
     }
     scrollContainer.addEventListener('mousewheel', handleScroll);
     scrollContainer.addEventListener('DOMMouseScroll', handleScroll);
+
+    // progressbar
+    var count = props.currentLecture;
+    var maxCount = props.lectureCount;
+    count = count === maxCount ? maxCount : count + 1;
+    progressbar(count, maxCount);
 });
 
 onUnmounted(() => {
@@ -38,7 +46,10 @@ onUnmounted(() => {
     scrollContainer.removeEventListener('DOMMouseScroll', handleScroll);
 });
 
-
+function progressbar(count, maxCount) {
+    var newWidth = (count / maxCount) * 100 + "%";
+    document.getElementsByClassName("progress-bar")[0].style.width = newWidth;
+}
 </script>
 
 <template>
@@ -50,6 +61,7 @@ onUnmounted(() => {
             <h1>Hey {{ $page.props.auth.user.name }},</h1>
             <h2>Schön dich zu sehen!</h2>
         </div>
+
         <div class="player-info">
             <div class="circle">
                 <svg width="250" height="258" viewBox="0 0 250 258" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -61,7 +73,7 @@ onUnmounted(() => {
                     <p>Punkte</p>
                 </div>
             </div>
-            <Fig3 width="75" />
+            <Fig3 :width="75" />
             <div class="circle">
                 <svg width="250" height="258" viewBox="0 0 250 258" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <circle cx="125" cy="125" r="125" transform="matrix(-1 0 0 1 250 8)" fill="#CCC8C8" />
@@ -78,37 +90,67 @@ onUnmounted(() => {
         </div>
         <div class="container">
             <div class="units">
-                <Circle width="250" bgColor="67917B">
+                <Circle :width="250" bgColor="67917B">
                     <h3>Grundlagen</h3>
+                    <p>{{ currentLecture }} / {{ lectureCount }}</p>
+                    <div class="progress dark">
+                        <div class="progress-bar">
+                            <span style="width: 40%;"></span>
+                        </div>
+                    </div>
                     <Link :class="{ disabled: $page.props.auth.user.unit <= 1 }" href="unit1/lektionen" type="button"
                         class="btn btn-yellow">Unit 1
                     </Link>
                 </Circle>
-                <Circle width="250" bgColor="103A51">
+                <Circle :width="250" bgColor="103A51">
                     <h3>Design Principles</h3>
+                    <p> 1 / 10 </p>
+                    <div class="progress dark">
+                        <div class="progress-bar">
+                            <span style="width: 40%;"></span>
+                        </div>
+                    </div>
                     <Link :class="{ disabled: $page.props.auth.user.unit <= 1 }" href="unit1/lektionen" type="button"
                         class="btn btn-yellow">Unit 2
                     </Link>
                 </Circle>
-                <Circle width="250" bgColor="FBF4CE">
+                <Circle :width="250" bgColor="FBF4CE">
                     <h3>Design Fokus Areas</h3>
+                    <p> 1 / 10 </p>
+                    <div class="progress light">
+                        <div class="progress-bar">
+                            <span style="width: 40%;"></span>
+                        </div>
+                    </div>
                     <Link :class="{ disabled: $page.props.auth.user.unit <= 1 }" href="unit1/lektionen" type="button"
                         class="btn btn-yellow">Unit 3
                     </Link>
                 </Circle>
-                <Circle width="250" bgColor="67917B">
+                <Circle :width="250" bgColor="67917B">
                     <h3>Injection</h3>
+                    <p> 1 / 10 </p>
+                    <div class="progress dark">
+                        <div class="progress-bar">
+                            <span style="width: 40%;"></span>
+                        </div>
+                    </div>
                     <Link :class="{ disabled: $page.props.auth.user.unit <= 1 }" href="unit1/lektionen" type="button"
                         class="btn btn-yellow">Unit 4
                     </Link>
                 </Circle>
-                <Circle width="250" bgColor="103A51">
+                <Circle :width="250" bgColor="103A51">
                     <h3>Zugriffskontrolle</h3>
+                    <p> 1 / 10 </p>
+                    <div class="progress dark">
+                        <div class="progress-bar">
+                            <span style="width: 40%;"></span>
+                        </div>
+                    </div>
                     <Link href="unit1/lektionen" type="button" class="btn btn-yellow">Unit 5
                     </Link>
                 </Circle>
             </div>
-            <Blink class="blink" width="50" />
+            <Blink class="blink" :width="50" />
         </div>
 
     </AuthenticatedLayout>
@@ -120,6 +162,7 @@ onUnmounted(() => {
 
 <style scoped lang="scss">
 @import '../../css/_main.scss';
+
 
 
 .intro-text {
@@ -138,18 +181,55 @@ onUnmounted(() => {
         border-radius: 25px;
         margin: 2rem;
 
-        :nth-child(3n+1), :nth-child(3n+2) {
-            
+        h3 {
+            margin-bottom: 0.25rem;
+        }
+
+        :nth-child(3n+1),
+        :nth-child(3n+2) {
+
             h3,
             p {
                 color: $white;
             }
         }
+
         :nth-child(3n) {
 
             h3,
             p {
                 color: $blue;
+            }
+        }
+
+        .progress {
+            width: 150px;
+            height: 20px;
+            align-items: first baseline;
+            display: flex;
+            border-radius: 50px;
+
+            &-bar {
+                border-radius: 50px;
+                width: 20%;
+                height: 15px;
+                background-color: $yellow;
+                color: #ffffff;
+                display: flex;
+                align-items: center;
+
+                span {
+                    text-align: center;
+                    margin-left: 10px;
+                }
+            }
+
+            &.dark {
+                background-color: $background-light;
+            }
+
+            &.light {
+                background-color: $blue;
             }
         }
 

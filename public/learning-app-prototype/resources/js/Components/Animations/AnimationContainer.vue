@@ -11,6 +11,7 @@ defineProps({
         <div class="result">
             <div class="xp" v-if="showXp">
                 <svg width="60" height="60" viewBox="0 0 172 181" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <desc>Ein Geldstück mit der entsprechenden Zahl an Experience Points die man sich erspielt hat</desc>
                     <circle cx="102.501" cy="116.15" r="64.4146" fill="#67917B" />
                     <circle cx="102.501" cy="110.5" r="64.4146" fill="#E3A328" />
                     <path

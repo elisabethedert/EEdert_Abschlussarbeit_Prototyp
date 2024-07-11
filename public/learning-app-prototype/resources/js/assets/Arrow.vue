@@ -2,7 +2,8 @@
 </script>
 
 <template>
-    <svg class="arrow" width="22" viewBox="0 0 47 23" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+    <svg  class="arrow" width="22" viewBox="0 0 47 23" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+        <desc>Kleiner Pfeil nach rechts</desc>
         <path
             d="M2.77076 13.0192C14.241 13.1748 25.7164 13.1702 37.1864 13.3158C40.4092 13.3563 40.2446 8.35896 37.0318 8.31822C25.5616 8.16262 14.0862 8.16724 2.61624 8.02163C-0.606545 7.98121 -0.442034 12.9785 2.77076 13.0192Z" />
         <path

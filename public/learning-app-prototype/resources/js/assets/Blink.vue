@@ -6,6 +6,7 @@ const props = defineProps({
 
 <template>
     <svg :width="width" height="41" viewBox="0 0 54 41" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <desc>Drei kleine Striche die wie ein Blinken aussehen</desc>
         <g clip-path="url(#clip0_631_12)">
             <path
                 d="M0.129655 13.4801C2.29965 18.8101 3.85965 24.3601 4.78965 30.0301C5.00965 31.3601 6.65965 32.1101 7.86965 31.7801C9.28965 31.3901 9.83965 30.0401 9.61965 28.7001C8.68965 23.0201 7.12965 17.4801 4.95965 12.1501C4.44965 10.9001 3.29965 10.0201 1.87965 10.4001C0.699655 10.7301 -0.380345 12.2201 0.129655 13.4801Z"
