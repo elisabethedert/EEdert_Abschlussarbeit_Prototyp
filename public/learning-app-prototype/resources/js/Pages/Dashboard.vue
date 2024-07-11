@@ -86,27 +86,26 @@ onUnmounted(() => {
                     </Link>
                 </Circle>
                 <Circle width="250" bgColor="103A51">
-                    <h3>Grundlagen</h3>
+                    <h3>Design Principles</h3>
                     <Link :class="{ disabled: $page.props.auth.user.unit <= 1 }" href="unit1/lektionen" type="button"
-                        class="btn btn-yellow">Unit 1
+                        class="btn btn-yellow">Unit 2
                     </Link>
                 </Circle>
                 <Circle width="250" bgColor="FBF4CE">
-                    <h3>Grundlagen</h3>
+                    <h3>Design Fokus Areas</h3>
                     <Link :class="{ disabled: $page.props.auth.user.unit <= 1 }" href="unit1/lektionen" type="button"
-                        class="btn btn-yellow">Unit 1
+                        class="btn btn-yellow">Unit 3
                     </Link>
                 </Circle>
                 <Circle width="250" bgColor="67917B">
-                    <h3>Grundlagen</h3>
+                    <h3>Injection</h3>
                     <Link :class="{ disabled: $page.props.auth.user.unit <= 1 }" href="unit1/lektionen" type="button"
-                        class="btn btn-yellow">Unit 1
+                        class="btn btn-yellow">Unit 4
                     </Link>
                 </Circle>
                 <Circle width="250" bgColor="103A51">
-                    <h3>Grundlagen</h3>
-                    <Link :class="{ disabled: $page.props.auth.user.unit <= 1 }" href="unit1/lektionen" type="button"
-                        class="btn btn-yellow">Unit 1
+                    <h3>Zugriffskontrolle</h3>
+                    <Link href="unit1/lektionen" type="button" class="btn btn-yellow">Unit 5
                     </Link>
                 </Circle>
             </div>
@@ -140,16 +139,26 @@ onUnmounted(() => {
         border-radius: 25px;
         margin: 2rem;
 
+        :nth-child(3n+1), :nth-child(3n+2) {
+            
+            h3,
+            p {
+                color: $white;
+            }
+        }
+        :nth-child(3n) {
+
+            h3,
+            p {
+                color: $blue;
+            }
+        }
+
         .figure {
             width: 55px;
         }
 
         .content {
-
-            h3,
-            p {
-                color: $white;
-            }
 
             .btn {
                 margin-top: 1rem;
