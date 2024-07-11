@@ -42,13 +42,13 @@ function copyToClipboard() {
         <h1 v-if="!isHighestLectureInUnit">Lektion {{ lecture }} <br> abgeschlossen!</h1>
         <h1 v-if="isHighestLectureInUnit">Unit {{ unit }} <br> abgeschlossen!</h1>
         <div class="result-text">
-            <p><b>Super, du hast {{ correctAnsweredFirstTry }} von {{ lectureCount }} Aufgaben auf Anhieb richtig beantwortet!</b></p>
+            <p><b>Super, du hast {{ correctAnsweredFirstTry }} von {{ lectureCount }} Aufgaben richtig beantwortet!</b></p>
             <p><b>Dein bestes Ergebnis ist {{ bestScore }} von {{ lectureCount }}</b></p>
             <p v-if="lectureAlreadyAnswered === 1">Damit erhälst du {{ correctAnsweredFirstTry * 3 }}
                 Punkte für die richtigen Antworten
                 dazu und hast insgesamt {{ $page.props.auth.user.experience_points }} Punkte</p>
             <p v-else="lectureAlreadyAnswered !== 1">Damit erhälst du {{ correctAnsweredFirstTry }}
-                Punkte für die Wiederholung der Aufgaben dazu und hast insgesamt {{ $page.props.auth.user.experience_points }} Punkte</p>
+                Punkte für die Wiederholung der Aufgaben dazu und hast jetzt insgesamt {{ $page.props.auth.user.experience_points }} Punkte!</p>
             <HappyDance />
 
             <div class="links">

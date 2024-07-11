@@ -92,8 +92,6 @@ class LectureController extends Controller
             ->distinct('session')
             ->count();
 
-        Log::debug($lectureAlreadyAnswered);
-
         return Inertia::render('LectureResult', [
             'correctAnswered' => (int)$numCorrectAnswered,
             'correctAnsweredFirstTry' => $numCorrectInFirstTry,

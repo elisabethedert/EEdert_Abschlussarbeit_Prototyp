@@ -50,7 +50,7 @@ defineProps({
                 Log in
                 </Link>
                 <Link class="btn-text item" v-if="canRegister" :href="route('register')">
-                Register
+                Registrieren
                 </Link>
             </template>
         </nav>

@@ -11,6 +11,7 @@ import HelpPopup from '@/Components/HelpPopup.vue';
 import Arrow from '@/assets/Arrow.vue';
 import Info from '@/assets/Info.vue';
 import Cross from '@/assets/Cross.vue';
+import Tick from '@/assets/Tick.vue';
 import { Head, router } from '@inertiajs/vue3';
 import { ref, computed, onMounted } from 'vue';
 import axios from 'axios';
@@ -64,6 +65,7 @@ var count = 0;
 function selectedOption(index) {
     selectedAnswer.value = index
 }
+
 function hideResult() {
     resultCorrect.value = false;
     resultIncorrect.value = false;
@@ -131,7 +133,6 @@ function dropboxEmpty() {
     }
     return false
 }
-
 
 function nextQuestion() {
     if (props.questions[currentIndex.value].type === "dd" && (dropboxEmpty())) {
@@ -233,7 +234,7 @@ function drop(event, gapIndex) {
             return;
         }
 
-        if(draggedItem.value.originalContainer.className !== "answer-dd") {
+        if (draggedItem.value.originalContainer.className !== "answer-dd") {
             draggedItem.value.originalContainer.innerText = '_____'
         }
 
@@ -294,8 +295,13 @@ function dropToAnswerDD(event) {
             </div>
             <div class="question-header">
                 <div class="question-counter">
-                    <p class="question-counter"><b>Frage {{ currentIndex + 1 }} von {{ lectureQuestionCount }}</b> | +{{
-                        lecureQuestionRepeatCount }} Fragen zur Wiederholung</p>
+                    <p v-if="currentIndex + 1 <= lectureQuestionCount" class="question-counter"><b>Frage {{ currentIndex +
+                            1 }} von {{ lectureQuestionCount }}</b> | +
+                        {{ lecureQuestionRepeatCount }} Fragen zur Wiederholung</p>
+                    <p v-else class="question-counter">Frage {{ lectureQuestionCount }} von {{ lectureQuestionCount }}
+                        <Tick class="ticked" /> |
+                        <b> {{ currentIndex + 1 - lectureQuestionCount }} / {{ lecureQuestionRepeatCount }} wiederholt</b>
+                    </p>
                     <div class="progress">
                         <div class="progress-bar">
                             <span style="width: 40%;"></span>
@@ -304,7 +310,6 @@ function dropToAnswerDD(event) {
                 </div>
             </div>
             <!-- MC Section -->
-            <!-- <MultipleChoice/> -->
             <div class="content">
                 <div v-if="currentQuestion.type === 'mc'">
                     <div class="question-main" v-if="showQuestion">
@@ -344,6 +349,7 @@ function dropToAnswerDD(event) {
                         </div>
                     </div>
                 </div>
+                <!-- Animations -->
                 <div class="question-animation">
                     <div v-if="resultCorrect">
                         <AnimationContainer :showXp="true">
@@ -366,6 +372,7 @@ function dropToAnswerDD(event) {
                         </AnimationContainer>
                     </div>
                 </div>
+                <!-- Buttons -->
                 <div class="question-footer" v-if="showQuestion">
                     <button @click="nextQuestion" v-if="!isLastQuestion" class="btn btn-green">Bestätigen</button>
                     <button @click="calculateResult" v-if="isLastQuestion" class="btn btn-yellow">Lektion beenden
@@ -408,6 +415,10 @@ function dropToAnswerDD(event) {
         .question-counter {
             p {
                 margin-bottom: 1rem;
+            }
+
+            .ticked {
+                margin-bottom: -5px;
             }
 
             .progress {

@@ -10,7 +10,6 @@ const toggleProfile = () => {
     } else {
         showProfile.value = true;
     }
-    console.log(props.auth.user.name)
 };
 </script>
 
