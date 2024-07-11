@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\QuestionResults;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class LectureController extends Controller
@@ -42,6 +43,11 @@ class LectureController extends Controller
             ->where('session', $request->route('session')) //sessionnummer
             ->sum('question_correct_count');
 
+        $numCorrectInFirstTry = QuestionResults::where('user_id', $request->user()->id)
+            ->where('session', $request->route('session')) //sessionnummer
+            ->where('question_incorrect_count', 0)
+            ->count();
+
         $numIncorrectAnswered = QuestionResults::where('user_id', $request->user()->id)
             ->where('session', $request->route('session')) //sessionnummer
             ->sum('question_incorrect_count');
@@ -56,10 +62,10 @@ class LectureController extends Controller
 
         $currentUnit = $firstLectureResult->unit;
         $currentLecture = $firstLectureResult->lecture;
-        
+
         $highestLectureInUnit = Question::where('unit', $currentUnit)
-        ->max('lecture');
-        
+            ->max('lecture');
+
         if ($currentLecture === $highestLectureInUnit) {
             $isHighestLectureInUnit = true;
         } else {
@@ -75,11 +81,26 @@ class LectureController extends Controller
 
         $totalCorrectAnswers = $bestScore->total_correct_answers;
 
+        $lectureCount = Question::where('unit', $currentUnit)
+            ->where('lecture', $currentLecture)
+            ->count();
+
+
+        $lectureAlreadyAnswered = QuestionResults::where('user_id', $request->user()->id)
+            ->where('unit', $currentUnit)
+            ->where('lecture', $currentLecture)
+            ->distinct('session')
+            ->count();
+
+        Log::debug($lectureAlreadyAnswered);
+
         return Inertia::render('LectureResult', [
             'correctAnswered' => (int)$numCorrectAnswered,
+            'correctAnsweredFirstTry' => $numCorrectInFirstTry,
             'incorrectAnswered' => (int)$numIncorrectAnswered,
-            'allAnswered' => (int)$numCorrectAnswered + (int)$numIncorrectAnswered,
+            'lectureCount' => (int)$lectureCount,
             'lecture' => (int)$currentLecture,
+            'lectureAlreadyAnswered' => (int)$lectureAlreadyAnswered,
             'unit' => $currentUnit,
             'isHighestLectureInUnit' => $isHighestLectureInUnit,
             'bestScore' => (int)$totalCorrectAnswers,

@@ -40,8 +40,8 @@ defineProps({
                 </div>
                 <div class="figure">
                     <Fig1 />
-                    <Link :class="{ disabled: highestLectureInUnit <= 1 }" href="lektion2"
-                        type="button" class="btn btn-green">Lektion 2
+                    <Link :class="{ disabled: highestLectureInUnit <= 0 }" href="lektion2" type="button"
+                        class="btn btn-green">Lektion 2
                     <Arrow />
                     </Link>
                 </div>
@@ -54,7 +54,7 @@ defineProps({
                     <h3>Sicheres Produktdesign & Secure Development Lifecycle</h3>
                     <Level :level="2" />
                 </div>
-                <Link :class="{ disabled: highestLectureInUnit <= 2 }" href="lektion3" type="button"
+                <Link :class="{ disabled: highestLectureInUnit <= 1 }" href="lektion3" type="button"
                     class="btn btn-green">Lektion 3
                 <Arrow />
                 </Link>
@@ -67,7 +67,7 @@ defineProps({
                     <h3>Schutzziele</h3>
                     <Level :level="2" />
                 </div>
-                <Link :class="{ disabled: highestLectureInUnit <= 3 }" href="lektion4" type="button"
+                <Link :class="{ disabled: highestLectureInUnit <= 2 }" href="lektion4" type="button"
                     class="btn btn-green">Lektion 4
                 <Arrow />
                 </Link>
@@ -82,8 +82,8 @@ defineProps({
                 </div>
                 <div class="figure">
                     <Fig2 />
-                    <Link :class="{ disabled: highestLectureInUnit <= 4 }" href="lektion5"
-                        type="button" class="btn btn-green">Lektion 5
+                    <Link :class="{ disabled: highestLectureInUnit <= 3 }" href="lektion5" type="button"
+                        class="btn btn-green">Lektion 5
                     <Arrow />
                     </Link>
                 </div>
@@ -95,7 +95,7 @@ defineProps({
                     <h3>Identity Management</h3>
                     <Level :level="2" />
                 </div>
-                <Link :class="{ disabled: highestLectureInUnit <= 5 }" href="lektion6" type="button"
+                <Link :class="{ disabled: highestLectureInUnit <= 4 }" href="lektion6" type="button"
                     class="btn btn-green">Lektion 6
                 <Arrow />
                 </Link>
@@ -108,7 +108,7 @@ defineProps({
                     <Level :level="3" />
                 </div>
 
-                <Link :class="{ disabled: highestLectureInUnit <= 6 }" href="lektion7" type="button"
+                <Link :class="{ disabled: highestLectureInUnit <= 5 }" href="lektion7" type="button"
                     class="btn btn-green">Lektion 7
                 <Arrow />
                 </Link>
@@ -122,8 +122,8 @@ defineProps({
                 </div>
                 <div class="figure">
                     <Fig3 />
-                    <Link :class="{ disabled: highestLectureInUnit <= 7 }" href="lektion8"
-                        type="button" class="btn btn-green">Lektion 8
+                    <Link :class="{ disabled: highestLectureInUnit <= 6 }" href="lektion8" type="button"
+                        class="btn btn-green">Lektion 8
                     <Arrow />
                     </Link>
                 </div>
@@ -134,7 +134,7 @@ defineProps({
                     <Level :level="3" />
                     <h3>+ Wiederholung</h3>
                 </div>
-                <Link :class="{ disabled: highestLectureInUnit <= 8 }" href="lektion9" type="button"
+                <Link :class="{ disabled: highestLectureInUnit <= 7 }" href="lektion9" type="button"
                     class="btn btn-green">Lektion 9
                 <Arrow />
                 </Link>
@@ -142,7 +142,7 @@ defineProps({
             <div class="lecture-container">
                 <div class="description">
                 </div>
-                <Link :class="{ disabled: highestLectureInUnit <= 9 }" href="lektion10" type="button"
+                <Link :class="{ disabled: highestLectureInUnit <= 8 }" href="lektion10" type="button"
                     class="btn btn-green">Lektion 10
                 <Arrow />
                 </Link>

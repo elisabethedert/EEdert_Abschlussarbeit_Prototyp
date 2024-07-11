@@ -86,7 +86,8 @@ function saveMcResult() {
             resultIncorrect.value = true;
             // add wrong answered question to the end of the questions array
             lecureQuestionRepeatCount.value++;
-            props.questions.push(props.questions[currentIndex.value]);
+            console.log(props.questions[currentIndex.value-1])
+            props.questions.push(props.questions[currentIndex.value-1]);
         }
     }).catch(error => {
         console.error(error);
@@ -97,7 +98,7 @@ function saveDdResult() {
 
     const droppedButtons = ref([]);
     droppedButtons.value = Array.from(document.querySelectorAll('.dropbox button')).map(button => button.textContent);
-    // TODO korrekte Datenweiterletung an BE
+
     axios.post('/question_results', {
         question_id: props.questions[currentIndex.value].id,
         dropped_buttons: droppedButtons.value,
@@ -113,7 +114,8 @@ function saveDdResult() {
             resultIncorrect.value = true;
             // add wrong answered question to the end of the questions array
             lecureQuestionRepeatCount.value++;
-            props.questions.push(props.questions[currentIndex.value]);
+            console.log(props.questions[currentIndex.value])
+            props.questions.push(props.questions[currentIndex.value-1]);
         }
     }).catch(error => {
         console.error(error);
