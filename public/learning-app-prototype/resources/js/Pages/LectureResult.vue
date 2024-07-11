@@ -42,9 +42,9 @@ function copyToClipboard() {
         <div class="result-text">
             <p><b>Super, du hast {{ correctAnswered }} von {{ allAnswered }} richtig beantwortet!</b></p>
             <p><b>Dein bestes Ergebnis ist {{ bestScore }} von {{ allAnswered }}</b></p>
-            <p v-if="lecture === $page.props.auth.user.current_lecture">Damit erhälst du {{ correctAnswered * 3 }}
+            <!-- <p v-if="lecture === $page.props.auth.user.current_lecture">Damit erhälst du {{ correctAnswered * 3 }}
                 Punkte
-                dazu und hast insgesamt {{ $page.props.auth.user.experience_points }} Punkte</p>
+                dazu und hast insgesamt {{ $page.props.auth.user.experience_points }} Punkte</p> -->
             <HappyDance />
 
             <div class="links">
