@@ -4,7 +4,6 @@ import Footer from '@/Layouts/Footer.vue';
 import Arrow from '@/assets/Arrow.vue';
 import Level from '@/Components/Level.vue';
 import { Head, Link, router } from '@inertiajs/vue3';
-import { ref, computed } from 'vue';
 import Fig1 from '@/assets/Fig1.vue';
 import Fig2 from '@/assets/Fig2.vue';
 import Fig3 from '@/assets/Fig3.vue';

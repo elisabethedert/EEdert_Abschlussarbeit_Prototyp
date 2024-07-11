@@ -6,7 +6,6 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import AnimationContainer from '@/Components/Animations/AnimationContainer.vue';
 import HappyDance from '@/Components/Animations/HappyDance.vue';
 import SadDance from '@/Components/Animations/SadDance.vue';
-import MultipleChoice from '@/Components/QuestionTypes/MultipleChoice.vue';
 import HelpPopup from '@/Components/HelpPopup.vue';
 import Arrow from '@/assets/Arrow.vue';
 import Info from '@/assets/Info.vue';

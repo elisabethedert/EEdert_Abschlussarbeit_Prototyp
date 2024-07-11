@@ -7,7 +7,6 @@ import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import Circle from '@/Components/Circle.vue';
 import Fig2 from '@/assets/Fig2.vue';
 import Blink from '@/assets/Blink.vue';
-import ArrowRound from '@/assets/ArrowRound.vue';
 
 import { Head, Link } from '@inertiajs/vue3';
 

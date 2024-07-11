@@ -7,34 +7,16 @@ use App\Models\Question;
 use App\Models\QuestionResults;
 use App\Models\User;
 use Illuminate\Http\Request;
-use App\Models\MultipleChoiceAnswer;
 use Illuminate\Support\Facades\Log;
-
 
 class QuestionResultsController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        $requestdata = $request->all(); // TODO: Validate Data
+        $requestdata = $request->all();
 
         // Frageergebnis in der Datenbank suchen, ob Frage in der Session bereits beantwortet
         $record = QuestionResults::where('user_id', $request->user()->id)
@@ -104,37 +86,5 @@ class QuestionResultsController extends Controller
         } else {
             return response()->json(['message' => 'incorrect'], 200);
         }
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(QuestionResults $questionResults)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(QuestionResults $questionResults)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(QuestionResults $questionResults)
-    {
-        //
     }
 }

@@ -1,9 +1,8 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import Footer from '@/Layouts/Footer.vue';
-import Arrow from '@/assets/Arrow.vue';
-import { Head, Link, router } from '@inertiajs/vue3';
-import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { Head, Link } from '@inertiajs/vue3';
+import { onMounted, onUnmounted } from 'vue';
 import Fig1 from '@/assets/Fig1.vue';
 import Fig2 from '@/assets/Fig2.vue';
 import Fig3 from '@/assets/Fig3.vue';
