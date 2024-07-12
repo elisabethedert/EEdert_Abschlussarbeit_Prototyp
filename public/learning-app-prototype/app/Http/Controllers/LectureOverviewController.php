@@ -8,6 +8,9 @@ use Inertia\Inertia;
 
 class LectureOverviewController extends Controller
 {
+    /**
+     * Display the lecture overview.
+     */
     public function index(Request $request)
     {
         $highestLectureInUnit = QuestionResults::where('unit', $request->route('unit'))

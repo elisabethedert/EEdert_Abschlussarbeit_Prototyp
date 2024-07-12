@@ -27,6 +27,18 @@ const lecureQuestionRepeatCount = ref(0);
 
 const isPopupVisible = ref(false);
 
+const currentIndex = ref(0);
+const resultFirstCorrect = ref(false);
+const resultRepeatCorrect = ref(false);
+const resultIncorrect = ref(false);
+
+const selectedAnswer = ref(null)
+const result = ref(0)
+
+const showQuestion = ref(true);
+
+var count = 0;
+
 function showHelpPopup() {
     if (isPopupVisible.value) {
         isPopupVisible.value = false;
@@ -34,18 +46,6 @@ function showHelpPopup() {
         isPopupVisible.value = true;
     }
 }
-
-const currentIndex = ref(0);
-const resultFirstCorrect = ref(false);
-const resultRepeatCorrect = ref(false);
-const resultIncorrect = ref(false);
-const totalQuestions = computed(() =>
-    props.questions.length
-)
-
-const selectedAnswer = ref(null)
-const result = ref(0)
-const showQuestion = ref(true);
 
 const currentQuestion = computed(() => {
     if (props.questions[currentIndex.value].type === 'dd') {
@@ -60,7 +60,6 @@ const answers = computed(() => {
     return props.questions[currentIndex.value].answers
 })
 
-var count = 0;
 
 function selectedOption(index) {
     selectedAnswer.value = index

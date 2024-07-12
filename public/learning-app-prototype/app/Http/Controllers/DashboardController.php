@@ -11,10 +11,13 @@ use Inertia\Inertia;
 
 class DashboardController extends Controller
 {
+    /**
+     * Display the dashboard.
+     */
     public function index()
     {
+        // extract all dates and group them by date
         $sessionDates = QuestionResults::where('user_id', auth()->user()->id)
-            // extract all dates and group them by date
             ->select(DB::raw('DATE(created_at) as date'))
             ->groupBy('date')
             ->orderBy('date', 'desc')
@@ -36,14 +39,7 @@ class DashboardController extends Controller
             }
         }
 
-        // $currentUnit = $firstLectureResult->unit;
-        // $currentLecture = $firstLectureResult->lecture;
-
-        // $lectureCount = Question::where('unit', $currentUnit)
-        // ->where('lecture', $currentLecture)
-        // ->count();
-
-        // alle Lektionen aus Unit 1
+        // all lecture out of unit 1
         $lectures = Question::where('unit', 1)
             ->select('lecture')
             ->distinct()
@@ -51,11 +47,10 @@ class DashboardController extends Controller
 
         $lectureCount = $lectures->count();
         
-        
+        // highest already processed lecture
         $currentLecture = QuestionResults::where('user_id', auth()->user()->id)
         ->where('unit', 1)
         ->max('lecture');
-        Log::debug($currentLecture);
 
         return Inertia::render('Dashboard', [
             'streak' => $streak,

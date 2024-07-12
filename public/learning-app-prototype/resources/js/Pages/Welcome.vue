@@ -38,12 +38,14 @@ defineProps({
                 <ApplicationLogo class="logo-icon" />
                 </Link>
             </div>
+            <!-- user is logged in -->
             <Link class="btn-text item" v-if="$page.props.auth.user" :href="route('dashboard')">
             Dashboard
             </Link>
             <Link class="btn-text item" v-if="$page.props.auth.user" :href="route('dashboard')">
             Team
             </Link>
+            <!-- user is not logged in -->
             <template v-else>
                 <Link class="btn-text item" :href="route('login')">
                 Log in
@@ -61,7 +63,6 @@ defineProps({
                 <h1>Circulo</h1>
                 <Blink :width="40" />
             </div>
-
             <h2>Secure Product Design</h2>
             <p><b>Entdecke mit Circulo spielerisch die Grundlagen von Secure Product Design. Mit interaktiven
                     Herausforderungen und

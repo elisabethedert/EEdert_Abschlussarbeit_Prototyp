@@ -23,6 +23,7 @@ const handleScroll = (event) => {
 };
 
 onMounted(() => {
+    // add scrolling
     const scrollContainer = document.querySelector('.units');
     if (scrollContainer === null) {
         return;
@@ -38,6 +39,7 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
+    // remove scrolling
     const scrollContainer = document.querySelector('.units');
     if (scrollContainer === null) {
         return;
@@ -89,6 +91,7 @@ function progressbar(count, maxCount) {
             <p><b>Hinter jeder Unit verbirgt sich ein neuer Schwerpunkt, den du vertiefen kannst.</b></p>
         </div>
         <div class="container">
+            <!-- al units in scrollcontainer -->
             <div class="units">
                 <Circle :width="250" bgColor="67917B">
                     <h3>Grundlagen</h3>
@@ -152,7 +155,6 @@ function progressbar(count, maxCount) {
             </div>
             <Blink class="blink" :width="50" />
         </div>
-
     </AuthenticatedLayout>
     <Footer class="footer">
         <p>AGB</p>
@@ -162,8 +164,6 @@ function progressbar(count, maxCount) {
 
 <style scoped lang="scss">
 @import '../../css/_main.scss';
-
-
 
 .intro-text {
     text-align: center;

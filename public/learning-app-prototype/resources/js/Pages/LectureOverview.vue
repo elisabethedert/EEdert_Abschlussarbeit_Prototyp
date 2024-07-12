@@ -21,6 +21,8 @@ defineProps({
             <h1>Lektionsübersicht</h1>
             <h2>Wähle eine Lektion aus, um Neues zu lernen</h2>
         </div>
+        
+        <!-- all lectures of unit -->
         <div class="lecture">
             <div class="lecture-container">
                 <div class="description">

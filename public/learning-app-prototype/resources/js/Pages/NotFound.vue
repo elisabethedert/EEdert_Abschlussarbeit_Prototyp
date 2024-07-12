@@ -16,9 +16,8 @@ const props = defineProps({
     <AuthenticatedLayout>
         <h1>404</h1>
         <h2>Scheint als hättest du dich verlaufen...</h2>
-
         <div class="links">
-            <Fig2 class="figure" />
+            <Fig2 :width="75" class="figure" />
             <Link :href="'/dashboard'" class="btn btn-yellow">Zur zum Dashboard
             <Arrow />
             </Link>

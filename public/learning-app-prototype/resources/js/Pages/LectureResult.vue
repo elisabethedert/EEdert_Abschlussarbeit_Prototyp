@@ -8,19 +8,19 @@ import { Head, Link } from '@inertiajs/vue3';
 import { ref } from 'vue';
 
 defineProps({
-    correctAnswered: Number,
     correctAnsweredFirstTry: Number,
-    incorrectAnswered: Number,
-    lectureCount: Number,
+    numLecturesInUnit: Number,
     lecture: Number,
     lectureAlreadyAnswered: Number,
     unit: Number,
     isHighestLectureInUnit: Boolean,
     bestScore: Number
 })
+
 const showTick = ref(false);
 const showShare = ref(true);
 
+// copies current url to clipboard
 function copyToClipboard() {
     const url = window.location.href;
     navigator.clipboard.writeText(url);
@@ -42,8 +42,8 @@ function copyToClipboard() {
         <h1 v-if="!isHighestLectureInUnit">Lektion {{ lecture }} <br> abgeschlossen!</h1>
         <h1 v-if="isHighestLectureInUnit">Unit {{ unit }} <br> abgeschlossen!</h1>
         <div class="result-text">
-            <p><b>Super, du hast {{ correctAnsweredFirstTry }} von {{ lectureCount }} Aufgaben richtig beantwortet!</b></p>
-            <p><b>Dein bestes Ergebnis ist {{ bestScore }} von {{ lectureCount }}</b></p>
+            <p><b>Super, du hast {{ correctAnsweredFirstTry }} von {{ numLecturesInUnit }} Aufgaben richtig beantwortet!</b></p>
+            <p><b>Dein bestes Ergebnis ist {{ bestScore }} von {{ numLecturesInUnit }}</b></p>
             <p v-if="lectureAlreadyAnswered === 1">Damit erhälst du {{ correctAnsweredFirstTry * 3 }}
                 Punkte für die richtigen Antworten
                 dazu und hast insgesamt {{ $page.props.auth.user.experience_points }} Punkte</p>
