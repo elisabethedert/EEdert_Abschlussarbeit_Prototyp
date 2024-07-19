@@ -3,9 +3,11 @@
     padding: 2rem;
     border-radius: 25px;
     background: $background-light;
+    margin-bottom: 1rem;
 
     .description {
         padding-block: 1rem;
+
         &-big {
             font-weight: bold;
             margin-bottom: 1rem;
@@ -16,10 +18,19 @@
         width: 50%;
         margin-right: auto;
         margin-left: auto;
+        margin-block: 2rem;
+
+        @include breakpoint("mobile") {
+            width: 100%;
+        }
     }
 
     &.auth {
         margin-inline: 2rem;
+
+        @include breakpoint("mobile") {
+            margin-inline: 0;
+        }
     }
 }
 

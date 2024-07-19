@@ -8,6 +8,7 @@ import { Head, Link } from '@inertiajs/vue3';
 import { ref } from 'vue';
 
 defineProps({
+    lectureCount: Number,
     correctAnsweredFirstTry: Number,
     numLecturesInUnit: Number,
     lecture: Number,
@@ -42,8 +43,8 @@ function copyToClipboard() {
         <h1 v-if="!isHighestLectureInUnit">Lektion {{ lecture }} <br> abgeschlossen!</h1>
         <h1 v-if="isHighestLectureInUnit">Unit {{ unit }} <br> abgeschlossen!</h1>
         <div class="result-text">
-            <p><b>Super, du hast {{ correctAnsweredFirstTry }} von {{ numLecturesInUnit }} Aufgaben richtig beantwortet!</b></p>
-            <p><b>Dein bestes Ergebnis ist {{ bestScore }} von {{ numLecturesInUnit }}</b></p>
+            <p><b>Super, du hast {{ correctAnsweredFirstTry }} von {{ lectureCount }} Aufgaben richtig beantwortet!</b></p>
+            <p><b>Dein bestes Ergebnis ist {{ bestScore }} von {{ lectureCount }}</b></p>
             <p v-if="lectureAlreadyAnswered === 1">Damit erhälst du {{ correctAnsweredFirstTry * 3 }}
                 Punkte für die richtigen Antworten
                 dazu und hast insgesamt {{ $page.props.auth.user.experience_points }} Punkte</p>
@@ -65,7 +66,7 @@ function copyToClipboard() {
 
             <div class="link-share">
                 <p><b>Teile dein Ergebnis:</b></p>
-                <button class="btn btn-yellow" @click="copyToClipboard">URL kopieren
+                <button class="btn btn-green" @click="copyToClipboard">URL kopieren
                     <Share v-if="showShare"/>
                     <Tick  v-if="showTick"/>
                 </button>
@@ -82,6 +83,7 @@ function copyToClipboard() {
     justify-content: center;
     flex-direction: column;
     align-items: center;
+    text-align: center;
 
     .link-share {
         margin-top: 1rem;
@@ -108,7 +110,7 @@ function copyToClipboard() {
     margin-top: 1rem;
 
     @include breakpoint("mobile") {
-        flex-direction: column;
+        flex-direction: column-reverse;
         width: fit-content;
         align-items: center;
     }

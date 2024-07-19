@@ -30,7 +30,7 @@ defineProps({
 
 <template>
 
-    <Head title="Welcome" />
+    <Head title="Wilkommen" />
     <header>
         <nav v-if="canLogin" class="topnav">
             <div class="logo">

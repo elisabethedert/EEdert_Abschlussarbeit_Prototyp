@@ -307,7 +307,7 @@ function dropToAnswerDD(event) {
                         {{ lecureQuestionRepeatCount }} Fragen zur Wiederholung</p>
                     <p v-else class="question-counter">Frage {{ lectureQuestionCount }} von {{ lectureQuestionCount }}
                         <Tick class="ticked" /> |
-                        <b> WIederholungsfrage {{ currentIndex + 1 - lectureQuestionCount }} / {{ lecureQuestionRepeatCount }}</b>
+                        <b> Wiederholungsfrage {{ currentIndex + 1 - lectureQuestionCount }} / {{ lecureQuestionRepeatCount }}</b>
                     </p>
                     <div class="progress">
                         <div class="progress-bar">
@@ -407,6 +407,10 @@ function dropToAnswerDD(event) {
 .info-header {
     text-align: center;
 
+    @include breakpoint("mobile") {
+        margin-top: 2rem;
+    }
+
     h1 {
         margin-bottom: 0;
         font-size: 2rem;
@@ -419,7 +423,7 @@ function dropToAnswerDD(event) {
 
 .question-container {
     min-height: 450px;
-    margin-top: 2rem;
+    margin-block: 2rem;
     padding: 2rem;
     background-color: $background-light;
     border-radius: 25px;
@@ -496,9 +500,6 @@ function dropToAnswerDD(event) {
         flex-direction: column;
         justify-content: space-between;
 
-
-
-
         .question-main {
             display: flex;
             flex-direction: row;
@@ -557,6 +558,14 @@ function dropToAnswerDD(event) {
                 display: flex;
                 flex-direction: column;
                 gap: 1rem;
+
+                @include breakpoint("mobile") {
+                    width: 100%;
+                }
+
+                .question h2 {
+                    text-align: left!important;
+                }
 
                 .answer {
                     label {

@@ -83,6 +83,10 @@ class LectureController extends Controller
             ->first();
         $totalCorrectAnswers = $bestScore->total_correct_answers;
 
+        $lectureCount = Question::where('unit', $currentUnit)
+        ->where('lecture', $currentLecture)
+        ->count();
+
         // number of already processed lectures in unit
         $lectureAlreadyAnswered = QuestionResults::where('user_id', $request->user()->id)
             ->where('unit', $currentUnit)
@@ -91,6 +95,7 @@ class LectureController extends Controller
             ->count();
 
         return Inertia::render('LectureResult', [
+            'lectureCount' => (int)$lectureCount,
             'correctAnsweredFirstTry' => $numCorrectInFirstTry,
             'numLecturesInUnit' => (int)$numLecturesInUnit,
             'lecture' => (int)$currentLecture,

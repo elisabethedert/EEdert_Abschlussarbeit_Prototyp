@@ -73,7 +73,7 @@ class QuestionResultsController extends Controller
             $user->experience_points = $user->experience_points + 3;
             $user->save();
             return response()->json(['message' => 'firstcorrect'], 200);
-        } else if (!$record && $answerWasCorrect) {
+        } else if ($recordWhole && $answerWasCorrect) {
             $user = User::where('id', $request->user()->id)
                 ->first();
 

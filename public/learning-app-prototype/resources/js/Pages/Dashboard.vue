@@ -65,27 +65,17 @@ function progressbar(count, maxCount) {
         </div>
 
         <div class="player-info">
-            <div class="circle">
-                <svg width="250" height="258" viewBox="0 0 250 258" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="125" cy="125" r="125" transform="matrix(-1 0 0 1 250 8)" fill="#CCC8C8" />
-                    <circle cx="125" cy="125" r="125" transform="matrix(-1 0 0 1 250 0)" fill="#67917B" />
-                </svg>
-                <div class="content">
-                    <h3> {{ $page.props.auth.user.experience_points }}</h3>
-                    <p>Punkte</p>
-                </div>
-            </div>
+            <Circle :width="100" bgColor="67917B">
+                <h3> {{ $page.props.auth.user.experience_points }}</h3>
+                <p>Punkte</p>
+            </Circle>
+
             <Fig3 :width="75" />
-            <div class="circle">
-                <svg width="250" height="258" viewBox="0 0 250 258" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="125" cy="125" r="125" transform="matrix(-1 0 0 1 250 8)" fill="#CCC8C8" />
-                    <circle cx="125" cy="125" r="125" transform="matrix(-1 0 0 1 250 0)" fill="#67917B" />
-                </svg>
-                <div class="content">
-                    <h3>{{ streak }}</h3>
-                    <p>Streak</p>
-                </div>
-            </div>
+
+            <Circle :width="100" bgColor="67917B">
+                <h3>{{ streak }}</h3>
+                <p>Streak</p>
+            </Circle>
         </div>
         <div class="intro-text">
             <p><b>Hinter jeder Unit verbirgt sich ein neuer Schwerpunkt, den du vertiefen kannst.</b></p>
@@ -260,49 +250,22 @@ function progressbar(count, maxCount) {
     align-items: center;
     margin-block: 2rem;
     gap: 2rem;
-
+    
     @include breakpoint('mobile') {
-        flex-direction: column;
+        gap: 0;
     }
 
-    .circle {
-        position: relative;
-        width: 100px;
-        height: 100px;
+    h3 {
+        color: $white;
+        font-size: 1.5rem;
 
-        @include breakpoint('mobile') {
-            width: 150px;
-            height: 150px;
-        }
-
-        svg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            fill: $green;
-        }
-
-        .content {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-
-            h3 {
-                color: $white;
-                font-size: 1.5rem;
-
-            }
-
-            p {
-                color: $white;
-                font-size: larger;
-            }
-        }
     }
+
+    p {
+        color: $white;
+        font-size: larger;
+    }
+
 }
 
 .footer {

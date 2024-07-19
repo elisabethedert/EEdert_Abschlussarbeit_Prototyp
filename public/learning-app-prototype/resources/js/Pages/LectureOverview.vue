@@ -10,6 +10,7 @@ import Fig3 from '@/assets/Fig3.vue';
 
 defineProps({
     highestLectureInUnit: Number,
+    lectures: Object
 })
 </script>
 <template>
@@ -20,8 +21,9 @@ defineProps({
         <div class="intro-text">
             <h1>Lektionsübersicht</h1>
             <h2>Wähle eine Lektion aus, um Neues zu lernen</h2>
+            <!-- <h3>{{ lectures[0].number }}</h3> -->
         </div>
-        
+
         <!-- all lectures of unit -->
         <div class="lecture">
             <div class="lecture-container">
@@ -40,7 +42,7 @@ defineProps({
                     <Level :level="1" />
                 </div>
                 <div class="figure">
-                    <Fig1 />
+                    <Fig1 :width="95" />
                     <Link :class="{ disabled: highestLectureInUnit <= 0 }" href="lektion2" type="button"
                         class="btn btn-green">Lektion 2
                     <Arrow />
@@ -82,7 +84,7 @@ defineProps({
                     <Level :level="3" />
                 </div>
                 <div class="figure">
-                    <Fig2 />
+                    <Fig2 :width="95"/>
                     <Link :class="{ disabled: highestLectureInUnit <= 3 }" href="lektion5" type="button"
                         class="btn btn-green">Lektion 5
                     <Arrow />
@@ -122,7 +124,7 @@ defineProps({
                     <Level :level="3" />
                 </div>
                 <div class="figure">
-                    <Fig3 />
+                    <Fig3 :width="95"/>
                     <Link :class="{ disabled: highestLectureInUnit <= 6 }" href="lektion8" type="button"
                         class="btn btn-green">Lektion 8
                     <Arrow />
@@ -140,14 +142,6 @@ defineProps({
                 <Arrow />
                 </Link>
             </div>
-            <div class="lecture-container">
-                <div class="description">
-                </div>
-                <Link :class="{ disabled: highestLectureInUnit <= 8 }" href="lektion10" type="button"
-                    class="btn btn-green">Lektion 10
-                <Arrow />
-                </Link>
-            </div>
         </div>
         <div class="links">
             <Link href="/dashboard" type="button" class="btn btn-yellow">Link zurück zum Dashboard</Link>
@@ -161,6 +155,11 @@ defineProps({
 
 <style scoped lang="scss">
 @import '../../css/_main.scss';
+
+.intro-text {
+    margin-top: 2rem;
+    text-align: center;
+}
 
 .lecture-container {
 
@@ -177,6 +176,9 @@ defineProps({
     justify-content: center;
     align-items: center;
     margin: 2rem;
+    @include breakpoint("mobile") {
+        margin-inline: 0;
+    }
 
     &:nth-child(even) {
         flex-direction: row-reverse;

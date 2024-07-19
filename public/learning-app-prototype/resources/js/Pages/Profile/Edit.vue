@@ -1,5 +1,6 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import Footer from '@/Layouts/Footer.vue';
 import DeleteUserForm from './Partials/DeleteUserForm.vue';
 import UpdatePasswordForm from './Partials/UpdatePasswordForm.vue';
 import UpdateProfileInformationForm from './Partials/UpdateProfileInformationForm.vue';
@@ -29,6 +30,10 @@ defineProps({
                     <DeleteUserForm/>
             </div>
     </AuthenticatedLayout>
+    <Footer class="footer">
+        <p>AGB</p>
+        <p>Datenschutz</p>
+    </Footer>
 </template>
 
 <style scoped lang="scss">
@@ -37,12 +42,20 @@ defineProps({
 .input {
     margin-left: auto;
     margin-right: auto;
-    --space-y-reverse: 0;
-    margin-top: calc(1.5rem * calc(1 - var(--space-y-reverse)));
-    margin-bottom: calc(1.5rem * var(--space-y-reverse));
+    margin-top: 2rem;
+    margin-bottom: 2rem;
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
+}
+
+.footer {
+    padding-top: 4rem;
+
+    p {
+        padding: 0.25rem;
+        color: white;
+    }
 }
 </style>
 

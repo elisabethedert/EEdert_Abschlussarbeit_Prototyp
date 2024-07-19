@@ -1,4 +1,5 @@
 <script setup>
+import Footer from '@/Layouts/Footer.vue';
 import Checkbox from '@/Components/Checkbox.vue';
 import GuestLayout from '@/Layouts/GuestLayout.vue';
 import InputError from '@/Components/InputError.vue';
@@ -31,6 +32,7 @@ const submit = () => {
 
 <template>
     <GuestLayout class="layout-center">
+
         <Head title="Log in" />
         <h1>Einloggen</h1>
         <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
@@ -41,14 +43,8 @@ const submit = () => {
                 <div class="input-container">
                     <InputLabel for="email" value="Email:" />
 
-                    <TextInput
-                        id="email"
-                        type="email"
-                        v-model="form.email"
-                        required
-                        autofocus
-                        autocomplete="username"
-                    />
+                    <TextInput id="email" type="email" v-model="form.email" required autofocus
+                        autocomplete="username" />
 
                     <InputError class="error-msg" :message="form.errors.email" />
                 </div>
@@ -56,13 +52,8 @@ const submit = () => {
                 <div class="input-container">
                     <InputLabel for="password" value="Passwort:" />
 
-                    <TextInput
-                        id="password"
-                        type="password"
-                        v-model="form.password"
-                        required
-                        autocomplete="current-password"
-                    />
+                    <TextInput id="password" type="password" v-model="form.password" required
+                        autocomplete="current-password" />
 
                     <InputError class="error-msg" :message="form.errors.password" />
                 </div>
@@ -75,12 +66,8 @@ const submit = () => {
                 </div>
 
                 <div class="submit">
-                    <Link
-                        v-if="canResetPassword"
-                        :href="route('password.request')"
-                        class="btn-text link"
-                    >
-                        Passwort vergessen?
+                    <Link v-if="canResetPassword" :href="route('password.request')" class="btn-text link">
+                    Passwort vergessen?
                     </Link>
 
                     <PrimaryButton :disabled="form.processing">
@@ -88,14 +75,45 @@ const submit = () => {
                     </PrimaryButton>
 
                     <Link class="btn btn-green" :href="route('register')">
-                        Neues Konto erstellen
+                    Neues Konto erstellen
                     </Link>
                 </div>
             </form>
         </div>
+        <Link class="btn btn-text back" href="/">
+        Zurück
+        </Link>
+        <Footer class="footer">
+        <p>AGB</p>
+        <p>Datenschutz</p>
+    </Footer>
     </GuestLayout>
 </template>
 
 <style scoped lang="scss">
 @import '../../../css/_main.scss';
+
+h1 {
+    @include breakpoint("mobile") {
+        margin-block: 3rem;
+    }
+}
+
+.back {
+    margin-left: 25%;
+    padding-left: 2rem;
+    @include breakpoint("mobile") {
+        margin-left: 0;
+        padding-left: 1rem;
+    }
+}
+
+.footer {
+    padding-top: 4rem;
+
+    p {
+        padding: 0.25rem;
+        color: white;
+    }
+}
 </style>
