@@ -1,4 +1,5 @@
 <script setup>
+import Footer from '@/Layouts/Footer.vue';
 import GuestLayout from '@/Layouts/GuestLayout.vue';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
@@ -97,9 +98,40 @@ const submit = () => {
                 </div>
             </form>      
         </div>
+        <Link class="btn btn-text back" href="/">
+        Zurück
+        </Link>
+        <Footer class="footer">
+        <p>AGB</p>
+        <p>Datenschutz</p>
+    </Footer>
     </GuestLayout>
 </template>
 
 <style scoped lang="scss">
 @import '../../../css/_main.scss';
+
+h1 {
+    @include breakpoint("mobile") {
+        margin-block: 3rem;
+    }
+}
+
+.back {
+    margin-left: 25%;
+    padding-left: 2rem;
+    @include breakpoint("mobile") {
+        margin-left: 0;
+        padding-left: 1rem;
+    }
+}
+
+.footer {
+    padding-top: 4rem;
+
+    p {
+        padding: 0.25rem;
+        color: white;
+    }
+}
 </style>

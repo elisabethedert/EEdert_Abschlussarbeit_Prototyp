@@ -1,26 +1,34 @@
 <script setup>
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
-import { Link } from '@inertiajs/vue3';
+import Footer from '@/Layouts/Footer.vue';
+import Nav from '@/Components/Nav.vue';
+
 </script>
 
 <template>
     <div class="guest-layout">
-        <!-- Logo
-        <div class="logo">
-            <Link :href="route('/')" as="button">
-                <ApplicationLogo class="logo-icon" />
-            </Link>
-        </div> -->
-        <div>
+
+        <main class="main">
             <slot />
-        </div>
+        </main>
     </div>
 </template>
 <style scoped lang="scss">
 @import '../../css/_main.scss';
 
-.guest-layout {
-    min-height: 100vh;
-    background-color: $background;
+.main {
+    margin-top: 3rem;
+    padding: 0 2rem;
+
+    @include breakpoint("mobile") {
+        margin-top: 0rem;
+    }
+
+    .guest-layout {
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: $background;
+    }
 }
 </style>

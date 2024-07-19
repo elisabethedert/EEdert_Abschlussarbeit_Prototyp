@@ -1,0 +1,23 @@
+<script setup>
+</script>
+
+<template>
+    <svg class="share" width="20" height="20" viewBox="0 0 49 45" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <desc>Ein Teilen-Icon</desc>
+        <path
+            d="M6.10187 35.6159C14.9782 28.3493 23.7552 20.9569 32.6248 13.6829C35.1167 11.6387 31.7731 7.92111 29.2887 9.95863C20.4124 17.2252 11.6354 24.6176 2.76573 31.8916C0.273888 33.9358 3.61747 37.6534 6.10187 35.6159Z"
+            fill="#ffffff" />
+        <path
+            d="M4.43211 37.0396C15.8828 37.7271 27.346 38.2547 38.7969 38.9321C42.0144 39.1219 42.0818 34.1224 38.8744 33.9327C27.4236 33.2453 15.9604 32.7177 4.50955 32.0402C1.2921 31.8504 1.22467 36.8499 4.43211 37.0396Z"
+            fill="#ffffff" />
+        <circle cx="32.5" cy="8.5" r="8.5" fill="#ffffff" />
+        <circle cx="40.5" cy="36.5" r="8.5" fill="#ffffff" />
+    </svg>
+
+</template>
+
+<style scoped lang="scss">
+.share {
+    margin-left: 4px;
+}
+</style>

@@ -9,6 +9,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
+// start page
 Route::get('/', function () {
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
@@ -18,30 +19,33 @@ Route::get('/', function () {
     ]);
 });
 
+// dashboard with units
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
+// profile page
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-//Spielübersicht
+// lecture overview
 Route::get('unit{unit}/lektionen',[LectureOverviewController::class, 'index'])->middleware(['auth', 'verified']);
 
-//Spielseite der einzelnen Lektionen
+// lecture with questions
 Route::get('unit1/lektion{lecture}',[LectureController::class, 'index'])->middleware(['auth', 'verified']);
 
-//Ergebnisse nach Lektion 
-Route::get('unit1/lektion{lecture}/result/{session}', [LectureController::class, 'results'])->middleware(['auth', 'verified'])->name('results');
+// lecture result
+Route::get('unit1/lektion{lecture}/result{session}', [LectureController::class, 'results'])->middleware(['auth', 'verified'])->name('results');
 
 Route::post('/question_results', [QuestionResultsController::class, 'store'])->middleware(['auth', 'verified'])->name('results');
 Route::get('/question_results', [QuestionResultsController::class, 'checkExistence'])->middleware(['auth', 'verified']);
 Route::put('/question_results', [QuestionResultsController::class, 'updateCounter'])->middleware(['auth', 'verified']);
 
+// fallback route with error 404
 Route::fallback(function () {
     return Inertia::render('NotFound');
 });

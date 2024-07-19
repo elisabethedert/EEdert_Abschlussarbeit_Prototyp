@@ -4,6 +4,7 @@
 <template>
     <div class="figure">
         <svg width="200" height="200" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <desc>Eine Figur bestehend aus Beinen drei Kreisen und Kulleraugen bewegt sich fröhlich</desc>
             <circle class="figur1-2" cx="255" cy="238" r="75" fill="#67917B" />
             <circle class="figur1-1" cx="255" cy="117" r="75" fill="#67917B" />
             <circle class="figur1-3" cx="255" cy="359" r="75" fill="#67917B" />
@@ -26,14 +27,10 @@
 @import '../../../css/_main.scss';
 
 .figur1-1 {
-    animation-delay: 0.6s;
-}
-
-.figur1-2 {
     animation-delay: 0.4s;
 }
 
-.figur1-3 {
+.figur1-2 {
     animation-delay: 0.2s;
 }
 
@@ -44,7 +41,7 @@
     animation-duration: 0.8s;
     animation-direction: alternate;
     animation-timing-function: ease-in-out;
-    animation-iteration-count: 4;
+    animation-iteration-count: 2;
 }
 
 @keyframes dance1 {

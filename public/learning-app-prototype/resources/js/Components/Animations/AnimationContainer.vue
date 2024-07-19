@@ -1,39 +1,37 @@
 <script setup>
 
 defineProps({
-    showXp: Boolean
+    showXp: Boolean,
+    xp: Number
 })
 </script>
 
 <template>
-    <div class="dance3">
-
-        <div class="animation">
-
-            <div class="result">
-                <div class="xp" v-if="showXp">
-                    <svg width="60" height="60" viewBox="0 0 172 181" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="102.501" cy="116.15" r="64.4146" fill="#67917B" />
-                        <circle cx="102.501" cy="110.5" r="64.4146" fill="#E3A328" />
-                        <path
-                            d="M97.1262 57.539C98.8176 52.3332 106.182 52.3332 107.874 57.539L116.835 85.119C117.592 87.4471 119.761 89.0233 122.209 89.0233L151.208 89.0233C156.682 89.0233 158.958 96.0276 154.529 99.245L131.069 116.29C129.088 117.729 128.26 120.28 129.016 122.608L137.977 150.188C139.669 155.393 133.71 159.722 129.282 156.505L105.821 139.46C103.841 138.021 101.159 138.021 99.1788 139.46L75.7178 156.505C71.2896 159.722 65.3313 155.393 67.0228 150.188L75.9841 122.608C76.7405 120.28 75.9118 117.729 73.9314 116.29L50.4705 99.245C46.0422 96.0276 48.3181 89.0233 53.7917 89.0233L82.791 89.0233C85.2389 89.0233 87.4084 87.4471 88.1649 85.119L97.1262 57.539Z"
-                            fill="#FFD521" />
-                        <path
-                            d="M82.5045 121.481V99.2553H88.1237V121.481H82.5045ZM74.2013 113.178V107.559H96.4268V113.178H74.2013ZM114.607 126.818C112.263 126.818 110.175 126.415 108.344 125.609C106.523 124.793 105.085 123.673 104.028 122.25C102.981 120.816 102.442 119.163 102.411 117.29H109.254C109.296 118.075 109.553 118.765 110.024 119.362C110.505 119.948 111.143 120.403 111.938 120.727C112.734 121.052 113.628 121.214 114.622 121.214C115.658 121.214 116.574 121.031 117.369 120.665C118.165 120.298 118.787 119.791 119.237 119.142C119.687 118.493 119.912 117.745 119.912 116.898C119.912 116.04 119.671 115.281 119.19 114.622C118.719 113.952 118.039 113.429 117.15 113.052C116.271 112.675 115.224 112.487 114.01 112.487H111.012V107.496H114.01C115.036 107.496 115.941 107.318 116.726 106.962C117.521 106.606 118.138 106.114 118.578 105.487C119.017 104.848 119.237 104.105 119.237 103.258C119.237 102.452 119.044 101.746 118.656 101.139C118.28 100.521 117.746 100.04 117.055 99.6948C116.375 99.3495 115.58 99.1768 114.67 99.1768C113.749 99.1768 112.906 99.3443 112.142 99.6791C111.379 100.003 110.766 100.469 110.306 101.076C109.846 101.683 109.6 102.395 109.568 103.211H103.054C103.086 101.359 103.614 99.7262 104.64 98.3136C105.665 96.9009 107.047 95.797 108.784 95.0017C110.531 94.196 112.503 93.7931 114.701 93.7931C116.919 93.7931 118.86 94.196 120.524 95.0017C122.188 95.8074 123.48 96.8957 124.401 98.2665C125.332 99.6268 125.793 101.155 125.782 102.85C125.793 104.65 125.233 106.151 124.103 107.354C122.983 108.558 121.523 109.322 119.724 109.646V109.897C122.089 110.201 123.888 111.022 125.123 112.362C126.368 113.69 126.986 115.354 126.975 117.353C126.986 119.184 126.457 120.811 125.39 122.234C124.333 123.657 122.873 124.777 121.011 125.593C119.148 126.409 117.013 126.818 114.607 126.818Z"
-                            fill="#103A51" />
-                        <path d="M2.99971 59.7515C10.3384 59.933 25.8259 60.7792 29.0666 62.7125" stroke="#103A51"
-                            stroke-width="5" stroke-linecap="round" class="draw" />
-                        <path d="M32.8637 18.5648C37.6592 24.1229 47.4363 36.164 48.1812 39.8633" stroke="#103A51"
-                            stroke-width="5" stroke-linecap="round" class="draw" />
-                        <path d="M76.0882 3.00002C77.655 10.1718 80.5115 25.4171 79.4033 29.0243" stroke="#103A51"
-                            stroke-width="5" stroke-linecap="round" class="draw" />
-                    </svg>
-                </div>
-                <slot name="result"></slot>
+    <div class="animation">
+        <div class="result">
+            <div class="xp" v-if="showXp">
+                <svg width="60" height="60" viewBox="0 0 172 181" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <desc>Ein Geldstück mit der entsprechenden Zahl an Experience Points die man sich erspielt hat</desc>
+                    <circle cx="102.501" cy="116.15" r="64.4146" fill="#67917B" />
+                    <circle cx="102.501" cy="110.5" r="64.4146" fill="#E3A328" />
+                    <path
+                        d="M97.1262 57.539C98.8176 52.3332 106.182 52.3332 107.874 57.539L116.835 85.119C117.592 87.4471 119.761 89.0233 122.209 89.0233L151.208 89.0233C156.682 89.0233 158.958 96.0276 154.529 99.245L131.069 116.29C129.088 117.729 128.26 120.28 129.016 122.608L137.977 150.188C139.669 155.393 133.71 159.722 129.282 156.505L105.821 139.46C103.841 138.021 101.159 138.021 99.1788 139.46L75.7178 156.505C71.2896 159.722 65.3313 155.393 67.0228 150.188L75.9841 122.608C76.7405 120.28 75.9118 117.729 73.9314 116.29L50.4705 99.245C46.0422 96.0276 48.3181 89.0233 53.7917 89.0233L82.791 89.0233C85.2389 89.0233 87.4084 87.4471 88.1649 85.119L97.1262 57.539Z"
+                        fill="#FFD521" />
+                    <path d="M2.99971 59.7515C10.3384 59.933 25.8259 60.7792 29.0666 62.7125" stroke="#103A51"
+                        stroke-width="5" stroke-linecap="round" class="draw" />
+                    <path d="M32.8637 18.5648C37.6592 24.1229 47.4363 36.164 48.1812 39.8633" stroke="#103A51"
+                        stroke-width="5" stroke-linecap="round" class="draw" />
+                    <path d="M76.0882 3.00002C77.655 10.1718 80.5115 25.4171 79.4033 29.0243" stroke="#103A51"
+                        stroke-width="5" stroke-linecap="round" class="draw" />
+                    <foreignObject class="xp-input" x="85" y="65" width="160" height="160">
+                        <p><b> {{ xp }}</b></p>
+                    </foreignObject>
+                </svg>
             </div>
-            <div class="figure">
-                <slot name="figure"></slot>
-            </div>
+            <slot name="result"></slot>
+        </div>
+        <div class="figure">
+            <slot name="figure"></slot>
         </div>
     </div>
 </template>
@@ -41,36 +39,29 @@ defineProps({
 <style scoped lang="scss">
 @import '../../../css/_main.scss';
 
-
-.dance3 {
-    background: $background-light;
-    position: absolute;
-    top: 60%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+.animation {
     display: flex;
     align-items: center;
-    flex-direction: column;
 
-    .animation {
+    .result {
+
+        border-radius: 25px;
         display: flex;
         align-items: center;
+        justify-content: center;
+        flex-direction: column;
 
-        .result {
+        .xp-input {
+            color: $blue;
+            font-size: 4.5rem;
+        }
 
-            border-radius: 25px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-
-            h3 {
-                margin-left: 10px;
-                margin-top: 10px;
-                font-size: 1.5rem;
-                text-align: center;
-                color: $blue;
-            }
+        h3 {
+            margin-left: 10px;
+            margin-top: 10px;
+            font-size: 1.5rem;
+            text-align: center;
+            color: $blue;
         }
     }
 }
@@ -83,42 +74,6 @@ defineProps({
 @keyframes dashdraw {
     to {
         stroke-dashoffset: 200;
-    }
-}
-
-.figur1-1 {
-    animation-delay: 0.6s;
-}
-
-.figur1-2 {
-    animation-delay: 0.4s;
-}
-
-.figur1-3 {
-    animation-delay: 0.2s;
-}
-
-.figur1-1,
-.figur1-2,
-.figur1-3 {
-    animation-name: dance1;
-    animation-duration: 0.8s;
-    animation-direction: alternate;
-    animation-timing-function: ease-in-out;
-    animation-iteration-count: 4;
-}
-
-@keyframes dance1 {
-    0% {
-        transform: translateX(0px);
-    }
-
-    50% {
-        transform: translateX(-25px);
-    }
-
-    100% {
-        transform: translateX(25px);
     }
 }
 </style>

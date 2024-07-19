@@ -2,12 +2,27 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\QuestionResults;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class LectureOverviewController extends Controller
 {
-    public function index()
+    /**
+     * Display the lecture overview.
+     */
+    public function index(Request $request)
     {
-        return Inertia::render('LectureOverview');
+
+        $lectures = [['number' => 1, 'topic' => 'Introduction'], ['number' => 2, 'topic' => 'Variables'], ['number' => 3, 'topic' => 'Functions'],];
+
+        $highestLectureInUnit = QuestionResults::where('unit', $request->route('unit'))
+            ->where('user_id', $request->user()->id)
+            ->max('lecture');
+
+        return Inertia::render('LectureOverview', [
+            'highestLectureInUnit' => $highestLectureInUnit,
+            'lectures' => $lectures,
+        ]);
     }
 }

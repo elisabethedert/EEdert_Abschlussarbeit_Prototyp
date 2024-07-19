@@ -1,15 +1,20 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import Arrow from '@/assets/Arrow.vue';
-import { Head, Link, router } from '@inertiajs/vue3';
-import { ref, computed, onMounted, onUnmounted } from 'vue';
+import Footer from '@/Layouts/Footer.vue';
+import { Head, Link } from '@inertiajs/vue3';
+import { onMounted, onUnmounted } from 'vue';
 import Fig1 from '@/assets/Fig1.vue';
 import Fig2 from '@/assets/Fig2.vue';
 import Fig3 from '@/assets/Fig3.vue';
+import Circle from '@/Components/Circle.vue';
+import Blink from '@/assets/Blink.vue';
 
 const props = defineProps({
-    sessionCount: Number
+    streak: Number,
+    lectureCount: Number,
+    currentLecture: Number
 })
+
 const handleScroll = (event) => {
     const delta = Math.max(-1, Math.min(1, (event.wheelDelta || -event.detail)));
     const scrolling = event.target.closest('.units');
@@ -17,16 +22,25 @@ const handleScroll = (event) => {
     event.preventDefault();
 };
 
-const scrollContainer = document.querySelector('.units');
 onMounted(() => {
+    // add scrolling
+    const scrollContainer = document.querySelector('.units');
     if (scrollContainer === null) {
         return;
     }
     scrollContainer.addEventListener('mousewheel', handleScroll);
     scrollContainer.addEventListener('DOMMouseScroll', handleScroll);
+
+    // progressbar
+    var count = props.currentLecture;
+    var maxCount = props.lectureCount;
+    count = count === maxCount ? maxCount : count + 1;
+    progressbar(count, maxCount);
 });
 
 onUnmounted(() => {
+    // remove scrolling
+    const scrollContainer = document.querySelector('.units');
     if (scrollContainer === null) {
         return;
     }
@@ -34,7 +48,10 @@ onUnmounted(() => {
     scrollContainer.removeEventListener('DOMMouseScroll', handleScroll);
 });
 
-
+function progressbar(count, maxCount) {
+    var newWidth = (count / maxCount) * 100 + "%";
+    document.getElementsByClassName("progress-bar")[0].style.width = newWidth;
+}
 </script>
 
 <template>
@@ -43,208 +60,189 @@ onUnmounted(() => {
 
     <AuthenticatedLayout>
         <div class="intro-text">
-            <h1>Hey {{ $page.props.auth.user.name }}!<br>Schön dich zu sehen!</h1>
+            <h1>Hey {{ $page.props.auth.user.name }},</h1>
+            <h2>Schön dich zu sehen!</h2>
         </div>
+
         <div class="player-info">
-            <div class="circle">
-                <svg width="250" height="258" viewBox="0 0 250 258" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="125" cy="125" r="125" transform="matrix(-1 0 0 1 250 8)" fill="#CCC8C8" />
-                    <circle cx="125" cy="125" r="125" transform="matrix(-1 0 0 1 250 0)" fill="#67917B" />
-                </svg>
-                <div class="content">
-                    <h3> {{ $page.props.auth.user.experience_points }}</h3>
-                    <p>Punkte</p>
-                </div>
-            </div>
-            <div class="circle">
-                <svg width="250" height="258" viewBox="0 0 250 258" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="125" cy="125" r="125" transform="matrix(-1 0 0 1 250 8)" fill="#CCC8C8" />
-                    <circle cx="125" cy="125" r="125" transform="matrix(-1 0 0 1 250 0)" fill="#67917B" />
-                </svg>
-                <div class="content">
-                    <h3>{{ sessionCount }}</h3>
-                    <p>Streak</p>
-                </div>
-            </div>
+            <Circle :width="100" bgColor="67917B">
+                <h3> {{ $page.props.auth.user.experience_points }}</h3>
+                <p>Punkte</p>
+            </Circle>
+
+            <Fig3 :width="75" />
+
+            <Circle :width="100" bgColor="67917B">
+                <h3>{{ streak }}</h3>
+                <p>Streak</p>
+            </Circle>
         </div>
         <div class="intro-text">
             <p><b>Hinter jeder Unit verbirgt sich ein neuer Schwerpunkt, den du vertiefen kannst.</b></p>
         </div>
-        <div class="units" id="scroll">
-            <div class="circle">
-                <svg width="300" height="258" viewBox="0 0 250 258" fill="none" xmlns="http://www.w3.org/2000/svg">
-
-                </svg>
-                <div class="content">
-                    <Fig1 class="figure" />
+        <div class="container">
+            <!-- al units in scrollcontainer -->
+            <div class="units">
+                <Circle :width="250" bgColor="67917B">
                     <h3>Grundlagen</h3>
+                    <p>{{ currentLecture }} / {{ lectureCount }}</p>
+                    <div class="progress dark">
+                        <div class="progress-bar">
+                            <span style="width: 40%;"></span>
+                        </div>
+                    </div>
                     <Link :class="{ disabled: $page.props.auth.user.unit <= 1 }" href="unit1/lektionen" type="button"
                         class="btn btn-yellow">Unit 1
-                    <!-- <Arrow /> -->
                     </Link>
-                </div>
-            </div>
-            <div class="circle light">
-                <svg width="300" height="258" viewBox="0 0 250 258" fill="none" xmlns="http://www.w3.org/2000/svg">
-                </svg>
-                <div class="content">
-                    <Fig2 class="figure" />
-                    <h3>Security <br>Principles</h3>
+                </Circle>
+                <Circle :width="250" bgColor="103A51">
+                    <h3>Design Principles</h3>
+                    <p> 1 / 10 </p>
+                    <div class="progress dark">
+                        <div class="progress-bar">
+                            <span style="width: 40%;"></span>
+                        </div>
+                    </div>
                     <Link :class="{ disabled: $page.props.auth.user.unit <= 1 }" href="unit1/lektionen" type="button"
                         class="btn btn-yellow">Unit 2
-                    <!-- <Arrow /> -->
                     </Link>
-                </div>
-            </div>
-            <div class="circle">
-                <svg width="300" height="258" viewBox="0 0 250 258" fill="none" xmlns="http://www.w3.org/2000/svg">
-                </svg>
-                <div class="content">
-                    <Fig3 class="figure" />
-                    <h3>Security <br> Fokus Areas</h3>
+                </Circle>
+                <Circle :width="250" bgColor="FBF4CE">
+                    <h3>Design Fokus Areas</h3>
+                    <p> 1 / 10 </p>
+                    <div class="progress light">
+                        <div class="progress-bar">
+                            <span style="width: 40%;"></span>
+                        </div>
+                    </div>
                     <Link :class="{ disabled: $page.props.auth.user.unit <= 1 }" href="unit1/lektionen" type="button"
                         class="btn btn-yellow">Unit 3
-                    <!-- <Arrow /> -->
                     </Link>
-                </div>
-            </div>
-            <div class="circle">
-                <svg width="300" height="258" viewBox="0 0 250 258" fill="none" xmlns="http://www.w3.org/2000/svg">
-                </svg>
-                <div class="content">
-                    <Fig3 class="figure" />
-                    <h3>Security <br> Fokus Areas</h3>
+                </Circle>
+                <Circle :width="250" bgColor="67917B">
+                    <h3>Injection</h3>
+                    <p> 1 / 10 </p>
+                    <div class="progress dark">
+                        <div class="progress-bar">
+                            <span style="width: 40%;"></span>
+                        </div>
+                    </div>
                     <Link :class="{ disabled: $page.props.auth.user.unit <= 1 }" href="unit1/lektionen" type="button"
-                        class="btn btn-yellow">Unit 3
-                    <!-- <Arrow /> -->
+                        class="btn btn-yellow">Unit 4
                     </Link>
-                </div>
-            </div>
-            <div class="circle">
-                <svg width="300" height="258" viewBox="0 0 250 258" fill="none" xmlns="http://www.w3.org/2000/svg">
-                </svg>
-                <div class="content">
-                    <Fig3 class="figure" />
-                    <h3>Security <br> Fokus Areas</h3>
-                    <Link :class="{ disabled: $page.props.auth.user.unit <= 1 }" href="unit1/lektionen" type="button"
-                        class="btn btn-yellow">Unit 3
-                    <!-- <Arrow /> -->
+                </Circle>
+                <Circle :width="250" bgColor="103A51">
+                    <h3>Zugriffskontrolle</h3>
+                    <p> 1 / 10 </p>
+                    <div class="progress dark">
+                        <div class="progress-bar">
+                            <span style="width: 40%;"></span>
+                        </div>
+                    </div>
+                    <Link href="unit1/lektionen" type="button" class="btn btn-yellow">Unit 5
                     </Link>
-                </div>
+                </Circle>
             </div>
-            <div class="circle">
-                <svg width="300" height="258" viewBox="0 0 250 258" fill="none" xmlns="http://www.w3.org/2000/svg">
-                </svg>
-                <div class="content">
-                    <Fig3 class="figure" />
-                    <h3>Security <br> Fokus Areas</h3>
-                    <Link :class="{ disabled: $page.props.auth.user.unit <= 1 }" href="unit1/lektionen" type="button"
-                        class="btn btn-yellow">Unit 3
-                    <!-- <Arrow /> -->
-                    </Link>
-                </div>
-            </div>
-            <div class="circle">
-                <svg width="300" height="258" viewBox="0 0 250 258" fill="none" xmlns="http://www.w3.org/2000/svg">
-                </svg>
-                <div class="content">
-                    <Fig3 class="figure" />
-                    <h3>Security <br> Fokus Areas</h3>
-                    <Link :class="{ disabled: $page.props.auth.user.unit <= 1 }" href="unit1/lektionen" type="button"
-                        class="btn btn-yellow">Unit 3
-                    <!-- <Arrow /> -->
-                    </Link>
-                </div>
-            </div>
+            <Blink class="blink" :width="50" />
         </div>
     </AuthenticatedLayout>
+    <Footer class="footer">
+        <p>AGB</p>
+        <p>Datenschutz</p>
+    </Footer>
 </template>
 
 <style scoped lang="scss">
 @import '../../css/_main.scss';
 
-
 .intro-text {
     text-align: center;
+    margin-top: 2rem;
 }
 
-.units {
-    overflow: auto;
+.container {
     display: flex;
-    flex-direction: row;
-    background-color: $background-light;
-    border-radius: 25px;
-    margin: 2rem;
 
-    .circle {
-        position: relative;
-        margin: 3rem;
-        width: 300px;
-        height: 310px;
+    .units {
+        overflow: auto;
+        display: flex;
+        flex-direction: row;
+        background-color: $background-light;
+        border-radius: 25px;
+        margin: 2rem;
 
-        &:nth-child(3n+1) {
-            background-image: url('data:image/svg+xml,%3Csvg width="250" height="258" viewBox="0 0 250 258" fill="none" xmlns="http://www.w3.org/2000/svg"%3E%3Ccircle cx="125" cy="125" r="125" transform="matrix(-1 0 0 1 250 8)" fill="%23CCC8C8" /%3E%3Ccircle cx="125" cy="125" r="125" transform="matrix(-1 0 0 1 250 0)" fill="%2367917B" /%3E%3C/svg%3E');
+        h3 {
+            margin-bottom: 0.25rem;
         }
 
-        &:nth-child(3n+2) {
-            background-image: url('data:image/svg+xml,%3Csvg width="250" height="258" viewBox="0 0 250 258" fill="none" xmlns="http://www.w3.org/2000/svg"%3E%3Ccircle cx="125" cy="125" r="125" transform="matrix(-1 0 0 1 250 8)" fill="%23CCC8C8" /%3E%3Ccircle cx="125" cy="125" r="125" transform="matrix(-1 0 0 1 250 0)" fill="%23FBF4CE" /%3E%3C/svg%3E');
+        :nth-child(3n+1),
+        :nth-child(3n+2) {
 
-            h3 {
-                color: $blue !important;
-            }
-        }
-
-        &:nth-child(3n) {
-            background-image: url('data:image/svg+xml,%3Csvg width="250" height="258" viewBox="0 0 250 258" fill="none" xmlns="http://www.w3.org/2000/svg"%3E%3Ccircle cx="125" cy="125" r="125" transform="matrix(-1 0 0 1 250 8)" fill="%23CCC8C8" /%3E%3Ccircle cx="125" cy="125" r="125" transform="matrix(-1 0 0 1 250 0)" fill="%23103A51" /%3E%3C/svg%3E');
-        }
-
-        background-size: cover;
-
-        @include breakpoint('mobile') {
-            width: 210px;
-            height: 217px;
-        }
-
-
-        .content {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-            display: flex;
-            gap: 1rem;
-            flex-direction: column;
-            align-items: center;
-
-            .figure {
-                position: relative;
-                width: 55px;
-
-                @include breakpoint('mobile') {
-                    display: none;
-                }
-            }
-
-            h3 {
-                color: $white;
-                font-size: 1.75rem;
-
-                @include breakpoint('mobile') {
-                    font-size: 1.25rem;
-                }
-            }
-
+            h3,
             p {
                 color: $white;
-                font-size: larger;
             }
         }
 
+        :nth-child(3n) {
 
+            h3,
+            p {
+                color: $blue;
+            }
+        }
+
+        .progress {
+            width: 150px;
+            height: 20px;
+            align-items: first baseline;
+            display: flex;
+            border-radius: 50px;
+
+            &-bar {
+                border-radius: 50px;
+                width: 20%;
+                height: 15px;
+                background-color: $yellow;
+                color: #ffffff;
+                display: flex;
+                align-items: center;
+
+                span {
+                    text-align: center;
+                    margin-left: 10px;
+                }
+            }
+
+            &.dark {
+                background-color: $background-light;
+            }
+
+            &.light {
+                background-color: $blue;
+            }
+        }
+
+        .figure {
+            width: 55px;
+        }
+
+        .content {
+
+            .btn {
+                margin-top: 1rem;
+            }
+        }
+    }
+
+    .blink {
+        margin-left: -30px;
+
+        @include breakpoint('mobile') {
+            width: 30%;
+        }
     }
 }
-
 
 .player-info {
     display: flex;
@@ -252,48 +250,30 @@ onUnmounted(() => {
     align-items: center;
     margin-block: 2rem;
     gap: 2rem;
-
+    
     @include breakpoint('mobile') {
-        flex-direction: column;
+        gap: 0;
     }
 
-    .circle {
-        position: relative;
-        width: 100px;
-        height: 100px;
+    h3 {
+        color: $white;
+        font-size: 1.5rem;
 
-        @include breakpoint('mobile') {
-            width: 150px;
-            height: 150px;
-        }
+    }
 
-        svg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            fill: $green;
-        }
+    p {
+        color: $white;
+        font-size: larger;
+    }
 
-        .content {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
+}
 
-            h3 {
-                color: $white;
-                font-size: 1.5rem;
+.footer {
+    padding-top: 4rem;
 
-            }
-
-            p {
-                color: $white;
-                font-size: larger;
-            }
-        }
+    p {
+        padding: 0.25rem;
+        color: white;
     }
 }
 </style>
