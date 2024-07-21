@@ -21,7 +21,9 @@ defineProps({
 const showTick = ref(false);
 const showShare = ref(true);
 
-// copies current url to clipboard
+/**
+ * copies current url to clipboard
+ */
 function copyToClipboard() {
     const url = window.location.href;
     navigator.clipboard.writeText(url);
@@ -32,7 +34,6 @@ function copyToClipboard() {
         showShare.value = true;
     }, 2000);
 }
-
 </script>
 
 <template>

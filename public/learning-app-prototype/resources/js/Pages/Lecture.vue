@@ -1,7 +1,6 @@
-<style scoped>
-@import '../../css/_main.scss';
-</style>
 <script setup>
+// inspired by William Juma - Laraphant, W3Schools, ChatGPT
+
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import AnimationContainer from '@/Components/Animations/AnimationContainer.vue';
 import HappyDance from '@/Components/Animations/HappyDance.vue';
@@ -15,15 +14,13 @@ import { Head, router } from '@inertiajs/vue3';
 import { ref, computed, onMounted } from 'vue';
 import axios from 'axios';
 
-
-const currentSession = crypto.randomUUID();
-
 const props = defineProps({
     questions: Object
 })
 
 const lectureQuestionCount = props.questions.length;
 const lecureQuestionRepeatCount = ref(0);
+const currentSession = crypto.randomUUID();
 
 const isPopupVisible = ref(false);
 
@@ -39,6 +36,38 @@ const showQuestion = ref(true);
 
 var count = 0;
 
+const sentenceParts = ref([]);
+const draggedItem = ref(null);
+const dropTargets = ref({});
+
+/**
+ * get the current question
+ * @returns {Object} current question
+ */
+const currentQuestion = computed(() => {
+    if (props.questions[currentIndex.value].type === 'dd') {
+        splitString(props.questions[currentIndex.value].question);
+    }
+    return props.questions[currentIndex.value]
+})
+
+/**
+ * check if the current question is the last question
+ */
+const isLastQuestion = computed(() => currentIndex.value === props.questions.length - 1)
+
+/**
+ * get the current answers
+ * @returns {Array} current answers
+ */
+const answers = computed(() => {
+    return props.questions[currentIndex.value].answers
+})
+
+
+/**
+ * show or hide the help popup containing information about processing
+ */
 function showHelpPopup() {
     if (isPopupVisible.value) {
         isPopupVisible.value = false;
@@ -47,24 +76,18 @@ function showHelpPopup() {
     }
 }
 
-const currentQuestion = computed(() => {
-    if (props.questions[currentIndex.value].type === 'dd') {
-        splitString(props.questions[currentIndex.value].question);
-    }
-    return props.questions[currentIndex.value]
-})
-
-const isLastQuestion = computed(() => currentIndex.value === props.questions.length - 1)
-
-const answers = computed(() => {
-    return props.questions[currentIndex.value].answers
-})
-
-
+/**
+ * set the selected answer
+ * @param index of the selected answer
+ 
+ */
 function selectedOption(index) {
     selectedAnswer.value = index
 }
 
+/**
+ * hide the result with animation
+ */
 function hideResult() {
     resultFirstCorrect.value = false;
     resultRepeatCorrect.value = false;
@@ -72,6 +95,9 @@ function hideResult() {
     showQuestion.value = true;
 }
 
+/**
+ * save the result of the mc question with axios and get response about the evluation of that questionresult
+ */
 function saveMcResult() {
     axios.post('/question_results', {
         question_id: props.questions[currentIndex.value].id,
@@ -84,7 +110,7 @@ function saveMcResult() {
         if (response.data.message == "firstcorrect") {
             result.value++;
             resultFirstCorrect.value = true;
-        } else if  (response.data.message == "repeatcorrect") {
+        } else if (response.data.message == "repeatcorrect") {
             result.value++;
             resultRepeatCorrect.value = true;
         }
@@ -92,15 +118,18 @@ function saveMcResult() {
             resultIncorrect.value = true;
             // add wrong answered question to the end of the questions array
             lecureQuestionRepeatCount.value++;
-            props.questions.push(props.questions[currentIndex.value-1]);
+            props.questions.push(props.questions[currentIndex.value - 1]);
         }
     }).catch(error => {
         console.error(error);
     });
 }
 
+/**
+ * save the result of the dd question with axios and get response about the evluation of that questionresult
+ */
 function saveDdResult() {
-
+    // contains the order of the dropped buttons
     const droppedButtons = ref([]);
     droppedButtons.value = Array.from(document.querySelectorAll('.dropbox button')).map(button => button.textContent);
 
@@ -116,7 +145,7 @@ function saveDdResult() {
             result.value++;
             resultFirstCorrect.value = true;
 
-        } else if  (response.data.message == "repeatcorrect") {
+        } else if (response.data.message == "repeatcorrect") {
             result.value++;
             resultRepeatCorrect.value = true;
         }
@@ -124,13 +153,17 @@ function saveDdResult() {
             resultIncorrect.value = true;
             // add wrong answered question to the end of the questions array
             lecureQuestionRepeatCount.value++;
-            props.questions.push(props.questions[currentIndex.value-1]);
+            props.questions.push(props.questions[currentIndex.value - 1]);
         }
     }).catch(error => {
         console.error(error);
     });
 }
 
+/**
+ * check if any dropboxes are empty
+ * @returns {boolean} true if any dropbox is empty
+ */
 function dropboxEmpty() {
     const dropboxes = document.querySelectorAll('.dropbox');
     for (let dropbox of dropboxes) {
@@ -141,7 +174,11 @@ function dropboxEmpty() {
     return false
 }
 
+/**
+ * show the next question and call save methods for current question
+ */
 function nextQuestion() {
+    // check if current question is completed
     if (props.questions[currentIndex.value].type === "dd" && (dropboxEmpty())) {
         return;
     }
@@ -157,7 +194,7 @@ function nextQuestion() {
     // show next question
     currentIndex.value++;
 
-    //Check if there are associated buttons in dropbox spans
+    // check if there are associated buttons in dropbox spans and clear them
     const dropboxSpans = document.querySelectorAll('.dropbox button');
     if (dropboxSpans.length > 0) {
         // Move the buttons back to the answer-dd div
@@ -176,6 +213,9 @@ function nextQuestion() {
     progressbar(count, maxCount);
 }
 
+/**
+ * call the result page and save the last question
+ */
 function calculateResult() {
     setTimeout(hideResult, 4000);
     showQuestion.value = false;
@@ -191,87 +231,128 @@ function calculateResult() {
     }, 2000);
 }
 
+/**
+ * progressbar 
+ * @param {number} count current question
+ * @param {number} maxCount number of ll questions
+ */
 function progressbar(count, maxCount) {
     var newWidth = (count / maxCount) * 100 + "%";
     document.getElementsByClassName("progress-bar")[0].style.width = newWidth;
 }
 
-const sentenceParts = ref([]);
-const draggedItem = ref(null);
-const dropTargets = ref({});
-
+/**
+ * check if the part is a gap
+ * @param {string} part of the question
+ * @returns {boolean} true if the part is a gap
+ */
 function isGap(part) {
-    // true wenn der Teil aus Unterstrichen besteht
+    // true if the part is a gap
     return /^___+$/.test(part.trim());
 };
 
+/**
+ * calculates the number of ‘gaps’ (elements containing three underscores) 
+   in the `sentenceParts.value` array up to a specified index
+ * @param {number} index of the part
+ * @returns {number} number of gaps
+ */
 const gapIndex = (index) => {
     return sentenceParts.value.slice(0, index).filter(isGap).length;
 };
 
+/**
+ * split the question string into parts
+ * @param {string} currentQ current question
+ */
 function splitString(currentQ) {
-    // Rexex erkennt Unterstriche im String
+    // regex detects underscores in the string
     const regex = /(_{3})(?=[,.\s]|$)/g
     let parts = currentQ.split(regex);
 
-    // Entferne leere Einträge aus dem parts Array
+    // remove empty parts from the parts array
     parts = parts.filter(part => part !== undefined && part !== "");
     for (let i = 0; i < parts.length; i++) {
         sentenceParts.value.push(parts[i]);
     }
 };
 
+/**
+ * allow drop event
+ * @param event 
+ */
 function allowDrop(event) {
     event.preventDefault();
 }
 
+/**
+ * allow drag event
+ * @param event 
+ */
 function drag(event) {
-    draggedItem.value = { id: event.target.id, originalContainer: event.target.parentElement };
+    draggedItem.value = {
+        id: event.target.id,
+        originalContainer: event.target.parentElement
+    };
     event.dataTransfer.setData("text", event.target.id);
 }
 
+/**
+ * handle drop events and the content of elements with drop functionality
+ * @param event
+ * @param {number} gapIndex index of the target gap
+ */
 function drop(event, gapIndex) {
     event.preventDefault();
     const data = event.dataTransfer.getData("text");
     const targetElement = document.getElementById(`div${gapIndex}`); // div class="dropbox"
     const draggedElement = document.getElementById(data);
 
+    // check if the target element is empty, else dropping is not possible
     if (targetElement && draggedElement) {
         if (targetElement.children.length > 0) {
             return;
         }
 
+        // if the dragged element is from one gap to another, 
+        // write the underscores back to the item
         if (draggedItem.value.originalContainer.className !== "answer-dd") {
             draggedItem.value.originalContainer.innerText = '_____'
         }
 
+        // remove underscores from gap
         targetElement.textContent = '';
 
-        // Füge das neue Element hinzu und entferne es aus der ursprünglichen Liste
+        // add the new element and remove it from the original list
         targetElement.appendChild(draggedElement);
         targetElement.insertBefore(draggedElement, targetElement.firstChild);
 
-        // Aktualisiere den dropTargets Eintrag
+        // update the dropTargets entry
         dropTargets.value[`div${gapIndex}`] = draggedElement;
     }
 }
 
+/**
+ * handling of drop events back to the answer-dd div
+ * @param event
+ */
 function dropToAnswerDD(event) {
     event.preventDefault();
     const data = event.dataTransfer.getData("text");
     const draggedElement = document.getElementById(data);
 
     if (draggedElement && draggedItem.value.originalContainer.className !== "answer-dd") {
-        // Entfernen des existierenden Elements aus der Lücke
+        // find the gap index of the dragged element 
+        // and remove it from the dropTargets
         const gapIndexKey = Object.keys(dropTargets.value).find(key => dropTargets.value[key] === draggedElement);
         if (gapIndexKey) {
             dropTargets.value[gapIndexKey] = null;
         }
 
-        // Fill gap line
+        // write the underscores back to the item
         draggedItem.value.originalContainer.innerText = '_____';
 
-        // Zurücksetzen des existierenden Elements in den ursprünglichen Container
+        // remove the dragged element from the gap and add it back to the answer-dd div
         if (event.target.className == "answer-dd") {
             event.target.appendChild(draggedElement);
         }
@@ -302,12 +383,14 @@ function dropToAnswerDD(event) {
             </div>
             <div class="question-header">
                 <div class="question-counter">
-                    <p v-if="currentIndex + 1 <= lectureQuestionCount" class="question-counter"><b>Frage {{ currentIndex +
+                    <p v-if="currentIndex + 1 <= lectureQuestionCount" class="question-counter"><b>Frage {{ currentIndex
+                        +
                             1 }} von {{ lectureQuestionCount }}</b> | +
                         {{ lecureQuestionRepeatCount }} Fragen zur Wiederholung</p>
                     <p v-else class="question-counter">Frage {{ lectureQuestionCount }} von {{ lectureQuestionCount }}
                         <Tick class="ticked" /> |
-                        <b> Wiederholungsfrage {{ currentIndex + 1 - lectureQuestionCount }} / {{ lecureQuestionRepeatCount }}</b>
+                        <b> Wiederholungsfrage {{ currentIndex + 1 - lectureQuestionCount }} / {{
+                            lecureQuestionRepeatCount }}</b>
                     </p>
                     <div class="progress">
                         <div class="progress-bar">
@@ -316,6 +399,7 @@ function dropToAnswerDD(event) {
                     </div>
                 </div>
             </div>
+
             <!-- MC Section -->
             <div class="content">
                 <div v-if="currentQuestion.type === 'mc'">
@@ -330,13 +414,15 @@ function dropToAnswerDD(event) {
                                 <label :class="{ 'selected': index === selectedAnswer }">
                                     <input type="radio" :value="index" v-model="selectedAnswer"
                                         @change="selectedOption(index)" aria-current="true" class="btn-radio">
-                                    <span class="answer-text">{{ answer.answer }}</span>
+                                    <span class="answer-text">
+                                        {{ answer.answer }}
+                                    </span>
                                 </label>
                             </div>
-
                         </div>
                     </div>
                 </div>
+
                 <!-- DD Section -->
                 <div v-if="currentQuestion.type === 'dd'" class="question-counter">
                     <div class="question-main" v-if="showQuestion">
@@ -564,7 +650,7 @@ function dropToAnswerDD(event) {
                 }
 
                 .question h2 {
-                    text-align: left!important;
+                    text-align: left !important;
                 }
 
                 .answer {
@@ -646,7 +732,6 @@ function dropToAnswerDD(event) {
         }
     }
 }
-
 
 .question-footer {
     display: flex;

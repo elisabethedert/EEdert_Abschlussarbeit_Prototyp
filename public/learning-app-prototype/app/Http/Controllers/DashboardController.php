@@ -6,10 +6,12 @@ use App\Models\Question;
 use App\Models\QuestionResults;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
-class DashboardController extends Controller
+/**
+ * Class DashboardController contains logik for the dashboard view
+ */
+class DashboardController
 {
     /**
      * Display the dashboard.

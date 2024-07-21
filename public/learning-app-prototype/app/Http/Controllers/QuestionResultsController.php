@@ -7,9 +7,11 @@ use App\Models\Question;
 use App\Models\QuestionResults;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
-class QuestionResultsController extends Controller
+/**
+ * Class QuestionResultsController contains logik for the question results
+ */
+class QuestionResultsController
 {
     /**
      * Store a newly created resource in storage.
