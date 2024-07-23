@@ -79,7 +79,6 @@ function showHelpPopup() {
 /**
  * set the selected answer
  * @param index of the selected answer
- 
  */
 function selectedOption(index) {
     selectedAnswer.value = index

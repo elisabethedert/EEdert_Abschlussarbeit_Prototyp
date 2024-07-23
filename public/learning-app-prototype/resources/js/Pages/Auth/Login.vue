@@ -6,6 +6,7 @@ import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
+import ShowPassword from '@/Components/ShowPassword.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 
 defineProps({
@@ -54,7 +55,7 @@ const submit = () => {
 
                     <TextInput id="password" type="password" v-model="form.password" required
                         autocomplete="current-password" />
-
+                    <ShowPassword />
                     <InputError class="error-msg" :message="form.errors.password" />
                 </div>
 
@@ -84,9 +85,9 @@ const submit = () => {
         Zurück
         </Link>
         <Footer class="footer">
-        <p>AGB</p>
-        <p>Datenschutz</p>
-    </Footer>
+            <p>AGB</p>
+            <p>Datenschutz</p>
+        </Footer>
     </GuestLayout>
 </template>
 
@@ -102,6 +103,7 @@ h1 {
 .back {
     margin-left: 25%;
     padding-left: 2rem;
+
     @include breakpoint("mobile") {
         margin-left: 0;
         padding-left: 1rem;
