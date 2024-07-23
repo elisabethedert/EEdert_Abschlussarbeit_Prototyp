@@ -36,7 +36,7 @@ const submit = () => {
 
         <Head title="Log in" />
         <h1>Einloggen</h1>
-        <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
+        <div v-if="status">
             {{ status }}
         </div>
         <div class="form-container unauth">
