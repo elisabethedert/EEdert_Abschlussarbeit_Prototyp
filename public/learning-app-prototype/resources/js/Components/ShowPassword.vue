@@ -1,5 +1,7 @@
 <script setup>
-
+/**
+ * shows password
+ */
 function showPw() {
   var pw = document.getElementById("password");
   if (pw.type === "password") {

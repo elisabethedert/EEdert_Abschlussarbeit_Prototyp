@@ -120,7 +120,7 @@ function progressbar(count, maxCount) {
                 </Circle>
                 <Circle :width="250" bgColor="FBF4CE">
                     <h3>Design Fokus Areas</h3>
-                    <p> 1 / 10 </p>
+                    <p> 1 / 12 </p>
                     <div class="progress light">
                         <div class="progress-bar">
                             <span style="width: 40%;"></span>

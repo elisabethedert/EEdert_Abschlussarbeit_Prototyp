@@ -63,7 +63,7 @@ defineProps({
                 <h1>Circulo</h1>
                 <Blink :width="40" />
             </div>
-            <h2>Secure Product Design</h2>
+            <h2>Gestaltungsprinzipien sicherer Softwareentwicklung</h2>
             <p><b>Entdecke mit Circulo spielerisch die Grundlagen von Secure Product Design. Mit interaktiven
                     Herausforderungen und
                     spannenden Aufgaben erlernst du die wichtigsten Sicherheitsprinzipien in der Produktentwicklung.
@@ -80,21 +80,16 @@ defineProps({
         </div>
         <div class="arguments">
             <Circle :width="225" bgColor="67917B">
-                <h3>Alleine oder im Team</h3>
-                <p>Lerne nur für dich oder mit deinen Kolleg:innen.</p>
-            </Circle>
-            <Circle :width="225" bgColor="67917B">
-                <h3>Von den Grundlagen bis zum Expertenwissen</h3>
+                <h3>Basics bis Expertenwissen</h3>
                 <p>Lerne die Konzepte von Secure Design kennen.</p>
-            </Circle>
-
-            <Circle :width="225" bgColor="67917B">
-                <h3>Müheloser Lernforschritt</h3>
-                <p>Erlebe kontinuierlichen Lernfortschritt</p>
             </Circle>
             <Circle :width="225" bgColor="67917B">
                 <h3>Abwechslungsreiche Aufgaben</h3>
                 <p>Profitiere von einer motivierenden Lernumgebung.</p>
+            </Circle>
+            <Circle :width="225" bgColor="67917B">
+                <h3>Müheloser Lernforschritt</h3>
+                <p>Erlebe kontinuierlichen Lernfortschritt</p>
             </Circle>
         </div>
     </GuestLayout>

@@ -41,16 +41,20 @@ function copyToClipboard() {
     <Head title="Ergebnis" />
 
     <AuthenticatedLayout>
-        <h1 v-if="!isHighestLectureInUnit">Lektion {{ lecture }} <br> abgeschlossen!</h1>
-        <h1 v-if="isHighestLectureInUnit">Unit {{ unit }} <br> abgeschlossen!</h1>
+        <div class="info-header">
+            <h1 v-if="!isHighestLectureInUnit">Lektion {{ lecture }} <br> abgeschlossen!</h1>
+            <h1 v-if="isHighestLectureInUnit">Unit {{ unit }} <br> abgeschlossen!</h1>
+        </div>
         <div class="result-text">
-            <p><b>Super, du hast {{ correctAnsweredFirstTry }} von {{ lectureCount }} Aufgaben richtig beantwortet!</b></p>
+            <p><b>Super, du hast {{ correctAnsweredFirstTry }} von {{ lectureCount }} Aufgaben richtig beantwortet!</b>
+            </p>
             <p><b>Dein bestes Ergebnis ist {{ bestScore }} von {{ lectureCount }}</b></p>
             <p v-if="lectureAlreadyAnswered === 1">Damit erhälst du {{ correctAnsweredFirstTry * 3 }}
                 Punkte für die richtigen Antworten
                 dazu und hast insgesamt {{ $page.props.auth.user.experience_points }} Punkte</p>
             <p v-else="lectureAlreadyAnswered !== 1">Damit erhälst du {{ correctAnsweredFirstTry }}
-                Punkte für die Wiederholung der Aufgaben dazu und hast jetzt insgesamt {{ $page.props.auth.user.experience_points }} Punkte!</p>
+                Punkte für die Wiederholung der Aufgaben dazu und hast jetzt insgesamt {{
+                    $page.props.auth.user.experience_points }} Punkte!</p>
             <HappyDance />
 
             <div class="links">
@@ -67,9 +71,9 @@ function copyToClipboard() {
 
             <div class="link-share">
                 <p><b>Teile dein Ergebnis:</b></p>
-                <button class="btn btn-green" @click="copyToClipboard">URL kopieren
-                    <Share v-if="showShare"/>
-                    <Tick  v-if="showTick"/>
+                <button class="btn btn-text" @click="copyToClipboard">URL kopieren
+                    <Share v-if="showShare" />
+                    <Tick v-if="showTick" />
                 </button>
             </div>
         </div>
@@ -77,6 +81,13 @@ function copyToClipboard() {
 </template>
 <style scoped lang="scss">
 @import '../../css/_main.scss';
+
+.info-header {
+    @include breakpoint("mobile") {
+        margin-top: 2rem;
+    }
+}
+
 
 .result-text {
     margin-top: 2rem;
@@ -87,14 +98,13 @@ function copyToClipboard() {
     text-align: center;
 
     .link-share {
-        margin-top: 1rem;
+        margin-top: 2rem;
         display: flex;
         flex-direction: column;
         align-items: center;
         position: relative;
 
         .btn {
-            margin-top: 1rem;
             display: flex;
             justify-content: center;
             align-items: center;
