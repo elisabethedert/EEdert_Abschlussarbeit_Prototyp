@@ -3,8 +3,6 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import Footer from '@/Layouts/Footer.vue';
 import { Head, Link } from '@inertiajs/vue3';
 import { onMounted, onUnmounted } from 'vue';
-import Fig1 from '@/assets/Fig1.vue';
-import Fig2 from '@/assets/Fig2.vue';
 import Fig3 from '@/assets/Fig3.vue';
 import Circle from '@/Components/Circle.vue';
 import Blink from '@/assets/Blink.vue';
@@ -15,6 +13,10 @@ const props = defineProps({
     currentLecture: Number
 })
 
+/**
+ * handles speed of scrolling 
+ * @param event 
+ */
 const handleScroll = (event) => {
     const delta = Math.max(-1, Math.min(1, (event.wheelDelta || -event.detail)));
     const scrolling = event.target.closest('.units');
@@ -22,8 +24,10 @@ const handleScroll = (event) => {
     event.preventDefault();
 };
 
+/**
+ * adds horizontal scrolling
+ */
 onMounted(() => {
-    // add scrolling
     const scrollContainer = document.querySelector('.units');
     if (scrollContainer === null) {
         return;
@@ -38,8 +42,10 @@ onMounted(() => {
     progressbar(count, maxCount);
 });
 
+/**
+ * removes horizontal scrolling
+ */
 onUnmounted(() => {
-    // remove scrolling
     const scrollContainer = document.querySelector('.units');
     if (scrollContainer === null) {
         return;
@@ -48,6 +54,11 @@ onUnmounted(() => {
     scrollContainer.removeEventListener('DOMMouseScroll', handleScroll);
 });
 
+/**
+ * progressbar 
+ * @param {number} count current question
+ * @param {number} maxCount number of ll questions
+ */
 function progressbar(count, maxCount) {
     var newWidth = (count / maxCount) * 100 + "%";
     document.getElementsByClassName("progress-bar")[0].style.width = newWidth;
@@ -109,7 +120,7 @@ function progressbar(count, maxCount) {
                 </Circle>
                 <Circle :width="250" bgColor="FBF4CE">
                     <h3>Design Fokus Areas</h3>
-                    <p> 1 / 10 </p>
+                    <p> 1 / 12 </p>
                     <div class="progress light">
                         <div class="progress-bar">
                             <span style="width: 40%;"></span>

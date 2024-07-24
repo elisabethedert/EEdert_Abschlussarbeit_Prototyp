@@ -11,7 +11,10 @@ use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
 
-class ProfileController extends Controller
+/**
+ * Class ProfileController contains logik for profile view
+ */
+class ProfileController
 {
     /**
      * Display the user's profile form.

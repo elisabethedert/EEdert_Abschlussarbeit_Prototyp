@@ -6,7 +6,10 @@ use App\Models\QuestionResults;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
-class LectureOverviewController extends Controller
+/**
+ * Class LectureOverviewController contains logik for the lecture overview (unit) view
+ */
+class LectureOverviewController
 {
     /**
      * Display the lecture overview.

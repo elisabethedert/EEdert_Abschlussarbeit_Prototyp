@@ -9,7 +9,10 @@ use App\Models\QuestionResults;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
-class LectureController extends Controller
+/**
+ * Class LectureController contains logik for the lecture view
+ */
+class LectureController
 {
     /**
      * Display all questions of lecture in random order
