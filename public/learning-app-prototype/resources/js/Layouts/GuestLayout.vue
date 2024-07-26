@@ -1,8 +1,4 @@
 <script setup>
-import ApplicationLogo from '@/Components/ApplicationLogo.vue';
-import Footer from '@/Layouts/Footer.vue';
-import Nav from '@/Components/Nav.vue';
-
 </script>
 
 <template>

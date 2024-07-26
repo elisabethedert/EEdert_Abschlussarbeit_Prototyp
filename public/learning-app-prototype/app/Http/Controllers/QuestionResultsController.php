@@ -62,7 +62,6 @@ class QuestionResultsController
             $newQuestionResult->lecture = $requestdata['lecture'];
             $newQuestionResult->unit = $requestdata['unit'];
             $newQuestionResult->session = $requestdata['session'];
-
             $newQuestionResult->save();
         }
 
@@ -74,6 +73,7 @@ class QuestionResultsController
 
             $user->experience_points = $user->experience_points + 3;
             $user->save();
+
             return response()->json(['message' => 'firstcorrect'], 200);
         } else if ($recordWhole && $answerWasCorrect) {
             $user = User::where('id', $request->user()->id)
@@ -81,6 +81,7 @@ class QuestionResultsController
 
             $user->experience_points = $user->experience_points + 1;
             $user->save();
+
             return response()->json(['message' => 'repeatcorrect'], 200);
         } else {
             return response()->json(['message' => 'incorrect'], 200);

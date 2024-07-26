@@ -24,7 +24,6 @@ const props = defineProps({
     border-radius: 10px;
     z-index: 60;
 
-
     .inner {
 
         z-index: 70;

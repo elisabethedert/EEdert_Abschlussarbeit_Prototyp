@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
+/**
+ * Class User contains the Model for the users
+ */
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
@@ -45,6 +48,9 @@ class User extends Authenticatable
         ];
     }
 
+    /**
+     * Get the question results associated with the user.
+     */
     public function question_results()
     {
         return $this->hasMany(QuestionResults::class);

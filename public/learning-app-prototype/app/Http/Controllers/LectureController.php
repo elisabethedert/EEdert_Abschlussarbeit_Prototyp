@@ -50,13 +50,13 @@ class LectureController
     {
         // number of correct answers in first try
         $numCorrectInFirstTry = QuestionResults::where('user_id', $request->user()->id)
-            ->where('session', $request->route('session')) //sessionnummer
+            ->where('session', $request->route('session'))
             ->where('question_incorrect_count', 0)
             ->count();
 
         // determine if the lecture already has results
         $firstLectureResult = QuestionResults::where('user_id', $request->user()->id)
-            ->where('session', $request->route('session')) //sessionnummer
+            ->where('session', $request->route('session'))
             ->first();
 
         if (!$firstLectureResult) {
@@ -66,7 +66,7 @@ class LectureController
         $currentUnit = $firstLectureResult->unit;
         $currentLecture = $firstLectureResult->lecture;
 
-        
+        // number of lectures in unit
         $numLecturesInUnit = Question::where('unit', $currentUnit)
             ->max('lecture');
 
@@ -99,7 +99,7 @@ class LectureController
 
         return Inertia::render('LectureResult', [
             'lectureCount' => (int)$lectureCount,
-            'correctAnsweredFirstTry' => $numCorrectInFirstTry,
+            'correctAnsweredFirstTry' => (int)$numCorrectInFirstTry,
             'numLecturesInUnit' => (int)$numLecturesInUnit,
             'lecture' => (int)$currentLecture,
             'lectureAlreadyAnswered' => (int)$lectureAlreadyAnswered,

@@ -8,11 +8,9 @@
             <circle class="figur1-2" cx="255" cy="238" r="75" fill="#67917B" />
             <circle class="figur1-1" cx="255" cy="117" r="75" fill="#67917B" />
             <circle class="figur1-3" cx="255" cy="359" r="75" fill="#67917B" />
-
             <circle class="figur1-2" cx="255" cy="231" r="75" fill="#E3A328" />
             <circle class="figur1-1" cx="255" cy="110" r="75" fill="#E3A328" />
             <circle class="figur1-3" cx="255" cy="352" r="75" fill="#E3A328" />
-
             <circle class="figur1-1" cx="199" cy="85" r="32.5" stroke="#103A51" stroke-width="5" fill="#FCF9E7" />
             <circle class="figur1-1" cx="311" cy="85" r="32.5" stroke="#103A51" stroke-width="5" fill="#FCF9E7" />
             <path d="M279 406C288.333 415.667 304.7 441.4 295.5 467C298.167 463.333 304.9 458.2 310.5 467"

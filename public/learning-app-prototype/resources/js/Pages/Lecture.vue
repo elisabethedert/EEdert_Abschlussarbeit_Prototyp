@@ -384,7 +384,7 @@ function dropToAnswerDD(event) {
                 <div class="question-counter">
                     <p v-if="currentIndex + 1 <= lectureQuestionCount" class="question-counter"><b>Frage {{ currentIndex
                         +
-                            1 }} von {{ lectureQuestionCount }}</b> | +
+                        1 }} von {{ lectureQuestionCount }}</b> | +
                         {{ lecureQuestionRepeatCount }} Fragen zur Wiederholung</p>
                     <p v-else class="question-counter">Frage {{ lectureQuestionCount }} von {{ lectureQuestionCount }}
                         <Tick class="ticked" /> |
@@ -595,7 +595,7 @@ function dropToAnswerDD(event) {
             @include breakpoint("mobile") {
                 flex-direction: column;
                 margin: 1rem;
-                gap: 1rem;
+                gap: 0rem;
             }
 
             .question {
@@ -626,7 +626,7 @@ function dropToAnswerDD(event) {
                     line-height: 3rem;
 
                     @include breakpoint("mobile") {
-                        line-height: 2rem;
+                        line-height: 2.5rem;
                         font-size: 1.25rem;
                     }
                 }
@@ -635,6 +635,10 @@ function dropToAnswerDD(event) {
                     border: none;
                     text-decoration: none;
                     display: inline-block;
+
+                    @include breakpoint("mobile") {
+                        line-height: 3rem;
+                    }
                 }
             }
 
@@ -701,6 +705,7 @@ function dropToAnswerDD(event) {
                 gap: 1rem;
 
                 @include breakpoint("mobile") {
+                    min-height: 80px;
                     width: 100%;
                 }
 
@@ -740,7 +745,7 @@ function dropToAnswerDD(event) {
 
     @include breakpoint("mobile") {
         display: flex;
-        margin-top: 1rem;
+        margin-top: 0rem;
         justify-content: center;
     }
 

@@ -5,6 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Class QuestionResults contains the Model for the question results
+ */
 class QuestionResults extends Model
 {
     use HasFactory;

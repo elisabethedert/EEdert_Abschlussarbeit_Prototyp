@@ -7,6 +7,9 @@ import { ref } from 'vue';
 
 const showMenu = ref(false);
 
+/**
+ * Toggles the navigation menu on mobile devices
+ */
 const toggleNav = () => {
     if (showMenu.value) {
         showMenu.value = false;

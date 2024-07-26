@@ -3,14 +3,13 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import Footer from '@/Layouts/Footer.vue';
 import Arrow from '@/assets/Arrow.vue';
 import Level from '@/Components/Level.vue';
-import { Head, Link, router } from '@inertiajs/vue3';
+import { Head, Link } from '@inertiajs/vue3';
 import Fig1 from '@/assets/Fig1.vue';
 import Fig2 from '@/assets/Fig2.vue';
 import Fig3 from '@/assets/Fig3.vue';
 
 defineProps({
     highestLectureInUnit: Number,
-    lectures: Object
 })
 </script>
 <template>
@@ -21,7 +20,6 @@ defineProps({
         <div class="intro-text">
             <h1>Lektionsübersicht</h1>
             <h2>Wähle eine Lektion aus, um Neues zu lernen</h2>
-            <!-- <h3>{{ lectures[0].number }}</h3> -->
         </div>
 
         <!-- all lectures of unit -->

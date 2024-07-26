@@ -89,7 +89,7 @@ defineProps({
             </Circle>
             <Circle :width="225" bgColor="67917B">
                 <h3>Müheloser Lernforschritt</h3>
-                <p>Erlebe kontinuierlichen Lernfortschritt</p>
+                <p>Erlebe kontinuierlichen Lernfortschritt.</p>
             </Circle>
         </div>
     </GuestLayout>
