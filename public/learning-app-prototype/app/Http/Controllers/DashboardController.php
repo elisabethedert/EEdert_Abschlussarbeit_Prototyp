@@ -57,7 +57,7 @@ class DashboardController
         return Inertia::render('Dashboard', [
             'streak' => $streak,
             'lectureCount' => (int)$lectureCount,
-            'currentLecture' => (int)$currentLecture+1,
+            'currentLecture' => (int)$currentLecture,
         ]);
     }
 }

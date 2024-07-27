@@ -57,7 +57,7 @@ const submit = () => {
                     <InputLabel for="password" value="Passwort:" />
                     <TextInput id="password" type="password" v-model="form.password" required
                         autocomplete="new-password"
-                        pattern="/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@.#$!%*?&^])[A-Za-z\d@.#$!%*?&]{8,15}$/" />
+                        pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,10}$" />
                     <ShowPassword/>
                     <InputError class="error-msg" :message="form.errors.password" />
                 </div>

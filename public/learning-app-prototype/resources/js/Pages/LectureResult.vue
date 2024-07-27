@@ -63,7 +63,7 @@ function copyToClipboard() {
                     class="btn btn-yellow">Nächste Lektion
                 <Arrow />
                 </Link>
-                <Link v-if="isHighestLectureInUnit" :href="'/dashboard'" type="button" class="btn btn-danger">Zurück zum
+                <Link v-if="isHighestLectureInUnit" :href="'/dashboard'" type="button" class="btn btn-yellow">Zurück zum
                 Dashboard
                 <Arrow />
                 </Link>

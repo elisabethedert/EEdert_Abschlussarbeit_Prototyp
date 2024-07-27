@@ -102,55 +102,52 @@ function progressbar(count, maxCount) {
                             <span style="width: 40%;"></span>
                         </div>
                     </div>
-                    <Link :class="{ disabled: $page.props.auth.user.unit <= 1 }" href="unit1/lektionen" type="button"
-                        class="btn btn-yellow">Unit 1
+                    <Link href="unit1/lektionen" type="button" class="btn btn-yellow">Unit 1
                     </Link>
                 </Circle>
                 <Circle :width="250" bgColor="103A51">
                     <h3>Design Principles</h3>
-                    <p> 1 / 10 </p>
+                    <p> 0 / 10 </p>
                     <div class="progress dark">
                         <div class="progress-bar">
                             <span style="width: 40%;"></span>
                         </div>
                     </div>
-                    <Link :class="{ disabled: $page.props.auth.user.unit <= 1 }" href="unit1/lektionen" type="button"
-                        class="btn btn-yellow">Unit 2
+                    <Link type="button" class="btn btn-yellow">Unit 2
                     </Link>
                 </Circle>
                 <Circle :width="250" bgColor="FBF4CE">
                     <h3>Design Fokus Areas</h3>
-                    <p> 1 / 12 </p>
+                    <p> 0 / 12 </p>
                     <div class="progress light">
                         <div class="progress-bar">
                             <span style="width: 40%;"></span>
                         </div>
                     </div>
-                    <Link :class="{ disabled: $page.props.auth.user.unit <= 1 }" href="unit1/lektionen" type="button"
-                        class="btn btn-yellow">Unit 3
+                    <Link type="button" class="btn btn-yellow">Unit 3
                     </Link>
                 </Circle>
                 <Circle :width="250" bgColor="67917B">
                     <h3>Injection</h3>
-                    <p> 1 / 10 </p>
+                    <p> 0 / 10 </p>
                     <div class="progress dark">
                         <div class="progress-bar">
                             <span style="width: 40%;"></span>
                         </div>
                     </div>
-                    <Link :class="{ disabled: $page.props.auth.user.unit <= 1 }" href="unit1/lektionen" type="button"
-                        class="btn btn-yellow">Unit 4
+                    <Link type="button" class="btn btn-yellow">
+                    Unit 4
                     </Link>
                 </Circle>
                 <Circle :width="250" bgColor="103A51">
                     <h3>Zugriffskontrolle</h3>
-                    <p> 1 / 10 </p>
+                    <p> 0 / 10 </p>
                     <div class="progress dark">
                         <div class="progress-bar">
                             <span style="width: 40%;"></span>
                         </div>
                     </div>
-                    <Link href="unit1/lektionen" type="button" class="btn btn-yellow">Unit 5
+                    <Link type="button" class="btn btn-yellow">Unit 5
                     </Link>
                 </Circle>
             </div>
@@ -261,7 +258,7 @@ function progressbar(count, maxCount) {
     align-items: center;
     margin-block: 2rem;
     gap: 2rem;
-    
+
     @include breakpoint('mobile') {
         gap: 0;
     }
