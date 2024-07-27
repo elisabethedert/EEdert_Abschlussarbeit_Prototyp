@@ -1,3 +1,5 @@
+-- Adminer 4.8.1 MySQL 8.4.1 dump
+
 SET NAMES utf8;
 SET time_zone = '+00:00';
 SET foreign_key_checks = 0;
@@ -8,7 +10,7 @@ SET NAMES utf8mb4;
 DROP TABLE IF EXISTS `answers`;
 CREATE TABLE `answers` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `answer` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `answer` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `question_id` bigint unsigned NOT NULL,
   `correct_answer` tinyint(1) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -222,33 +224,13 @@ INSERT INTO `answers` (`id`, `answer`, `question_id`, `correct_answer`, `created
 (201,	'Privacy by Design ',	60,	0,	NULL,	NULL),
 (202,	'Security by Design ',	60,	0,	NULL,	NULL);
 
-DROP TABLE IF EXISTS `question_results`;
-CREATE TABLE `question_results` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` bigint unsigned NOT NULL,
-  `question_id` int NOT NULL,
-  `question_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `question_count` int NOT NULL,
-  `question_correct_count` int NOT NULL,
-  `question_incorrect_count` int NOT NULL,
-  `lecture` int NOT NULL,
-  `unit` int NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  `session` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `question_results_user_id_foreign` (`user_id`),
-  CONSTRAINT `question_results_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-
 DROP TABLE IF EXISTS `questions`;
 CREATE TABLE `questions` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `question` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `topic` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `question` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `topic` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `level` int NOT NULL,
-  `type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `lecture` int NOT NULL,
   `unit` int NOT NULL,
   `blanks` json DEFAULT NULL,
@@ -322,14 +304,19 @@ INSERT INTO `questions` (`id`, `question`, `topic`, `level`, `type`, `lecture`, 
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `email_verified_at` timestamp NULL DEFAULT NULL,
-  `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `experience_points` int NOT NULL DEFAULT '0',
-  `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `remember_token` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `users_email_unique` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `experience_points`, `remember_token`, `created_at`, `updated_at`) VALUES
+(1,	'Testuser',	'test@test.de',	NULL,	'$2y$12$ivKh1uuOlV9RTxUeei9OX.VENBV213Z2z9lqUJL087mSdYKdgEUv.',	0,	NULL,	'2024-07-27 18:02:29',	'2024-07-27 18:02:29');
+
+-- 2024-07-27 18:07:24
