@@ -75,6 +75,8 @@ class QuestionResultsController
             $user->save();
 
             return response()->json(['message' => 'firstcorrect'], 200);
+        } else if ($record && $answerWasCorrect) {
+            return response()->json(['message' => 'repeatsessioncorrect'], 200);
         } else if ($recordWhole && $answerWasCorrect) {
             $user = User::where('id', $request->user()->id)
                 ->first();

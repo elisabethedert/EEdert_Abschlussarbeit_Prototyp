@@ -27,6 +27,7 @@ const isPopupVisible = ref(false);
 const currentIndex = ref(0);
 const resultFirstCorrect = ref(false);
 const resultRepeatCorrect = ref(false);
+const resultRepeatSessionCorrect = ref(false);
 const resultIncorrect = ref(false);
 
 const selectedAnswer = ref(null)
@@ -90,6 +91,7 @@ function selectedOption(index) {
 function hideResult() {
     resultFirstCorrect.value = false;
     resultRepeatCorrect.value = false;
+    resultRepeatSessionCorrect.value = false;
     resultIncorrect.value = false;
     showQuestion.value = true;
 }
@@ -112,8 +114,10 @@ function saveMcResult() {
         } else if (response.data.message == "repeatcorrect") {
             result.value++;
             resultRepeatCorrect.value = true;
-        }
-        else {
+        } else if (response.data.message == "repeatsessioncorrect") {
+            result.value++;
+            resultRepeatSessionCorrect.value = true;
+        } else {
             resultIncorrect.value = true;
             // add wrong answered question to the end of the questions array
             lecureQuestionRepeatCount.value++;
@@ -143,12 +147,13 @@ function saveDdResult() {
         if (response.data.message == "firstcorrect") {
             result.value++;
             resultFirstCorrect.value = true;
-
         } else if (response.data.message == "repeatcorrect") {
             result.value++;
             resultRepeatCorrect.value = true;
-        }
-        else {
+        } else if (response.data.message == "repeatsessioncorrect") {
+            result.value++;
+            resultRepeatSessionCorrect.value = true;
+        } else {
             resultIncorrect.value = true;
             // add wrong answered question to the end of the questions array
             lecureQuestionRepeatCount.value++;
@@ -206,16 +211,15 @@ function nextQuestion() {
 
     dropTargets.value = {};
 
-    // progressbar
-    var maxCount = lectureQuestionCount;
-    count = count === maxCount ? maxCount : count + 1;
-    progressbar(count, maxCount);
+    progressbar();
 }
 
 /**
  * call the result page and save the last question
  */
 function calculateResult() {
+    progressbar();
+
     setTimeout(hideResult, 4000);
     showQuestion.value = false;
     if (props.questions[currentIndex.value].type === "mc") {
@@ -232,10 +236,10 @@ function calculateResult() {
 
 /**
  * progressbar 
- * @param {number} count current question
- * @param {number} maxCount number of ll questions
  */
-function progressbar(count, maxCount) {
+function progressbar() {
+    count = count === maxCount ? maxCount : count + 1;
+    var maxCount = lectureQuestionCount;
     var newWidth = (count / maxCount) * 100 + "%";
     document.getElementsByClassName("progress-bar")[0].style.width = newWidth;
 }
@@ -384,7 +388,7 @@ function dropToAnswerDD(event) {
                 <div class="question-counter">
                     <p v-if="currentIndex + 1 <= lectureQuestionCount" class="question-counter"><b>Frage {{ currentIndex
                         +
-                        1 }} von {{ lectureQuestionCount }}</b> | +
+                            1 }} von {{ lectureQuestionCount }}</b> | +
                         {{ lecureQuestionRepeatCount }} Fragen zur Wiederholung</p>
                     <p v-else class="question-counter">Frage {{ lectureQuestionCount }} von {{ lectureQuestionCount }}
                         <Tick class="ticked" /> |
@@ -455,6 +459,16 @@ function dropToAnswerDD(event) {
                     </div>
                     <div v-if="resultRepeatCorrect">
                         <AnimationContainer :showXp="true" :xp="1">
+                            <template #result>
+                                <h3>Richtig!</h3>
+                            </template>
+                            <template #figure>
+                                <HappyDance />
+                            </template>
+                        </AnimationContainer>
+                    </div>
+                    <div v-if="resultRepeatSessionCorrect">
+                        <AnimationContainer :showXp="false">
                             <template #result>
                                 <h3>Richtig!</h3>
                             </template>
