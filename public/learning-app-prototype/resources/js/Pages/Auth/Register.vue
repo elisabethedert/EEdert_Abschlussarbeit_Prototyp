@@ -85,11 +85,11 @@ const submit = () => {
         <Link class="btn btn-text back" href="/">
         Zurück
         </Link>
-        <Footer class="footer">
-            <p>AGB</p>
-            <p>Datenschutz</p>
-        </Footer>
     </GuestLayout>
+    <Footer class="footer">
+        <p>AGB</p>
+        <p>Datenschutz</p>
+    </Footer>
 </template>
 
 <style scoped lang="scss">

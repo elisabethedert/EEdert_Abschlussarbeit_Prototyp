@@ -23,6 +23,11 @@
 
 .footer {
     position: relative;
+    margin-top: 3rem;
+
+    @include breakpoint('mobile') {
+        margin-top: 1.5rem;
+    }
 
     .bg {
         background: $background;
@@ -38,7 +43,7 @@
         transform: translate(-50%, -50%);
         display: flex;
         justify-content: center;
-        
+
         @include breakpoint('mobile') {
             top: 60%;
         }

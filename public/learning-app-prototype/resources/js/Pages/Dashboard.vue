@@ -209,7 +209,7 @@ function progressbar(count, maxCount) {
 
             &-bar {
                 border-radius: 50px;
-                width: 20%;
+                width: 11%;
                 height: 15px;
                 background-color: $yellow;
                 color: #ffffff;
