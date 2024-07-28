@@ -1,6 +1,6 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import Fig2 from 'A/Fig2.vue';
+import Fig2 from '@/Assets/Fig2.vue';
 import Arrow from '@/Assets/Arrow.vue';
 import { Head, Link } from '@inertiajs/vue3';
 
