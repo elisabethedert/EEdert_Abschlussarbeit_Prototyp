@@ -224,6 +224,26 @@ INSERT INTO `answers` (`id`, `answer`, `question_id`, `correct_answer`, `created
 (201,	'Privacy by Design ',	60,	0,	NULL,	NULL),
 (202,	'Security by Design ',	60,	0,	NULL,	NULL);
 
+DROP TABLE IF EXISTS `question_results`;
+CREATE TABLE `question_results` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` bigint unsigned NOT NULL,
+  `question_id` int NOT NULL,
+  `question_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `question_count` int NOT NULL,
+  `question_correct_count` int NOT NULL,
+  `question_incorrect_count` int NOT NULL,
+  `lecture` int NOT NULL,
+  `unit` int NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `session` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `question_results_user_id_foreign` (`user_id`),
+  CONSTRAINT `question_results_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
 DROP TABLE IF EXISTS `questions`;
 CREATE TABLE `questions` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
@@ -319,4 +339,4 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `experience_points`, `remember_token`, `created_at`, `updated_at`) VALUES
 (1,	'Testuser',	'test@test.de',	NULL,	'$2y$12$ivKh1uuOlV9RTxUeei9OX.VENBV213Z2z9lqUJL087mSdYKdgEUv.',	0,	NULL,	'2024-07-27 18:02:29',	'2024-07-27 18:02:29');
 
--- 2024-07-27 18:07:24
+-- 2024-07-28 18:57:50

@@ -3,9 +3,9 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import Footer from '@/Layouts/Footer.vue';
 import { Head, Link } from '@inertiajs/vue3';
 import { onMounted, onUnmounted } from 'vue';
-import Fig3 from '@/assets/Fig3.vue';
+import Fig3 from '@/Assets/Fig3.vue';
 import Circle from '@/Components/Circle.vue';
-import Blink from '@/assets/Blink.vue';
+import Blink from '@/Assets/Blink.vue';
 
 const props = defineProps({
     streak: Number,
@@ -128,7 +128,7 @@ function progressbar(count, maxCount) {
                     </Link>
                 </Circle>
                 <Circle :width="250" bgColor="67917B">
-                    <h3>Injection</h3>
+                    <h3>Zugriffskontrolle</h3>
                     <p> 0 / 10 </p>
                     <div class="progress dark">
                         <div class="progress-bar">
@@ -140,7 +140,7 @@ function progressbar(count, maxCount) {
                     </Link>
                 </Circle>
                 <Circle :width="250" bgColor="103A51">
-                    <h3>Zugriffskontrolle</h3>
+                    <h3>Injection</h3>
                     <p> 0 / 10 </p>
                     <div class="progress dark">
                         <div class="progress-bar">

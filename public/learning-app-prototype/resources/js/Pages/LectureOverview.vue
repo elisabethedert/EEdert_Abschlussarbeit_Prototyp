@@ -1,12 +1,12 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import Footer from '@/Layouts/Footer.vue';
-import Arrow from '@/assets/Arrow.vue';
+import Arrow from '@/Assets/Arrow.vue';
 import Level from '@/Components/Level.vue';
 import { Head, Link } from '@inertiajs/vue3';
-import Fig1 from '@/assets/Fig1.vue';
-import Fig2 from '@/assets/Fig2.vue';
-import Fig3 from '@/assets/Fig3.vue';
+import Fig1 from '@/Assets/Fig1.vue';
+import Fig2 from '@/Assets/Fig2.vue';
+import Fig3 from '@/Assets/Fig3.vue';
 
 defineProps({
     highestLectureInUnit: Number,

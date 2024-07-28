@@ -1,9 +1,9 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import HappyDance from '@/Components/Animations/HappyDance.vue';
-import Arrow from '@/assets/Arrow.vue';
-import Share from '@/assets/Share.vue';
-import Tick from '@/assets/Tick.vue';
+import Arrow from '@/Assets/Arrow.vue';
+import Share from '@/Assets/Share.vue';
+import Tick from '@/Assets/Tick.vue';
 import { Head, Link } from '@inertiajs/vue3';
 import { ref } from 'vue';
 

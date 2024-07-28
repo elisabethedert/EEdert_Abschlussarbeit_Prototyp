@@ -1,12 +1,12 @@
 <script setup>
 import GuestLayout from '@/Layouts/GuestLayout.vue';
 import Footer from '@/Layouts/Footer.vue';
-import Arrow from '@/assets/Arrow.vue';
+import Arrow from '@/Assets/Arrow.vue';
 import DropdownNav from '@/Components/DropdownNav.vue';
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import Circle from '@/Components/Circle.vue';
-import Fig2 from '@/assets/Fig2.vue';
-import Blink from '@/assets/Blink.vue';
+import Fig2 from '@/Assets/Fig2.vue';
+import Blink from '@/Assets/Blink.vue';
 
 import { Head, Link } from '@inertiajs/vue3';
 

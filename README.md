@@ -1,6 +1,23 @@
 # Gestaltungsprinzipien sicherer Softwareentwicklung: prototypische Entwicklung eines Lernspiels
-## Local development environment
-When developing on a Windows operating system, a **WSL2 (Windows Subsystem for Linux 2)** must be used.
+
+## How to access the prototype:
+1. Log in to the server ei-dmz-vm-srv188.th-luebeck.de and tunnel port 8080 of the server to the localhost
+```
+ssh -L 8080:localhost:8080 ee@ei-dmz-vm-srv188.th-luebeck.de
+```
+
+2. open http://localhost:8080/ to see the application
+
+## Testuser
+You can use the test user to log in or create your own new user
+Email: test@test.de 
+PW: Test!123?
+
+----------
+<details>
+<summary>Local development environment</summary>
+<br>
+When developing on a Windows operating system, a WSL2 (Windows Subsystem for Linux 2) must be used.
 
 ### Clone Project and go to laravel project folder:
 ```
@@ -47,31 +64,11 @@ To set up the Loakle database, the migrations must be executed, then the databas
 ```
 vendor/bin/sail migrate
 ```
-You can find the databse dump here: public/learning-app-prototype/database/20240727_databasedump.sql
+You can find the databse dump here: public/learning-app-prototype/database/20240728_databasedump.sql
 
 ### Stop Project:
 ```
 Ctrl + c
 vendor/bin/sail down
 ```
-
-## Use of the server:
-1. Log in to the server ei-dmz-vm-srv188.th-luebeck.de
-```
-ssh ee@ei-dmz-vm-srv188.th-luebeck.de
-```
-2. Tunnel port 8080 of the server to the localhost
-```
-ssh -L 8080:localhost:8080 ei-dmz-vm-srv188.th-luebeck.de
-```
-3. open http://localhost:8080/ to see the application
-
-## Testuser
-You can use the test user to log in or create your own new user
-Email: test@test.de 
-PW: Test!123?
-
-----------
-## License:
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+</details>

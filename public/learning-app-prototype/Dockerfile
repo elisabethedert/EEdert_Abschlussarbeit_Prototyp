@@ -1,3 +1,5 @@
+# Source: https://github.com/Boadzie/blogy-laravel/blob/main/Dockerfile
+
 ARG PHP_VERSION=8.3
 ARG NODE_VERSION=20
 FROM fideloper/fly-laravel:${PHP_VERSION} as base
