@@ -1,12 +1,12 @@
 # Gestaltungsprinzipien sicherer Softwareentwicklung: prototypische Entwicklung eines Lernspiels
 
 ## How to access the prototype:
-1. Log in to the server ei-dmz-vm-srv188.th-luebeck.de and tunnel port 8080 of the server to the localhost
+1. Log in to the server ei-dmz-vm-srv188.th-luebeck.de and tunnel port 80 of the server to the localhost
 ```
-ssh -L 8080:localhost:8080 ee@ei-dmz-vm-srv188.th-luebeck.de
+ssh -L 8080:localhost:80 ee@ei-dmz-vm-srv188.th-luebeck.de
 ```
 
-2. open http://localhost:8080/ to see the application
+2. open http://localhost:80/ to see the application
 
 ## Testuser
 You can use the test user to log in or create your own new user
