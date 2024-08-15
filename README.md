@@ -6,7 +6,7 @@
 ssh -L 8080:localhost:80 ee@ei-dmz-vm-srv188.th-luebeck.de
 ```
 
-2. open http://localhost:80/ to see the application
+2. open http://localhost:8080/ to see the application
 
 ## Testuser
 You can use the test user to log in or create your own new user
