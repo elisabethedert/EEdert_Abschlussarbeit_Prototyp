@@ -336,7 +336,4 @@ CREATE TABLE `users` (
   UNIQUE KEY `users_email_unique` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `experience_points`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1,	'Testuser',	'test@test.de',	NULL,	'$2y$12$ivKh1uuOlV9RTxUeei9OX.VENBV213Z2z9lqUJL087mSdYKdgEUv.',	0,	NULL,	'2024-07-27 18:02:29',	'2024-07-27 18:02:29');
-
 -- 2024-07-28 18:57:50
