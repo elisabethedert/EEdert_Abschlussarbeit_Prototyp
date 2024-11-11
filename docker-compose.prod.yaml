@@ -7,6 +7,8 @@ services:
         image: mysql
         volumes:
             - mysql_data:/var/lib/mysql
+        env_file:
+            - .env
         ports:
             - 3306:3306
     circuloapp:
@@ -16,8 +18,29 @@ services:
         environment:
             - APP_ENV=production
             - APP_DEBUG=false
+        labels:
+            - "traefik.enable=true"
+            - "traefik.http.routers.whoami.rule=Host(`circulo.elisabeth-edert.de`)"
+            - "traefik.http.routers.whoami.entrypoints=websecure"
+            - "traefik.http.routers.whoami.tls.certresolver=myresolver"
         ports:
             - 80:8080
+    traefik:
+        image: "traefik:v3.2"
+        container_name: "traefik"
+        command:
+            - "--providers.docker.exposedbydefault=false"
+            - "--entryPoints.websecure.address=:443"
+            - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
+            - "--certificatesresolvers.myresolver.acme.email=elisabeth.edert@gmail.com"
+            - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+        ports:
+            - "443:443"
+        volumes:
+            - "letsencrypt_data:/letsencrypt"
+            - "/var/run/docker.sock:/var/run/docker.sock:ro"
 volumes:
     mysql_data:
+        driver: local
+    letsencrypt_data:
         driver: local
