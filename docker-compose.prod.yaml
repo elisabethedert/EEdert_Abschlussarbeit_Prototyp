@@ -12,14 +12,13 @@ services:
         ports:
             - 3306:3306
     circuloapp:
-        image: elisabethedert1998/circulo:latest
+        image: lukasboettcher/circulo:latest
         env_file:
             - .env
         environment:
             - APP_ENV=production
             - APP_DEBUG=false
             - APP_URL="https://circulo.elisabeth-edert.de"
-            - ASSET_URL="https://circulo.elisabeth-edert.de"
         labels:
             - "traefik.enable=true"
             - "traefik.http.routers.whoami.rule=Host(`circulo.elisabeth-edert.de`)"

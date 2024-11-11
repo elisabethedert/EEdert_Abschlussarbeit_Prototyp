@@ -1,5 +1,9 @@
 vendor/
 node_modules/
+doku/
 .env*
 Dockerfile
-docker-compose.yml
+docker-compose*
+.editorconfig
+.git*
+.dockerignore
