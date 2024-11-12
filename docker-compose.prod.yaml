@@ -12,7 +12,7 @@ services:
         ports:
             - 3306:3306
     circuloapp:
-        image: lukasboettcher/circulo:latest
+        image: ghcr.io/elisabethedert/eedert_abschlussarbeit_prototyp:sha-e1cfe80
         env_file:
             - .env
         environment:
