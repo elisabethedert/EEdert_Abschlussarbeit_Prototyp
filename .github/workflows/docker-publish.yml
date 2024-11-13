@@ -1,5 +1,6 @@
 name: Create and publish a Docker image
 
+# gucken, obs gebaut werden kann und bei jedem commit checken ob alle images funktionieren
 on: [ push, workflow_dispatch ]
 
 env:
