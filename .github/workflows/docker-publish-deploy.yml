@@ -85,7 +85,7 @@ jobs:
           echo "MYSQL_RANDOM_ROOT_PASSWORD=yes" >> .env
 
           echo 'VITE_APP_NAME="${APP_NAME}"' >> .env
-
+          mkdir ~/.ssh/
           echo "Host circulo" > ~/.ssh/config
           echo "    HostName ${{ secrets.DB_HOST }}" >> ~/.ssh/config
           echo "    Port 22" >> ~/.ssh/config
