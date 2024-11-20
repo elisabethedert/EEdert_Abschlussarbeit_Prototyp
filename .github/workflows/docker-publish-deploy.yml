@@ -41,3 +41,58 @@ jobs:
         with:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
+
+  deploy_via_ssh:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout latest or specific tag
+      - name: checkout
+        uses: actions/checkout@v3
+
+      - name: Create .env file, ssh config-file and private ssh-key
+        run: |
+          echo "APP_NAME=Circulo" > .env
+          echo "APP_ENV=local" >> .env
+          echo "APP_KEY=${{ secrets.APP_KEY }}" >> .env
+          echo "APP_DEBUG=true" >> .env
+          echo "APP_TIMEZONE=Europe/Berlin" >> .env
+
+          echo "APP_LOCALE=en" >> .env
+          echo "APP_FALLBACK_LOCALE=en" >> .env
+          echo "APP_FAKER_LOCALE=en_US" >> .env
+
+          echo "APP_MAINTENANCE_DRIVER=file" >> .env
+          echo "APP_MAINTENANCE_STORE=database" >> .env
+
+          echo "BCRYPT_ROUNDS=12" >> .env
+
+          echo "LOG_CHANNEL=stack" >> .env
+          echo "LOG_STACK=stderr" >> .env
+          echo "LOG_DEPRECATIONS_CHANNEL=null" >> .env
+          echo "LOG_LEVEL=debug" >> .env
+
+          echo "DB_CONNECTION=mysql" >> .env
+          echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env
+          echo "DB_PORT=3306" >> .env
+          echo "DB_DATABASE=${{ secrets.DB_DATABASE }}" >> .env
+          echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> .env
+          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
+
+          echo "MYSQL_DATABASE=$DB_DATABASE" >> .env
+          echo "MYSQL_USER=$DB_USERNAME" >> .env
+          echo "MYSQL_PASSWORD=$DB_PASSWORD" >> .env
+          echo "MYSQL_RANDOM_ROOT_PASSWORD=yes" >> .env
+
+          echo 'VITE_APP_NAME="${APP_NAME}"' >> .env
+
+          echo "Host circulo" > ~/.ssh/config
+          echo "    HostName ${{ secrets.DB_HOST }}" >> ~/.ssh/config
+          echo "    Port 22" >> ~/.ssh/config
+
+          echo "${{ secrets.DEPLOY_KEY }}" > ~/.ssh/id_rsa
+
+      - name: Create .env file
+        run: |
+          docker -H ssh://circulo compose -f docker-compose.prod.yaml pull
+          docker -H ssh://circulo compose -f docker-compose.prod.yaml up -d
