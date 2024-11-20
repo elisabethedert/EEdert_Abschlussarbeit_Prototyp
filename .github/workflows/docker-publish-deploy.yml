@@ -92,7 +92,7 @@ jobs:
           echo "    User ${{ secrets.DEPLOY_USERNAME }}" >> ~/.ssh/config
 
           echo "${{ secrets.DEPLOY_KEY }}" > ~/.ssh/id_rsa
-
+          chmod 600 ~/.ssh/id_rsa
           echo "${{ secrets.DEPLOY_KNOWNHOSTS }}" > ~/.ssh/known_hosts
 
       - name: deploy
