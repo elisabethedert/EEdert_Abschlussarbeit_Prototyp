@@ -92,6 +92,8 @@ jobs:
 
           echo "${{ secrets.DEPLOY_KEY }}" > ~/.ssh/id_rsa
 
+          echo "${{ secrets.DEPLOY_KNOWNHOSTS }}" > ~/.ssh/known_hosts
+
       - name: Create .env file
         run: |
           docker -H ssh://circulo compose -f docker-compose.prod.yaml pull
