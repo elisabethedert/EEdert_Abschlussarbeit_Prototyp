@@ -89,7 +89,7 @@ jobs:
           echo "Host circulo" > ~/.ssh/config
           echo "    HostName ${{ secrets.DB_HOST }}" >> ~/.ssh/config
           echo "    Port 22" >> ~/.ssh/config
-          echo "    HostName ${{ secrets.DEPLOY_USERNAME }}" >> ~/.ssh/config
+          echo "    User ${{ secrets.DEPLOY_USERNAME }}" >> ~/.ssh/config
 
           echo "${{ secrets.DEPLOY_KEY }}" > ~/.ssh/id_rsa
 
